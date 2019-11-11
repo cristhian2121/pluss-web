@@ -15,13 +15,13 @@ function App() {
       <header className="">
 
       </header>
-      {/* <Menu /> */}
       <Router>
-        <Switch>
+      <Menu />
+        {/* <Switch>
           <Route exact path="/" component={User} />
           <Route exact path="/cotizaciones/crear" component={CreateMakeRate} />
           <Route component={PageNotFound} />
-        </Switch>
+        </Switch> */}
       </Router>
     </div>
   );

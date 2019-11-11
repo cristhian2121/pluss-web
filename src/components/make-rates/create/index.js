@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 export class CreateMakeRate extends Component {
-  constructor() {}
+//   constructor() {}
   render() {
     return (
       <div>
