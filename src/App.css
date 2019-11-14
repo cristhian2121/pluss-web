@@ -1,5 +1,6 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
+  font-family: Roboto,-apple-system,Helvetica Neue,Helvetica,Arial,sans-serif;
 }
 
 .App-logo {
@@ -19,4 +20,23 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+/*  Base plantilla inicial  */
+.title {
+  border-left: 4px solid #db2929;
+  padding: 10px;
+  font-size: 22px;
+  font-weight: 500;
+  color: #464646;
+  font-size: 20px;
+}
+
+.sub-title {
+  padding: 10px;
+  border-left: 4px solid #97b10c;
+  font-size: 17px;
+  font-weight: 300;
+  position: relative;
+  margin-top: 15px;
 }
