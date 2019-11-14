@@ -24,7 +24,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import PageNotFound from "../page-not-found";
 import { CreateMakeRate } from "../../make-rates/create/index";
-import { User } from "../../users/index";
+import { User } from "../../../pages/user";
 import { MakeRate } from "../../make-rates/list/index";
 
 const drawerWidth = 240;
@@ -128,7 +128,7 @@ export default function Menu() {
         <List>
           {[
             {
-              text: "Usuarios",
+              // text: "Usuarios",
               icon: <PeopleIcon />,
               path: "/usuarios"
             },
