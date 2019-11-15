@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Create } from "../components/users/index";
+import { Create } from "../../components/users/index";
 
 export class User extends Component {
     constructor() {
@@ -14,9 +14,6 @@ export class User extends Component {
                 Administrador de usuarios
             </div>
             <br/>
-            <div class="sub-title">
-                Nuevo usuario
-            </div>
             <Create/>
           </div>
         );

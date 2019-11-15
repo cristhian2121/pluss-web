@@ -40,3 +40,13 @@
   position: relative;
   margin-top: 15px;
 }
+
+/* Edition class material */
+.MuiFormControl-root {
+  margin-right: 16px !important;
+  /* margin-right: 2px; */
+}
+
+.formControl {
+  min-width: 100% !important;
+}
