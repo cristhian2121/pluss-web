@@ -5,13 +5,49 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import Button from '@material-ui/core/Button';
 
 export class Create extends Component {
-  constructor() {
-    super();
+  state = {
+    dataGroups: [],
+    data: {
+      group: null,
+      name: null
+    }
   }
-  
+
+  constructor(props) {
+    super(props);
+  }  
+
+  componentDidMount() {
+    this.getGroups()
+  }
+
+  getGroups = async () => {
+    try {
+      let response = await fetch('http://rickandmortyapi.com/api/character/')
+      let data = await response.json();
+
+      this.setState({
+        dataGroups: data.results
+      })
+    } catch (error) {
+      console.log('error', error)
+    }    
+  }
+
+  save() {
+    let name = this.state.data.name
+    console.log('llego', name)
+  }
+
+  handleChange(event) {
+    this.setState({
+      data: event.target.value
+    })
+  }
+
   render() {
     return (
       <div>
@@ -20,28 +56,33 @@ export class Create extends Component {
         </div>
         <form>
           <TextField
-            id="name"
-            label="Nombres"
+            required
+            id="code"
+            label="Código"
             margin="normal"
             />
           <TextField
-            id="last_name"
-            // className={classes.textField}
-            label="Apellidos"
-            // mx={2}
+            required
+            id="name"
+            label="Nombre"
             margin="normal"
+            value={this.state.data.name}
             />
           <TextField
             id="document"
-            // className={classes.textField}
             label="Documento"
             margin="normal"
             />
           <TextField
             required
-            id="user"
-            // className={classes.textField}
-            label="Usuario"
+            id="email"
+            label="Correo electrónico"
+            margin="normal"
+            />
+          <TextField
+            required
+            id="phone"
+            label="Teléfono"
             margin="normal"
             />
           <FormControl margin="normal">
@@ -49,16 +90,22 @@ export class Create extends Component {
             <Select
               labelId="type_user"
               id="type_user"
-              
-              // value={age}
-              // onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              value={this.state.group}
+              onChange={this.handleChange}
+            >              
+              {this.state.dataGroups.map(groups => (
+                <MenuItem key={groups.id} value={groups.id}>{groups.name}</MenuItem>
+              ))}              
             </Select>
           </FormControl>
         </form>
+
+        <div class="text-center">
+          <Button variant="contained" color="primary" onClick={this.save}>
+            Crear Usuario
+          </Button>
+        </div>
+
       </div>
     );
   }
