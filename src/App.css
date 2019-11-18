@@ -41,10 +41,19 @@
   margin-top: 15px;
 }
 
+.text-center {
+  text-align: center;
+}
+
 /* Edition class material */
 .MuiFormControl-root {
   margin-right: 16px !important;
   /* margin-right: 2px; */
+}
+
+.MuiCircularProgress-colorPrimary {
+  color: red !important;
+  opacity: .6;
 }
 
 .formControl {
