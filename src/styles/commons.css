@@ -3,3 +3,7 @@
     color: red;
     text-align: right;
 }
+
+.container-padding {
+    margin-bottom: 15px !important;
+}

@@ -9,10 +9,17 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 // Icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+
+
+
+
 
 // css
 import '../../../styles/commons.css';
@@ -36,19 +43,20 @@ export const CreateMakeRate = () => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const UnitCost = () => {
+  const UnitCost = (key) => {
+    console.log('hola', key)
     return (
       <Grid container spacing={3} >
         <Grid item md={1}>
           <TextField
-            id="unit"
+            id={'unit' + key}
             className=""
             label="Unidades"
           />
         </Grid>
         <Grid item md={2}>
           <TextField
-            id="cost"
+            id={'cost' + key}
             className=""
             label="Costo"
           />
@@ -95,18 +103,18 @@ export const CreateMakeRate = () => {
     )
   }
 
-  const ubi = () => {
+  const saveQuotation = () => {
 
   }
 
   return (
     <div>
-      <h3>Cotizaciones -</h3>
+      <h3>Cotizaciones</h3>
 
       <Grid container spacing={3}>
         <Grid item md={3}>
           <TextField
-            id="id"
+            id="consecutive"
             className=""
             label="Cosecutivo"
             margin="normal"
@@ -174,7 +182,7 @@ export const CreateMakeRate = () => {
         </Grid>
         <Grid item md={3}>
           <TextField
-            id="pay"
+            id="payTime"
             className=""
             label="Formato de pago"
             margin="normal"
@@ -186,11 +194,17 @@ export const CreateMakeRate = () => {
       <div className="text-expand"><span onClick={showUnits}> Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
       </div>
       {showUnitForm &&
-        <div>
-          <button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades</button>
+        <div className="container-padding">
+          <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
           <div>{units.map(unit => <UnitCost key={unit} />)}</div>
         </div>
       }
+      <Button variant="contained" color="primary" onClick={saveQuotation}>
+        Guardar cotización
+      </Button>
+      <Button variant="contained" color="primary" onClick="">
+        Generar PDF <PictureAsPdfIcon />
+      </Button>
     </div>
   );
 }
