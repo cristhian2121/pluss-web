@@ -43,20 +43,20 @@ export const CreateMakeRate = () => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const UnitCost = (key) => {
-    console.log('hola', key)
+  const UnitCost = ({number}) => {
+    console.log('hola', number)
     return (
       <Grid container spacing={3} >
         <Grid item md={1}>
           <TextField
-            id={'unit' + key}
+            id={'unit' + number}
             className=""
             label="Unidades"
           />
         </Grid>
         <Grid item md={2}>
           <TextField
-            id={'cost' + key}
+            id={'cost' + number}
             className=""
             label="Costo"
           />
@@ -104,7 +104,10 @@ export const CreateMakeRate = () => {
   }
 
   const saveQuotation = () => {
-
+    const consecutive = document.getElementById('consecutive').value
+    const unit1 = document.getElementById('unit1').value
+    console.log(unit1)
+    console.log(consecutive)
   }
 
   return (
@@ -196,7 +199,7 @@ export const CreateMakeRate = () => {
       {showUnitForm &&
         <div className="container-padding">
           <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
-          <div>{units.map(unit => <UnitCost key={unit} />)}</div>
+          <div>{units.map(unit => <UnitCost key={unit} number={unit}/>)}</div>
         </div>
       }
       <Button variant="contained" color="primary" onClick={saveQuotation}>
