@@ -43,13 +43,14 @@ export const CreateMakeRate = () => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const UnitCost = ({number}) => {
+  const UnitCost = ({ number }) => {
     console.log('hola', number)
     return (
       <Grid container spacing={3} >
         <Grid item md={1}>
           <TextField
             id={'unit' + number}
+            name={'unit' + number}
             className=""
             label="Unidades"
           />
@@ -57,22 +58,25 @@ export const CreateMakeRate = () => {
         <Grid item md={2}>
           <TextField
             id={'cost' + number}
+            name={'cost' + number}
             className=""
             label="Costo"
           />
         </Grid>
         <Grid item md={1}>
           <TextField
-            id="discount"
+            id={'discount' + number}
+            name={'discount' + number}
             className=""
             label="% descuento"
           />
         </Grid>
         <Grid item md={2}>
           <TextField
-            id="discount"
+            id={'mark' + number}
+            name={'mark' + number}
             className=""
-            label="Marcasión"
+            label="Marcación"
           />
         </Grid>
 
@@ -80,21 +84,24 @@ export const CreateMakeRate = () => {
 
         <Grid item md={1}>
           <TextField
-            id="discount"
+            id={'profitableness' + number}
+            name={'profitableness' + number}
             className=""
             label="% Rentabilidad"
           />
         </Grid>
         <Grid item md={2}>
           <TextField
-            id="discount"
+            id={'total' + number}
+            name={'total' + number}
             className=""
             label="Valor de venta"
           />
         </Grid>
         <Grid item md={2}>
           <TextField
-            id="discount"
+            id={'transport' + number}
+            name={'transport' + number}
             className=""
             label="Transporte"
           />
@@ -103,109 +110,129 @@ export const CreateMakeRate = () => {
     )
   }
 
-  const saveQuotation = () => {
-    const consecutive = document.getElementById('consecutive').value
-    const unit1 = document.getElementById('unit1').value
-    console.log(unit1)
-    console.log(consecutive)
+  const saveQuotation = event => {
+    console.log('entrooo');
+    if (event) {
+      event.preventDefault()
+      console.log('event: ', event);
+      const objForm = event.target.value;
+      console.log('objForm: ', objForm);
+    }
+    // const consecutive = document.getElementById('consecutive').value
+    // const unit1 = document.getElementById('unit1').value
+    // const quotationDate = document.getElementById('date-picker-inline').value
+  }
+
+  const generatePDF = () => {
+
   }
 
   return (
     <div>
       <h3>Cotizaciones</h3>
-
-      <Grid container spacing={3}>
-        <Grid item md={3}>
-          <TextField
-            id="consecutive"
-            className=""
-            label="Cosecutivo"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
+      <form id="quotationForm" onSubmit={saveQuotation}>
+        <Grid container spacing={3}>
+          <Grid item md={3}>
+            <TextField
+              id="consecutive"
+              name="consecutive"
+              className=""
+              label="Cosecutivo"
               margin="normal"
-              id="date-picker-inline"
-              label="Fecha de cotización"
-              value={selectedDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
             />
-          </MuiPickersUtilsProvider>
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="client"
-            className=""
-            label="Nombre del cliente"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="clientPhone"
-            className=""
-            label="Telefóno del cliente"
-            margin="normal"
-          />
-        </Grid>
+          </Grid>
+          <Grid item md={3}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                name="quotationDate"
+                label="Fecha de cotización"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id="client"
+              name="client"
+              className=""
+              label="Nombre del cliente"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id="clientPhone"
+              name="clientPhone"
+              className=""
+              label="Telefóno del cliente"
+              margin="normal"
+            />
+          </Grid>
 
-        {/* segunda fila  */}
+          {/* segunda fila  */}
 
-        <Grid item md={3}>
-          <TextField
-            id="user"
-            className=""
-            label="Ejecutivo de ventas"
-            margin="normal"
-          />
+          <Grid item md={3}>
+            <TextField
+              id="user"
+              name="user"
+              className=""
+              label="Ejecutivo de ventas"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id="city"
+              name="city"
+              className=""
+              label="Ciudad"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id="deliveryTime"
+              name="deliveryTime"
+              className=""
+              label="Tiempo de entrega"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id="payTime"
+              name="payTime"
+              className=""
+              label="Formato de pago"
+              margin="normal"
+            />
+          </Grid>
+          {/* fila 3 */}
         </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="city"
-            className=""
-            label="Ciudad"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="deliveryTime"
-            className=""
-            label="Tiempo de entrega"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="payTime"
-            className=""
-            label="Formato de pago"
-            margin="normal"
-          />
-        </Grid>
-        {/* fila 3 */}
-      </Grid>
-
-      <div className="text-expand"><span onClick={showUnits}> Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
-      </div>
-      {showUnitForm &&
-        <div className="container-padding">
-          <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
-          <div>{units.map(unit => <UnitCost key={unit} number={unit}/>)}</div>
+        <div className="text-expand"><span onClick={showUnits}> Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
         </div>
-      }
-      <Button variant="contained" color="primary" onClick={saveQuotation}>
-        Guardar cotización
+        {showUnitForm &&
+          <div className="container-padding">
+            <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
+            <div>{units.map(unit => <UnitCost key={unit} number={unit} />)}</div>
+          </div>
+        }
+        <Button variant="contained" color="primary" type="submit">
+          Guardar cotización
       </Button>
-      <Button variant="contained" color="primary" onClick="">
+      </form>
+
+
+      <Button variant="contained" color="primary" onClick="generatePDF">
         Generar PDF <PictureAsPdfIcon />
       </Button>
     </div>
