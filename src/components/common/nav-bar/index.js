@@ -23,7 +23,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import PageNotFound from "../page-not-found";
-import { CreateMakeRate } from "../../make-rates/create/index";
+import { CreateQuotations as CreateQuotation } from "../../make-rates/create";
 import { User } from "../../users/index";
 import { MakeRate } from "../../make-rates/list/index";
 
@@ -156,7 +156,7 @@ export default function Menu() {
         <Switch>
           <Route exact path="/cotizaciones" component={MakeRate} />
           <Route exact path="/usuarios" component={User} />
-          <Route exact path="/cotizaciones/crear" component={CreateMakeRate} />
+          <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
           <Route component={PageNotFound} />
         </Switch>
       </main>
