@@ -27,10 +27,11 @@ import '../../../styles/commons.css';
 
 
 
-export const FormQuotation = () => {
+export const FormQuotation = (props) => {
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [units, setunits] = useState([])
+  const [quotationData, setquotationData] = useState([])
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -114,12 +115,8 @@ export const FormQuotation = () => {
     console.log('entrooo');
     if (event) {
       event.preventDefault();
-      let elements = document.getElementById('quotationForm').elements;
-      let obj = {};
-      for (let item of elements) {
-        obj[item.name] = item.value;
-      }
-      console.log('obj: ', obj);
+      generateData()
+      props.eventCreateQuotation(quotationData)
     }
     // const consecutive = document.getElementById('consecutive').value
     // const unit1 = document.getElementById('unit1').value
@@ -127,7 +124,17 @@ export const FormQuotation = () => {
   }
 
   const generatePDF = () => {
+    generateData()
+    props.eventGeneratePDF(quotationData)
+  }
 
+  const generateData = () => {
+    let elements = document.getElementById('quotationForm').elements;
+    let obj = {};
+    for (let item of elements) {
+      obj[item.name] = item.value;
+    }
+    setquotationData(obj)
   }
 
   return (
