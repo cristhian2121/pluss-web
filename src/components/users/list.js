@@ -5,10 +5,11 @@ import MaterialTable from 'material-table';
 export class List extends Component {
     state = {
         columns: [
-            { title: 'Código', field: 'id' },
-            { title: 'Nombre', field: 'name' },
-            { title: 'Teléfono', field: 'phone' },
-            { title: 'Estado', field: 'state' }
+            { title: 'Id', field: 'id' },
+            { title: 'Usuario', field: 'username' },
+            { title: 'Nombre', field: 'first_name' },
+            { title: 'Correo electrónico', field: 'email' },
+            { title: 'user', field: 'user' }
         ],
         dataUser: []
     };
@@ -18,11 +19,11 @@ export class List extends Component {
     }
     getDataUsers = async () => {
         try {
-            let response = await fetch('http://rickandmortyapi.com/api/character/')
+            let response = await fetch('http://localhost:8933/api/user/')
             let data = await response.json();
         
             this.setState({
-                dataUser: data.results
+                dataUser: data
             })
         } catch (error) {
             console.log('error', error)

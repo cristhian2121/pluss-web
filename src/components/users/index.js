@@ -13,22 +13,26 @@ export class Create extends Component {
   }
   data = {
     code: null,
-    name: null,
-    document: null,
-    email: null,
-    phone: null,
-    group: null
+    first_name: null,
+    user: '',
+    type_identification: 'CC',
+    identification_number: null,
+    username: null,
+    phone_number: null,
+    groups: [],
+    password: null
   }
   componentDidMount() {
     this.getGroups()
   }
   getGroups = async () => {
     try {
-      let response = await fetch('http://rickandmortyapi.com/api/character/')
+      let response = await fetch('http://localhost:8933/api/group/')
       let data = await response.json();
+      console.log('llego grupos', data)
 
       this.setState({
-        dataGroups: data.results
+        dataGroups: data
       })
     } catch (error) {
       console.log('error', error)
@@ -39,21 +43,43 @@ export class Create extends Component {
     switch (e.target.name){
       case "code":
         this.data.code = e.target.value
+        break
       case "name":
-        this.data.name = e.target.value
+        this.data.first_name = e.target.value
+        break
       case "document":
-        this.data.document = e.target.value
+        this.data.identification_number = e.target.value
+        this.data.password = e.target.value
+        break
       case "email":
-        this.data.email = e.target.value
+        this.data.username = e.target.value
+        break
       case "phone":
-        this.data.phone = e.target.value
+        this.data.phone_number = e.target.value
+        break
       case "group":
-        this.data.group = e.target.value
+        this.data.groups = e.target.value
+        break      
     }
     console.log('llego', this.data.name)
   };  
   save = () => {
     console.log('llego al save', this.data)
+
+    fetch('http://localhost:8933/api/profile/', {
+      method: 'POST',
+      body: JSON.stringify(this.data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(function(response) {
+      console.log('response', response)
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+
   }
 
   render() {
@@ -75,7 +101,6 @@ export class Create extends Component {
             onChange={this.handleChange}
             name="name"
             label="Nombre"
-            value={this.data.name}
             margin="normal"
             />
           <TextField
