@@ -7,8 +7,6 @@ import { FormQuotation } from './formQuotation'
 import { connect } from 'react-redux'
 import * as quotationActions from '../../../actions/quotationActions'
 
-import { pdf } from '../../common/pdf'
-
 class CreateQuotation extends Component {
 
   constructor(props) {
@@ -25,7 +23,6 @@ class CreateQuotation extends Component {
     this.setState({
       downloadPDF: true
     })
-    pdf.GeneratePFD('a')
 
   }
 

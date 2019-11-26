@@ -26,6 +26,7 @@ import PageNotFound from "../page-not-found";
 import { CreateQuotations as CreateQuotation } from "../../make-rates/create";
 import { User } from "../../users/index";
 import { MakeRate } from "../../make-rates/list/index";
+import { GeneratePDF } from '../pdf'
 
 const drawerWidth = 240;
 
@@ -157,6 +158,7 @@ export default function Menu() {
           <Route exact path="/cotizaciones" component={MakeRate} />
           <Route exact path="/usuarios" component={User} />
           <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
+          <Route exact path="/cotizacion" component={GeneratePDF} />
           <Route component={PageNotFound} />
         </Switch>
       </main>
