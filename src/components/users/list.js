@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import MaterialTable from 'material-table';
+import conf from '../../config'
 
 export class List extends Component {
     state = {
@@ -19,7 +20,8 @@ export class List extends Component {
     }
     getDataUsers = async () => {
         try {
-            let response = await fetch('http://localhost:8933/api/user/')
+            console.log('api', conf.api_url)
+            let response = await fetch(`${conf.api_url}/user/`)
             let data = await response.json();
         
             this.setState({

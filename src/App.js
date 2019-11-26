@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { CreateMakeRate } from "./components/make-rates/create/index";
-import { User } from "./components/users/index";
+import SignIn from "./pages/login";
 import PageNotFound from "./components/common/page-not-found";
 import Menu from './components/common/nav-bar/index'
 
@@ -16,12 +16,12 @@ function App() {
 
       </header>
       <Router>
-      <Menu />
-        {/* <Switch>
-          <Route exact path="/" component={User} />
-          <Route exact path="/cotizaciones/crear" component={CreateMakeRate} />
-          <Route component={PageNotFound} />
-        </Switch> */}
+      {/* <Menu /> */}
+        <Switch>
+          <Route exact path="/login" component={SignIn} />
+          <Route exact path="/" component={Menu} />
+          {/* <Route component={PageNotFound} /> */}
+        </Switch>
       </Router>
     </div>
   );
