@@ -1,34 +1,109 @@
-.text-header-pdf{
+p {
+    margin-top: 0.15em;
+    margin-bottom: 0.15em;
+    font-size: 0.85em
+}
+
+.text-header-pdf {
     font-size: 0.9em;
     align-content: flex-end;
 }
 
-.container-pdf{
- margin-left: 21px;
- margin-bottom: 10px;
+.container-pdf {
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 0.5em;
 }
 
 .row {
     display: flex;
-    margin-left: 21px;
+    /* margin-left: 21px; */
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-  }
-  
-  .column {
+}
+
+.column {
     display: flex;
     flex-direction: column;
     flex-basis: 100%;
     flex: 1;
-  }
+}
 
-  .information-client-pdf p{
+.information-client-pdf p {
     margin-bottom: 2px;
     margin-top: 2px;
-  }
+}
 
-  .image-logo-pdf {
-      height: 100px;
-      width: 100px;
-  }
+.image-logo-pdf {
+    height: 100px;
+    width: 100px;
+}
+
+.header-pdf {
+    text-align: left;
+}
+
+.text-descripcion {
+    margin-top: 0.5em;
+}
+
+.text-descripcion p {
+    font-weight: normal;
+    font-size: 0.85em;
+}
+
+.text-descripcion span {
+    font-weight: bold;
+    font-size: 0.85em;
+}
+
+.bar-head {
+    background-color: #ff0000 !important;
+    height: 1.5em;
+}
+
+.quotation-title {
+    padding-left: 2em;
+    padding-right: 2em;
+    background-color: white;
+    width: 10%;
+    position: relative;
+    height: 1.5em;
+    left: 70%;
+    font-size: 1.1em;
+}
+
+.floor-pdf {
+    margin-top: 1em;
+    font-size: 0.7em;
+}
+
+.sub-title-pdf {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.product-section-pdf {
+    padding-top: 1em;
+}
+
+.product-pdf{
+    display: flex;
+    align-items: center;
+}
+
+.product-image-pdf{
+    height: 11em;
+    width: 13em;
+}
+
+.quote-delivery span{
+    color: red;
+}
+
+.quote-delivery p:not(:first-child) {
+    padding-left: 1em;
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
