@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -48,7 +48,8 @@ const useStyles = makeStyles(theme => ({
 
 
 
-export default function SignIn() {
+export default function Login() {
+  const [loginData, setloginData] = useState([])
   const classes = useStyles();
   
   const data = {
@@ -56,8 +57,20 @@ export default function SignIn() {
     password: null,
   }
 
-  const autentication = () => {
-    console.log('autentication', data)
+  const login = () => {
+    console.log('entro a login')
+    generateData()
+    console.log('autentication bygytffut', loginData)
+  }
+
+  const generateData = () => {
+    let elements = document.getElementById('loginForm').elements;
+    let obj = {};
+    for (let item of elements) {
+      obj[item.name] = item.value;
+    }
+    setloginData( obj )
+    console.log('autentication', obj, loginData)
   }
   return (
     <Container component="main" maxWidth="xs">
@@ -69,7 +82,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form id="loginForm" className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -104,7 +117,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={autentication}
+            onClick={login}
           >
             Sign In
           </Button>

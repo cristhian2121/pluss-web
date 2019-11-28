@@ -9,19 +9,22 @@ import Button from '@material-ui/core/Button';
 import conf from '../../config'
 
 export class Create extends Component {
-  state = {
-    dataGroups: [],
-  }
-  data = {
-    code: null,
-    first_name: null,
-    user: '',
-    type_identification: 'CC',
-    identification_number: null,
-    username: null,
-    phone_number: null,
-    groups: [],
-    password: null
+  constructor(props) {
+    super(props)
+    this.state = {
+      dataGroups: [],
+    }
+    this.data = {
+      code: null,
+      first_name: null,
+      user: '',
+      type_identification: 'CC',
+      identification_number: null,
+      username: null,
+      phone_number: null,
+      groups: [],
+      password: null
+    }
   }
   componentDidMount() {
     this.getGroups()
@@ -105,6 +108,7 @@ export class Create extends Component {
             name="code"
             label="Código"
             margin="normal"
+            // value={this.data.code}
             />
           <TextField
             required
