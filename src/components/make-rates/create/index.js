@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import {
+  Link
+} from 'react-router-dom'
 
 // components
 import { FormQuotation } from './formQuotation'
@@ -7,7 +10,7 @@ import { FormQuotation } from './formQuotation'
 import { connect } from 'react-redux'
 import * as quotationActions from '../../../actions/quotationActions'
 
-class CreateQuotation extends Component {
+class CreateQuotationHook extends Component {
 
   constructor(props) {
     super(props)
@@ -19,26 +22,22 @@ class CreateQuotation extends Component {
   }
 
   generatePDF(quotation) {
-    console.log('quotation: ', quotation);
-    this.setState({
-      downloadPDF: true
-    })
-
+    this.props.createQuotation(quotation);
   }
 
-  createQuotation() {
-
+  createQuotation(data) {
+    this.props.createQuotation({ ...data })
   }
 
   render() {
-    console.log(this.props)
-    console.log('***');
+    console.log('***', this.props)
     return (
       <div>
         {/* {this.state.downloadPDF && <GeneratePFD />} */}
         <FormQuotation
           eventGeneratePDF={this.generatePDF}
           eventCreateQuotation={this.createQuotation} />
+        <Link to="/cotizacion" >amor</Link>
       </div>
     );
   }
@@ -47,15 +46,11 @@ class CreateQuotation extends Component {
 // pass state to props (console.log(pros)) end i selected the into return
 
 const mapStateToProps = (reducers) => {
-  console.log('reducers.quotationReducer: ', reducers.quotationReducer);
   return reducers.quotationReducer;
 };
 
 // connect reducer to component
-const CreateQuotations = connect(
-  mapStateToProps,
-  quotationActions
-)(CreateQuotation);
+const CreateQuotation = connect(mapStateToProps, quotationActions)(CreateQuotationHook);
 export {
-  CreateQuotations
+  CreateQuotation
 }

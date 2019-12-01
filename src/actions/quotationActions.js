@@ -1,14 +1,16 @@
+
 export const getAllQuotation = () => (dispatch) => {
     console.log('Actions');
     dispatch({
         type: 'get_quotation',
-        payload: [1,2,3,]
+        payload: 'store.quotation'
+
     })
 }
 
-export const createQuotation = (entity) => (dispatch, entity) => {
+export const createQuotation = (quotation) => (dispatch) => {
     dispatch({
         type: 'create_quotation',
-        payload: entity
+        payload: quotation
     })
 }

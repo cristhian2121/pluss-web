@@ -23,7 +23,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import PageNotFound from "../page-not-found";
-import { CreateQuotations as CreateQuotation } from "../../make-rates/create";
+import { CreateQuotation } from "../../make-rates/create";
 import { User } from "../../users/index";
 import { MakeRate } from "../../make-rates/list/index";
 import { GeneratePDF } from '../pdf'

@@ -5,14 +5,16 @@ import App from './App';
 // import * as serviceWorker from './serviceWorker';
 
 // REDUX
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import reduxThunk from 'redux-thunk'
 
 import reducers from './reducers'
 // Create storage app
 const store = createStore(
     reducers, // todos redux
-    {} // estado inicial
+    {}, // estado inicial
+    applyMiddleware(reduxThunk)
 );
 
 // all in store, app can use

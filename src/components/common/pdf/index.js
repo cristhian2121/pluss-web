@@ -1,15 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import Logo from '../../../static/logo_pop_litle.png'
 import '../../../styles/pdf.css'
 
-export const GeneratePDF = () => {
+// redux 
+import { connect } from 'react-redux'
+
+import * as quotationActions from '../../../actions/quotationActions'
+
+const buildUnits = (quotation) => {
+    const keys = Object.keys(quotation);
+    const unitsNumber = keys.filter(_ => !_.indexOf('cost'));
+    const units = [];
+    for (let index in unitsNumber) {
+        units.push({
+            number: quotation[`unit${index + 1}`],
+            unit: quotation[`const${index + 1}`]
+        })
+    }
+    return units
+}
+
+export const GeneratePDFHook = (props) => {
+    const [unitsCost, setUnitsCost] = useState([])
+    const units = buildUnits(props.quotation)
+    if(!unitsCost){
+        setUnitsCost([units]);
+    } 
+    console.log('props: ', props);
     return (
         <div className="container-pdf">
             <section>
                 <div className="header-pdf">
                     <img src={Logo} className="image-logo-pdf" />
                 </div>
-
                 <div className="bar-head" style={{ backgroundColor: "#ff0000" }}>
                     <div className="quotation-title">Cotización</div>
                 </div>
@@ -17,14 +40,14 @@ export const GeneratePDF = () => {
                 <div className="cliente-information">
                     <div className="row">
                         <div className="column text-descripcion">
-                            <p>EPM S.A.S</p>
+                            <p>{props.quotation.client}</p>
                             <p>calle 37 a # 88 - 26</p>
-                            <p>Medellin</p>
-                            <p>+034 7462382</p>
+                            <p>{props.quotation.city}</p>
+                            <p>{props.quotation.clientPhone}</p>
                         </div>
                         <div className="column text-descripcion">
-                            <p>No. Factura: <span>1223455</span></p>
-                            <p>Fecha: <span>25-11-2019</span></p>
+                            <p>No. Factura: <span>{props.quotation.consecutive}</span></p>
+                            <p>Fecha: <span>{props.quotation.quotationDate}</span></p>
                         </div>
                     </div>
                 </div>
@@ -37,9 +60,9 @@ export const GeneratePDF = () => {
                     </div>
                     <div className="column">
                         <div className="sub-title-pdf">Mause Inalambrico</div>
-                        <p><spam>Descripción: </spam>Mouse plástico inalámbrico. Conexión automática mediante
+                        <p><span>Descripción: </span>Mouse plástico inalámbrico. Conexión automática mediante
                              transmisor USB incluido. 2 Pilas AAA (no incluidas).</p>
-                        <p><spam>Medidas: </spam>11 cm x 5.8 cm x 2 cm</p>
+                        <p><span>Medidas: </span>11 cm x 5.8 cm x 2 cm</p>
                     </div>
                 </div>
                 <div className="product-section-pdf row">
@@ -48,16 +71,16 @@ export const GeneratePDF = () => {
                     </div>
                     <div className="column">
                         <div className="sub-title-pdf">Mause Inalambrico</div>
-                        <p><spam>Descripción: </spam>Vaso plástico con tapa y protector en silicona.
+                        <p><span>Descripción: </span>Vaso plástico con tapa y protector en silicona.
                         Encaja en la mayoría de porta vasos de los autos. En PP Libre de BPA,
                          ftalatos u otras sustancias nocivas. No retiene ni transmite sabores u olores.
                           Capacidad 356 ml / 12 Oz</p>
-                        <p><spam>Medidas: </spam>11 cm x 5.8 cm x 2 cm</p>
+                        <p><span>Medidas: </span>11 cm x 5.8 cm x 2 cm</p>
                         <div className="quote-delivery">
-                            <p style={{marginBottom: "0px"}}>Por:</p>
-                            <p><span>100</span> <b>Unidades</b> $500</p>
-                            <p><span>300</span> <b>Unidades</b> $20.000</p>
-                            <p><span>500</span> <b>Unidades</b> $1.500</p>
+                            <p style={{ marginBottom: "0px" }}>Por:</p>
+                            {unitsCost.map(unit => (
+                                <p><span>{unit.number}</span> <b>Unidades</b> ${unit.price}</p>
+                            ))}
                         </div>
 
                     </div>
@@ -92,5 +115,13 @@ export const GeneratePDF = () => {
     )
 }
 
+const mapStateToProps = (reducers) => {
+    console.log('reducers.quotationReducer: ', reducers.quotationReducer);
+    return reducers.quotationReducer;
+};
 
+const GeneratePDF = connect(mapStateToProps, quotationActions)(GeneratePDFHook);
+export {
+    GeneratePDF
+}
 

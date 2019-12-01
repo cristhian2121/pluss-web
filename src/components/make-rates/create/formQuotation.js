@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -17,7 +17,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-
+import { Link } from "react-router-dom"
 
 
 
@@ -31,7 +31,7 @@ export const FormQuotation = (props) => {
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [units, setunits] = useState([])
-  const [quotationData, setquotationData] = useState([])
+  const [quotationData, setQuotationData] = useState({})
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -40,12 +40,10 @@ export const FormQuotation = (props) => {
   };
 
   const showUnits = () => {
-    console.log('show', showUnitForm)
     setshowUnitForm(!showUnitForm)
   }
 
   const UnitCost = ({ number }) => {
-    console.log('hola', number)
     return (
       <Grid container spacing={3} >
         <Grid item md={1}>
@@ -112,11 +110,10 @@ export const FormQuotation = (props) => {
   }
 
   const saveQuotation = event => {
-    console.log('entrooo');
     if (event) {
       event.preventDefault();
       generateData()
-      props.eventCreateQuotation(quotationData)
+      props.eventCreateQuotation({ ...quotationData })
     }
     // const consecutive = document.getElementById('consecutive').value
     // const unit1 = document.getElementById('unit1').value
@@ -134,8 +131,10 @@ export const FormQuotation = (props) => {
     for (let item of elements) {
       obj[item.name] = item.value;
     }
-    setquotationData(obj)
+    setQuotationData({ ...obj })
   }
+
+  useEffect(() => setQuotationData(quotationData), [quotationData])
 
   return (
     <div>
@@ -242,9 +241,11 @@ export const FormQuotation = (props) => {
       </form>
 
 
-      <Button variant="contained" color="primary" onClick={generatePDF}>
-        Generar PDF <PictureAsPdfIcon />
-      </Button>
+      
+        <Button variant="contained" color="primary" onClick={generatePDF}>
+          Generar PDF <PictureAsPdfIcon />
+        </Button>
+      
     </div>
   );
 }
