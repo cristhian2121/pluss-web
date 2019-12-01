@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import {
-  Link
+  Link,
+  Redirect
 } from 'react-router-dom'
 
 // components
 import { FormQuotation } from './formQuotation'
+import { GeneratePDF } from '../../common/pdf'
 
-// redux 
+// redux
 import { connect } from 'react-redux'
 import * as quotationActions from '../../../actions/quotationActions'
 
@@ -15,7 +17,8 @@ class CreateQuotationHook extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      downloadPDF: false
+      downloadPDF: false,
+      preView: false
     }
     this.createQuotation = this.createQuotation.bind(this)
     this.generatePDF = this.generatePDF.bind(this)
@@ -23,6 +26,32 @@ class CreateQuotationHook extends Component {
 
   generatePDF(quotation) {
     this.props.createQuotation(quotation);
+    this.setState({ preView: true })
+    this.redirectToPDF()
+    const $link = document.querySelector('#new-tap');
+    // $link.print()
+    // this.amor($link)
+    // window.open('/cotizacion', '_blank','',true)
+  }
+
+  amor($link) {
+    let mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+    mywindow.document.appendChild(
+      $link
+    )
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    mywindow.print();
+    mywindow.close();
+  }
+
+  redirectToPDF() {
+    if (this.state.preView) {
+      return <Redirect to='/cotizacion' push={true} />
+    }
   }
 
   createQuotation(data) {
@@ -37,7 +66,8 @@ class CreateQuotationHook extends Component {
         <FormQuotation
           eventGeneratePDF={this.generatePDF}
           eventCreateQuotation={this.createQuotation} />
-        <Link to="/cotizacion" >amor</Link>
+        {this.redirectToPDF()}
+        <Link to="/cotizacion" target="_blank" id="new-tap">amor</Link>
       </div>
     );
   }

@@ -23,6 +23,7 @@ import { Link } from "react-router-dom"
 
 // css
 import '../../../styles/commons.css';
+import { da } from "date-fns/locale";
 
 
 
@@ -111,9 +112,11 @@ export const FormQuotation = (props) => {
 
   const saveQuotation = event => {
     if (event) {
+
+      const data = generateData()
+      console.log('FECHA', da.localize);
+      props.eventCreateQuotation(data)
       event.preventDefault();
-      generateData()
-      props.eventCreateQuotation({ ...quotationData })
     }
     // const consecutive = document.getElementById('consecutive').value
     // const unit1 = document.getElementById('unit1').value
@@ -121,8 +124,9 @@ export const FormQuotation = (props) => {
   }
 
   const generatePDF = () => {
-    generateData()
-    props.eventGeneratePDF(quotationData)
+    const data = generateData()
+    console.log('FECHA', da.localize);
+    props.eventGeneratePDF(data)
   }
 
   const generateData = () => {
@@ -131,10 +135,10 @@ export const FormQuotation = (props) => {
     for (let item of elements) {
       obj[item.name] = item.value;
     }
-    setQuotationData({ ...obj })
+    return obj
   }
 
-  useEffect(() => setQuotationData(quotationData), [quotationData])
+  // useEffect(() => setQuotationData(quotationData), [quotationData])
 
   return (
     <div>
@@ -241,11 +245,11 @@ export const FormQuotation = (props) => {
       </form>
 
 
-      
-        <Button variant="contained" color="primary" onClick={generatePDF}>
-          Generar PDF <PictureAsPdfIcon />
-        </Button>
-      
+
+      <Button variant="contained" color="primary" onClick={generatePDF}>
+        Generar PDF <PictureAsPdfIcon />
+      </Button>
+
     </div>
   );
 }
