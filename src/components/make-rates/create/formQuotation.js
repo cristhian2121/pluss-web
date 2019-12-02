@@ -32,6 +32,7 @@ export const FormQuotation = (props) => {
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [units, setunits] = useState([])
+  const [products, setProducts] = useState([])
   const [quotationData, setQuotationData] = useState({})
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
@@ -46,7 +47,7 @@ export const FormQuotation = (props) => {
 
   const Product = ({ number }) => {
     return (
-      <Grid container spacing={3} >
+      <Grid container spacing={1} >
         <Grid item md={3}>
           <TextField
             id={'image' + number}
@@ -63,7 +64,15 @@ export const FormQuotation = (props) => {
             label="Medidas"
           />
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={3}>
+          <TextField
+            id={'cost' + number}
+            name={'cost' + number}
+            className=""
+            label="Costo"
+          />
+        </Grid>
+        <Grid item md={3}>
           <TextField
             id={'description' + number}
             name={'description' + number}
@@ -81,21 +90,12 @@ export const FormQuotation = (props) => {
   const UnitCost = ({ number }) => {
     return (
       <Grid container spacing={3} >
-
         <Grid item md={2}>
           <TextField
             id={'unit' + number}
             name={'unit' + number}
             className=""
             label="Unidades"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'cost' + number}
-            name={'cost' + number}
-            className=""
-            label="Costo"
           />
         </Grid>
         <Grid item md={2}>
@@ -148,10 +148,10 @@ export const FormQuotation = (props) => {
 
   const saveQuotation = event => {
     if (event) {
+      event.preventDefault();
       const data = generateData()
       console.log('FECHA', da.localize);
       props.eventCreateQuotation(data)
-      event.preventDefault();
     }
     // const consecutive = document.getElementById('consecutive').value
     // const unit1 = document.getElementById('unit1').value
@@ -167,13 +167,25 @@ export const FormQuotation = (props) => {
   const generateData = () => {
     let elements = document.getElementById('quotationForm').elements;
     let obj = {};
-    let products = []
-    for (let item of elements) {    
+    for (let item of elements) {
       obj[item.name] = item.value;
       obj.products = products
     }
-
+    obj.products = generateProducts({...obj});
     return obj
+  }
+
+  const generateProducts = (obj) => {
+    const productsList = []
+    for (let i of products) {
+      productsList.push({
+        image: obj[`image${i}`],
+        size: obj[`size${i}`],
+        cost: obj[`cost${i}`],
+        description: obj[`description${i}`]
+      })
+    }
+    return productsList
   }
 
   return (
@@ -274,12 +286,18 @@ export const FormQuotation = (props) => {
           <div className="container-padding">
             <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
             <div>{units.map(unit => (
-              <div>                
+              <div>
                 <UnitCost key={unit} number={unit} />
               </div>
             ))}</div>
           </div>
         }
+        <Button onClick={() => setProducts([...products, products.length + 1])}>Agregar productos  <AddCircleIcon /></Button>
+        <div>{products.map(product => (
+          <Product key={product} number={product} />
+        ))}
+        </div>
+
         <Button variant="contained" color="primary" type="submit">
           Guardar cotización
       </Button>
