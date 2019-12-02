@@ -1,6 +1,8 @@
 import React, { useState, useReducer } from "react";
 import Logo from '../../../static/logo_pop_litle.png'
-import '../../../styles/pdf.css'
+
+// Components
+import { ProductPDF } from './productPDF'
 
 // redux 
 import { connect } from 'react-redux'
@@ -49,7 +51,7 @@ export const GeneratePDFHook = (props) => {
     console.log('props: ', props);
     return (
         <div>
-        <div className="container-pdf">
+            <div className="container-pdf">
                 <section>
                     <div className="header-pdf">
                         <img src={Logo} onClick={printPDF} className="image-logo-pdf" />
@@ -75,37 +77,9 @@ export const GeneratePDFHook = (props) => {
                 </section>
 
                 <section>
-                    <div className="product-section-pdf row">
-                        <div className="column product-pdf">
-                            <img src="https://http2.mlstatic.com/logitech-wireless-mouse-m170-a-gris-D_NQ_NP_823839-MCO31539178210_072019-O.webp" className="product-image-pdf" />
-                        </div>
-                        <div className="column">
-                            <div className="sub-title-pdf">Mause Inalambrico</div>
-                            <p><span>Descripción: </span>Mouse plástico inalámbrico. Conexión automática mediante
-                             transmisor USB incluido. 2 Pilas AAA (no incluidas).</p>
-                            <p><span>Medidas: </span>11 cm x 5.8 cm x 2 cm</p>
-                        </div>
-                    </div>
-                    <div className="product-section-pdf row">
-                        <div className="column product-pdf">
-                            <img src="http://www.prototipo.co/images/Noticias-2017/souvenirs-empresariales-y-su-importancia-4.jpg" className="product-image-pdf" />
-                        </div>
-                        <div className="column">
-                            <div className="sub-title-pdf">Mause Inalambrico</div>
-                            <p><span>Descripción: </span>Vaso plástico con tapa y protector en silicona.
-                            Encaja en la mayoría de porta vasos de los autos. En PP Libre de BPA,
-                             ftalatos u otras sustancias nocivas. No retiene ni transmite sabores u olores.
-                          Capacidad 356 ml / 12 Oz</p>
-                            <p><span>Medidas: </span>11 cm x 5.8 cm x 2 cm</p>
-                            <div className="quote-delivery">
-                                <p style={{ marginBottom: "0px" }}>Por:</p>
-                                {unitsCost.map((unit, index) => (
-                                    <p key={index}><span>{unit.number}</span> <b>Unidades</b> ${unit.price}</p>
-                                ))}
-                            </div>
-
-                        </div>
-                    </div>
+                    {props.quotation.products.map(product => (
+                        ProductPDF(product)
+                    ))}
                 </section>
                 <hr />
                 <section className="floor-pdf">

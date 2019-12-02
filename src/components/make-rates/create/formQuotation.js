@@ -47,7 +47,23 @@ export const FormQuotation = (props) => {
   const UnitCost = ({ number }) => {
     return (
       <Grid container spacing={3} >
-        <Grid item md={1}>
+        <Grid item md={2}>
+          <TextField
+            id={'image' + number}
+            name={'image' + number}
+            className=""
+            label="Url imagen"
+          />
+        </Grid>
+        <Grid item md={2}>
+          <TextField
+            id={'image' + number}
+            name={'image' + number}
+            className=""
+            label="Medidas"
+          />
+        </Grid>
+        <Grid item md={2}>
           <TextField
             id={'unit' + number}
             name={'unit' + number}
@@ -63,7 +79,7 @@ export const FormQuotation = (props) => {
             label="Costo"
           />
         </Grid>
-        <Grid item md={1}>
+        <Grid item md={2}>
           <TextField
             id={'discount' + number}
             name={'discount' + number}
@@ -82,7 +98,7 @@ export const FormQuotation = (props) => {
 
         {/* Segunda fila */}
 
-        <Grid item md={1}>
+        <Grid item md={2}>
           <TextField
             id={'profitableness' + number}
             name={'profitableness' + number}
@@ -104,6 +120,16 @@ export const FormQuotation = (props) => {
             name={'transport' + number}
             className=""
             label="Transporte"
+          />
+        </Grid>
+        <Grid item md={4}>
+          <TextField
+            id={'image' + number}
+            name={'image' + number}
+            multiline
+            rowsMax="4"
+            className=""
+            label="Descripción"
           />
         </Grid>
       </Grid>
