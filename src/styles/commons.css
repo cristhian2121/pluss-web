@@ -1,0 +1,9 @@
+.text-expand{
+    font-size: 1.1em;
+    color: red;
+    text-align: right;
+}
+
+.container-padding {
+    margin-bottom: 15px !important;
+}

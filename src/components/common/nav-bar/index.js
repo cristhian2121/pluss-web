@@ -25,7 +25,9 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import PageNotFound from "../page-not-found";
 import { CreateMakeRate } from "../../make-rates/create/index";
 import { User } from "../../../pages/users/index";
+import { CreateQuotation } from "../../make-rates/create";
 import { MakeRate } from "../../make-rates/list/index";
+import { GeneratePDF } from '../pdf'
 
 const drawerWidth = 240;
 
@@ -76,13 +78,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       width: theme.spacing(9) + 1
     }
-  },
-  toolbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar
   },
   content: {
     flexGrow: 1,
@@ -163,7 +158,8 @@ export default function Menu() {
         <Switch>
           <Route exact path="/cotizaciones" component={MakeRate} />
           <Route exact path="/usuarios" component={User} />
-          <Route exact path="/cotizaciones/crear" component={CreateMakeRate} />
+          <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
+          <Route exact path="/cotizacion" component={GeneratePDF} />
           <Route component={PageNotFound} />
         </Switch>
       </main>

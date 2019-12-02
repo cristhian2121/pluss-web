@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Avatar from '@material-ui/core/Avatar';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -7,7 +9,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 
@@ -16,7 +17,7 @@ import Container from '@material-ui/core/Container';
 import conf from '../../config';
 import Copyright from '../../components/common/copyright'
 import {Redirect} from 'react-router-dom' 
-
+import Logo from '../../static/logo_pop_litle.png'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -85,9 +86,12 @@ function IntegrationNotistack() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+        {/* <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
-        </Avatar>
+        </Avatar> */}
+        <Typography component="h1" variant="h5">
+        <img src={Logo} className="image-logo-pdf" />
+        </Typography>
         <Typography component="h1" variant="h5">
           Ingresa tus credenciales
         </Typography>
