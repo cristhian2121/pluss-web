@@ -5,26 +5,18 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import { SnackbarProvider, useSnackbar } from 'notistack';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import conf from '../../config';
+import Copyright from '../../components/common/copyright'
+import {Redirect} from 'react-router-dom' 
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -46,32 +38,49 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-
 export default function Login() {
-  const [loginData, setloginData] = useState([])
+  return (
+    <SnackbarProvider maxSnack={3}>
+      <IntegrationNotistack />
+    </SnackbarProvider>
+  );
+}
+
+function IntegrationNotistack() {
   const classes = useStyles();
-  
-  const data = {
-    email: null,
-    password: null,
-  }
+  const { enqueueSnackbar } = useSnackbar();
+  const [ loginRoot, setLoginRoot ] = useState(false)
 
   const login = () => {
-    console.log('entro a login')
-    generateData()
-    console.log('autentication bygytffut', loginData)
+    let data = generateData()
+    fetch(`${conf.api_url}/login/`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(async function(response) {
+      let resp = await response.json()
+      if (resp['username']) { enqueueSnackbar(resp['username'], {variant: 'error'}) }
+      if (resp['password']) { enqueueSnackbar(resp['password'], {variant: 'error'}) }
+      if (response.status == 401) { enqueueSnackbar(resp['detail'], {variant: 'error'}) }
+      if (response.status == 200) { setLoginRoot(true) }
+    })
+    .catch(function(error) {
+      enqueueSnackbar('Se generó un error en la autenticación.', {variant: 'error'});
+    });
   }
 
   const generateData = () => {
     let elements = document.getElementById('loginForm').elements;
-    let obj = {};
+    let data = {};
     for (let item of elements) {
-      obj[item.name] = item.value;
+      data[item.name] = item.value;
     }
-    setloginData( obj )
-    console.log('autentication', obj, loginData)
+    return data
   }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -80,7 +89,7 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Ingresa tus credenciales
         </Typography>
         <form id="loginForm" className={classes.form} noValidate>
           <TextField
@@ -88,11 +97,10 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="email"
+            id="username"
             label="Correo electrónico"
-            name="email"
-            autoComplete="email"
-            value={data.email}
+            name="username"
+            autoComplete="username"
             autoFocus
           />
           <TextField
@@ -101,16 +109,15 @@ export default function Login() {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Contraseña"
             type="password"
             id="password"
-            value={data.password}
             autoComplete="current-password"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
             type="button"
             fullWidth
@@ -119,9 +126,9 @@ export default function Login() {
             className={classes.submit}
             onClick={login}
           >
-            Sign In
+            Ingresar
           </Button>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
@@ -132,12 +139,13 @@ export default function Login() {
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </div>
       <Box mt={8}>
         <Copyright />
       </Box>
+      {loginRoot ?  <Redirect to='/'/> : ''}
     </Container>
   );
 }

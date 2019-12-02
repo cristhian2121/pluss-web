@@ -6,13 +6,26 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import { SnackbarProvider, useSnackbar } from 'notistack';
+
 import conf from '../../config'
 
 export class Create extends Component {
+//   render() {
+//     return (
+//       <SnackbarProvider maxSnack={3}>
+//         <Created />
+//       </SnackbarProvider>
+//   )};
+// }
+
+// class Created extends Component {
   constructor(props) {
     super(props)
     this.state = {
       dataGroups: [],
+      passDiff: false
     }
     this.data = {
       code: null,
@@ -20,11 +33,13 @@ export class Create extends Component {
       user: '',
       type_identification: 'CC',
       identification_number: null,
+      email: null,
       username: null,
       phone_number: null,
       groups: [],
       password: null
     }
+    this.passwordConfirm = null
   }
   componentDidMount() {
     this.getGroups()
@@ -52,20 +67,44 @@ export class Create extends Component {
         break
       case "document":
         this.data.identification_number = e.target.value
-        this.data.password = e.target.value
         break
       case "email":
         this.data.username = e.target.value
+        this.data.email = e.target.value
         break
       case "phone":
         this.data.phone_number = e.target.value
         break
       case "group":
         this.data.groups = e.target.value
-        break      
+        break
+      case "password1":
+        this.passwordConfirm = e.target.value
+        break
+      case "password":
+        console.log(this.passwordConfirm, e.target.value)
+        if (this.passwordConfirm !== e.target.value) {
+          this.setState({ passDiff: true })
+        }else {
+          this.data.password = e.target.value
+          this.setState({ passDiff: false })
+        }
+        break
     }
     console.log('llego', this.data.name)
   };  
+  clear = () => {
+    document.getElementById("userForm").reset()
+    this.data.code = null
+    this.data.first_name = null
+    this.data.user = ''
+    this.data.identification_number = null
+    this.data.email = null
+    this.data.username = null
+    this.data.phone_number = null
+    this.data.groups = []
+    this.data.password = null
+  }
   save = () => {
     fetch(`${conf.api_url}/profile/`, {
       method: 'POST',
@@ -74,26 +113,19 @@ export class Create extends Component {
         'Content-Type': 'application/json'
       }
     })
-    .then(function(response) {
+    .then(async function(response) {
       console.log('response', response)
-      this.clear()
+      let resp = await response.json()
+      if (response.status == 201 ) {
+        // useSnackbar(resp['detail'], {variant: 'succes'})
+        this.clear()
+      }
     })
-    .catch(function(err) {
+    .catch(err => {
         console.log(err);
     });
 
   };
-  clear = () => {
-    this.data.code = null
-    this.data.first_name = null
-    this.data.user = ''
-    this.data.type_identification = 'CC'
-    this.data.identification_number = null
-    this.data.username = null
-    this.data.phone_number = null
-    this.data.groups = []
-    this.data.password = null
-  }
 
   render() {
     return (
@@ -101,7 +133,7 @@ export class Create extends Component {
         <div class="sub-title">
           Nuevo usuario
         </div>
-        <form>
+        <form id="userForm" >
           <TextField
             required
             onChange={this.handleChange}
@@ -147,8 +179,27 @@ export class Create extends Component {
             >              
               {this.state.dataGroups.map(groups => (
                 <MenuItem value={groups.id}>{groups.name}</MenuItem>
-              ))}              
+                ))}              
             </Select> 
+          </FormControl>
+          <TextField
+            required
+            type="password"
+            onChange={this.handleChange}
+            name="password1"
+            label="Contraseña"
+            margin="normal"
+            />
+          <FormControl>
+            <TextField
+              required
+              type="password"
+              onChange={this.handleChange}
+              name="password"
+              label="Confirme contraseña"
+              margin="normal"
+              />
+            {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
           </FormControl>
           <br/><br/>
           <div class="text-center">
