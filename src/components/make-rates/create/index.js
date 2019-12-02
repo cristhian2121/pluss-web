@@ -67,7 +67,6 @@ class CreateQuotationHook extends Component {
           eventGeneratePDF={this.generatePDF}
           eventCreateQuotation={this.createQuotation} />
         {this.redirectToPDF()}
-        <Link to="/cotizacion" target="_blank" id="new-tap">amor</Link>
       </div>
     );
   }

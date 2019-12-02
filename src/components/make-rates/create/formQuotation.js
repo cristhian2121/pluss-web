@@ -44,10 +44,10 @@ export const FormQuotation = (props) => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const UnitCost = ({ number }) => {
+  const Product = ({ number }) => {
     return (
       <Grid container spacing={3} >
-        <Grid item md={2}>
+        <Grid item md={3}>
           <TextField
             id={'image' + number}
             name={'image' + number}
@@ -55,14 +55,33 @@ export const FormQuotation = (props) => {
             label="Url imagen"
           />
         </Grid>
-        <Grid item md={2}>
+        <Grid item md={3}>
           <TextField
-            id={'image' + number}
-            name={'image' + number}
+            id={'size' + number}
+            name={'size' + number}
             className=""
             label="Medidas"
           />
         </Grid>
+        <Grid item md={4}>
+          <TextField
+            id={'description' + number}
+            name={'description' + number}
+            multiline
+            rowsMax="4"
+            className=""
+            label="Descripción"
+          />
+        </Grid>
+      </Grid>
+    )
+
+  }
+
+  const UnitCost = ({ number }) => {
+    return (
+      <Grid container spacing={3} >
+
         <Grid item md={2}>
           <TextField
             id={'unit' + number}
@@ -122,23 +141,13 @@ export const FormQuotation = (props) => {
             label="Transporte"
           />
         </Grid>
-        <Grid item md={4}>
-          <TextField
-            id={'image' + number}
-            name={'image' + number}
-            multiline
-            rowsMax="4"
-            className=""
-            label="Descripción"
-          />
-        </Grid>
+
       </Grid>
     )
   }
 
   const saveQuotation = event => {
     if (event) {
-
       const data = generateData()
       console.log('FECHA', da.localize);
       props.eventCreateQuotation(data)
@@ -158,13 +167,14 @@ export const FormQuotation = (props) => {
   const generateData = () => {
     let elements = document.getElementById('quotationForm').elements;
     let obj = {};
-    for (let item of elements) {
+    let products = []
+    for (let item of elements) {    
       obj[item.name] = item.value;
+      obj.products = products
     }
+
     return obj
   }
-
-  // useEffect(() => setQuotationData(quotationData), [quotationData])
 
   return (
     <div>
@@ -259,10 +269,15 @@ export const FormQuotation = (props) => {
         </Grid>
         <div className="text-expand"><span onClick={showUnits}> Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
         </div>
+
         {showUnitForm &&
           <div className="container-padding">
             <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
-            <div>{units.map(unit => <UnitCost key={unit} number={unit} />)}</div>
+            <div>{units.map(unit => (
+              <div>                
+                <UnitCost key={unit} number={unit} />
+              </div>
+            ))}</div>
           </div>
         }
         <Button variant="contained" color="primary" type="submit">
