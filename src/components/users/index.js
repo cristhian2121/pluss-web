@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -7,25 +6,18 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import conf from '../../config'
 
 export class Create extends Component {
-//   render() {
-//     return (
-//       <SnackbarProvider maxSnack={3}>
-//         <Created />
-//       </SnackbarProvider>
-//   )};
-// }
-
-// class Created extends Component {
   constructor(props) {
     super(props)
     this.state = {
       dataGroups: [],
-      passDiff: false
+      passDiff: false,
+      activeDialog: false,
+      messageAlert: ''
     }
     this.data = {
       code: null,
@@ -104,6 +96,12 @@ export class Create extends Component {
     this.data.phone_number = null
     this.data.groups = []
     this.data.password = null
+  };
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({ activeDialog: false })
   }
   save = () => {
     fetch(`${conf.api_url}/profile/`, {
@@ -117,12 +115,13 @@ export class Create extends Component {
       console.log('response', response)
       let resp = await response.json()
       if (response.status == 201 ) {
-        // useSnackbar(resp['detail'], {variant: 'succes'})
+        this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
         this.clear()
       }
     })
     .catch(err => {
         console.log(err);
+        this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
     });
 
   };
@@ -208,6 +207,21 @@ export class Create extends Component {
             </Button>
           </div>
         </form>
+
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.activeDialog}
+          autoHideDuration={3000}
+          color="secondary"
+          onClose={this.handleClose}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">{this.state.messageAlert}</span>}
+        />
       </div>
     );
   }
