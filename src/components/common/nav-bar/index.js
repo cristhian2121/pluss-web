@@ -85,7 +85,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Menu() {
+export const Menu = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -99,7 +99,7 @@ export default function Menu() {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} id="nav-var-pluss">
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
@@ -155,13 +155,12 @@ export default function Menu() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Switch>
+        {/* <Switch> */}
           <Route exact path="/cotizaciones" component={MakeRate} />
           <Route exact path="/usuarios" component={User} />
           <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
-          <Route exact path="/cotizacion" component={GeneratePDF} />
-          <Route component={PageNotFound} />
-        </Switch>
+          {/* <Route exact path="/cotizacion" component={GeneratePDF} />  */}         
+        {/* </Switch> */}
       </main>
     </div>
   );

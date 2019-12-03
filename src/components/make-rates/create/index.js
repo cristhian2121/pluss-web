@@ -7,6 +7,7 @@ import {
 // components
 import { FormQuotation } from './formQuotation'
 import { GeneratePDF } from '../../common/pdf'
+import { Menu } from '../../common/nav-bar'
 
 // redux
 import { connect } from 'react-redux'
@@ -62,7 +63,7 @@ class CreateQuotationHook extends Component {
     console.log('***', this.props)
     return (
       <div>
-        {/* {this.state.downloadPDF && <GeneratePFD />} */}
+        {/* <Menu /> */}
         <FormQuotation
           eventGeneratePDF={this.generatePDF}
           eventCreateQuotation={this.createQuotation} />
