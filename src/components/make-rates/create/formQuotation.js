@@ -71,6 +71,15 @@ export const FormQuotation = (props) => {
             className=""
             label="Costo"
           />
+        </Grid><Grid item md={3}>
+          <TextField
+            id={'name' + number}
+            name={'name' + number}
+            multiline
+            rowsMax="4"
+            className=""
+            label="Nombre"
+          />
         </Grid>
         <Grid item md={3}>
           <TextField
