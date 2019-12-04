@@ -25,6 +25,11 @@ class CreateQuotationHook extends Component {
     this.generatePDF = this.generatePDF.bind(this)
   }
 
+  componentDidMount(){
+    const $navBar = document.querySelector('#nav-var-pluss')
+    $navBar.style.visibility = 'visible'
+  }
+
   generatePDF(quotation) {
     this.props.createQuotation(quotation);
     this.setState({ preView: true })
@@ -51,7 +56,8 @@ class CreateQuotationHook extends Component {
 
   redirectToPDF() {
     if (this.state.preView) {
-      return <Redirect to='/cotizacion' push={true} />
+      // return <Redirect to='/cotizacion' push={true} />
+      this.props.history.push('/cotizacion')
     }
   }
 
@@ -67,7 +73,7 @@ class CreateQuotationHook extends Component {
         <FormQuotation
           eventGeneratePDF={this.generatePDF}
           eventCreateQuotation={this.createQuotation} />
-        {this.redirectToPDF()}
+        {/* {this.redirectToPDF()} */}
       </div>
     );
   }

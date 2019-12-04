@@ -85,7 +85,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const Menu = () => {
+export const Menu = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -155,12 +155,7 @@ export const Menu = () => {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {/* <Switch> */}
-          <Route exact path="/cotizaciones" component={MakeRate} />
-          <Route exact path="/usuarios" component={User} />
-          <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
-          {/* <Route exact path="/cotizacion" component={GeneratePDF} />  */}         
-        {/* </Switch> */}
+        {children}
       </main>
     </div>
   );

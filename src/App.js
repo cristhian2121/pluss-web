@@ -16,20 +16,16 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      <header></header>
       <Router>
-        {/* <Route exact path="/cotizacion" component={GeneratePDF} /> */}
-        {/* <Switch> */}
-        {/* <Route exact path="/login" component={Login} /> */}
         <Route exact path="/cotizacion" component={GeneratePDF} />
-
-        <Route component={Menu} />
-        {/* <Route component={PageNotFound} /> */}
-        {/* <Route exact path="/cotizaciones" component={MakeRate} />
-          <Route exact path="/usuarios" component={Create} />
-          <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
-          <Route component={PageNotFound} /> */}
-        {/* </Switch> */}
+        <Menu>
+          <Switch>
+            <Route exact path="/cotizaciones" component={MakeRate} />
+            <Route exact path="/usuarios" component={Create} />
+            <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
+            <Route component={PageNotFound} />
+          </Switch>
+      </Menu>
       </Router>
     </div>
   );
