@@ -1,7 +1,8 @@
 .text-expand{
     font-size: 1.1em;
-    color: red;
+    color: #db2929;/*#97b10c;*/
     text-align: right;
+    font-weight: bold;
 }
 
 .container-padding {

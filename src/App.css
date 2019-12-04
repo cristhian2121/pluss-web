@@ -34,10 +34,11 @@
 }
 
 .sub-title {
-  padding: 10px;
+  /* padding: 3px; */
+  padding-left: 7px;
   border-left: 4px solid #97b10c;
-  font-size: 17px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 400;
   position: relative;
   margin-top: 15px;
 }
@@ -59,5 +60,10 @@
 
 .formControl {
   min-width: 100% !important;
+}
+
+.MuiButton-containedSecondary {
+  background-color:#db2929 !important;
+  /* opacity: .6; */
 }
 

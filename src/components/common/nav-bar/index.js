@@ -18,7 +18,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import {LibraryBooks} from "@material-ui/icons";
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
@@ -129,7 +130,7 @@ export const Menu = ({ children }) => {
             },
             {
               text: "Cotizaciones",
-              icon: <AssignmentIcon />,
+              icon: <LibraryBooks />,
               path: "/cotizaciones/crear"
             },
             {
