@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -31,7 +31,7 @@ import { da } from "date-fns/locale";
 export const FormQuotation = (props) => {
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
-  const [units, setunits] = useState([])
+  const [units, setUnits] = useState([])
   const [products, setProducts] = useState([])
   const [quotationData, setQuotationData] = useState({})
 
@@ -47,101 +47,136 @@ export const FormQuotation = (props) => {
 
   const Product = ({ number }) => {
     return (
-      <Grid container spacing={1} >
-        <Grid item md={3}>
-          <TextField
-            id={'image' + number}
-            name={'image' + number}
-            className=""
-            label="Url imagen"
-          />
+      <Fragment>
+        <Grid container spacing={1} >
+          <Grid item md={3}>
+            <TextField
+              id={'image' + number}
+              name={'image' + number}
+              className=""
+              label="Url imagen"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id={'name' + number}
+              name={'name' + number}
+              className=""
+              label="Nombre"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id={'size' + number}
+              name={'size' + number}
+              className=""
+              label="Medidas"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id={'colors' + number}
+              name={'colors' + number}
+              className=""
+              label="Colores disponibles"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id={'prints' + number}
+              name={'prints' + number}
+              className=""
+              label="tintas"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id={'description' + number}
+              name={'description' + number}
+              multiline
+              rowsMax="4"
+              className=""
+              label="Descripción"
+            />
+          </Grid>
+          <Grid item md={3}>
+            <TextField
+              id={'cost' + number}
+              name={'cost' + number}
+              className=""
+              label="Precio en pagina"
+            />
+          </Grid>
         </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'size' + number}
-            name={'size' + number}
-            className=""
-            label="Medidas"
-          />
+        <p>Valor por unidades</p>
+        <Grid container spacing={1}>
+          <Grid item>
+            <TextField
+              id={'discount' + number}
+              name={'discount' + number}
+              className=""
+              label="Descuento %"
+
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              id={'mark' + number}
+              name={'mark' + number}
+              className=""
+              label="Marcación"
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              id={'profitableness' + number}
+              name={'profitableness' + number}
+              className=""
+              label="Rentabilidad %"
+            />
+          </Grid>
+          <Grid item md={2}>
+            <TextField
+              id={'transport' + number}
+              name={'transport' + number}
+              className=""
+              label="Transporte"
+            />
+          </Grid>
+          <Grid item md={2}>
+            <p>Costo: </p>
+            <p>Valor de venta: </p>
+          </Grid>
         </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'cost' + number}
-            name={'cost' + number}
-            className=""
-            label="Costo"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'description' + number}
-            name={'description' + number}
-            multiline
-            rowsMax="4"
-            className=""
-            label="Descripción"
-          />
-        </Grid>
-      </Grid>
+      </Fragment>
     )
 
   }
 
-  const UnitCost = ({ number }) => {
+  const handleAddUnits = () => {
+    const $unit = document.querySelector(`#unit`)
+    if ($unit) {
+      const unit = $unit.value
+      setUnits(units => [...units, unit]);
+    }
+  }
+
+  const UnitCost = () => {
     return (
       <Grid container spacing={3} >
         <Grid item md={2}>
           <TextField
-            id={'unit' + number}
-            name={'unit' + number}
+            id={'unit'}
+            name={'unit'}
             className=""
             label="Unidades"
           />
         </Grid>
         <Grid item md={2}>
-          <TextField
-            id={'discount' + number}
-            name={'discount' + number}
-            className=""
-            label="% descuento"
-          />
+          <Button color="primary" onClick={handleAddUnits}>
+            Agregar <AddCircleIcon />
+          </Button>
         </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'mark' + number}
-            name={'mark' + number}
-            className=""
-            label="Marcación"
-          />
-        </Grid>
-
-        {/* Segunda fila */}
-
-        <Grid item md={2}>
-          <TextField
-            id={'profitableness' + number}
-            name={'profitableness' + number}
-            className=""
-            label="% Rentabilidad"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'total' + number}
-            name={'total' + number}
-            className=""
-            label="Valor de venta"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'transport' + number}
-            name={'transport' + number}
-            className=""
-            label="Transporte"
-          />
-        </Grid>
-
       </Grid>
     )
   }
@@ -153,9 +188,6 @@ export const FormQuotation = (props) => {
       console.log('FECHA', da.localize);
       props.eventCreateQuotation(data)
     }
-    // const consecutive = document.getElementById('consecutive').value
-    // const unit1 = document.getElementById('unit1').value
-    // const quotationDate = document.getElementById('date-picker-inline').value
   }
 
   const generatePDF = () => {
@@ -171,7 +203,7 @@ export const FormQuotation = (props) => {
       obj[item.name] = item.value;
       obj.products = products
     }
-    obj.products = generateProducts({...obj});
+    obj.products = generateProducts({ ...obj });
     return obj
   }
 
@@ -193,7 +225,7 @@ export const FormQuotation = (props) => {
       <div class="title">
         Crear cotización
       </div>
-      <br/>
+      <br />
       <form id="quotationForm" onSubmit={saveQuotation}>
         <Grid container spacing={3}>
           <Grid item md={3}>
@@ -282,31 +314,27 @@ export const FormQuotation = (props) => {
           </Grid>
           {/* fila 3 */}
         </Grid>
-        <br/>
-        {/* <div className="text-expand"><span onClick={showUnits}>
-          Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
-        </div> */}
-
-        {/* {showUnitForm &&
-          <div className="container-padding">
-          </div>
-        } */}
+        <br />
         <div class="sub-title">
-          <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
+          Agregar Unidades
         </div>
-        <div>{units.map(unit => (
-          <div>
-            <UnitCost key={unit} number={unit} />
-          </div>
-        ))}</div>
-        <br/>
+
+        {/* Unidades */}
+        <UnitCost />
+
+        <div>
+          {units.map(unit => (
+            <span style={{paddingRight: '1em'}}>{unit},</span>
+          ))}
+        </div>
+        <br />
         <div class="sub-title">
           <Button onClick={() => setProducts([...products, products.length + 1])}>Agregar productos  <AddCircleIcon /></Button>
         </div>
         <div>{products.map(product => (
           <Product key={product} number={product} />
         ))}</div>
-        <br/><br/>
+        <br /><br />
         <Grid item md={12} class="text-center">
           <Button variant="contained" color="primary" type="submit">
             Guardar cotización
@@ -317,10 +345,6 @@ export const FormQuotation = (props) => {
         </Grid>
 
       </form>
-
-
-
-
     </div>
   );
 }
