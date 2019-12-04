@@ -84,7 +84,7 @@ export class Create extends Component {
         break
     }
     console.log('llego', this.data.name)
-  };  
+  };
   clear = () => {
     document.getElementById("userForm").reset()
     this.data.code = null
@@ -129,9 +129,9 @@ export class Create extends Component {
   render() {
     return (
       <div>
-        <div class="sub-title">
+        {/* <div class="sub-title">
           Nuevo usuario
-        </div>
+        </div> */}
         <form id="userForm" >
           <TextField
             required
@@ -168,19 +168,6 @@ export class Create extends Component {
             label="Teléfono"
             margin="normal"
             />
-          <FormControl margin="normal">
-            <InputLabel id="group">Tipo usuario</InputLabel>
-            <Select
-              labelId="group"
-              name="group"
-              onChange={this.handleChange}
-              // onInput={this.handleChange}
-            >              
-              {this.state.dataGroups.map(groups => (
-                <MenuItem value={groups.id}>{groups.name}</MenuItem>
-                ))}              
-            </Select> 
-          </FormControl>
           <TextField
             required
             type="password"
@@ -200,9 +187,22 @@ export class Create extends Component {
               />
             {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
           </FormControl>
-          <br/><br/>
+          <FormControl margin="normal">
+            <InputLabel id="group">Tipo usuario</InputLabel>
+            <Select
+              labelId="group"
+              name="group"
+              onChange={this.handleChange}
+              // onInput={this.handleChange}
+            >              
+              {this.state.dataGroups.map(groups => (
+                <MenuItem value={groups.id}>{groups.name}</MenuItem>
+                ))}              
+            </Select> 
+          </FormControl>
+          <br/><br/><br/>
           <div class="text-center">
-            <Button color="primary" onClick={this.save}>
+            <Button variant="contained" color="primary" type="submit" onClick={this.save}>
               Crear Usuario
             </Button>
           </div>

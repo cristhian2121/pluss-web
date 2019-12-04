@@ -190,7 +190,10 @@ export const FormQuotation = (props) => {
 
   return (
     <div>
-      <h3>Cotizaciones</h3>
+      <div class="title">
+        Crear cotización
+      </div>
+      <br/>
       <form id="quotationForm" onSubmit={saveQuotation}>
         <Grid container spacing={3}>
           <Grid item md={3}>
@@ -279,35 +282,44 @@ export const FormQuotation = (props) => {
           </Grid>
           {/* fila 3 */}
         </Grid>
-        <div className="text-expand"><span onClick={showUnits}> Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
-        </div>
+        <br/>
+        {/* <div className="text-expand"><span onClick={showUnits}>
+          Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
+        </div> */}
 
-        {showUnitForm &&
+        {/* {showUnitForm &&
           <div className="container-padding">
-            <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
-            <div>{units.map(unit => (
-              <div>
-                <UnitCost key={unit} number={unit} />
-              </div>
-            ))}</div>
           </div>
-        }
-        <Button onClick={() => setProducts([...products, products.length + 1])}>Agregar productos  <AddCircleIcon /></Button>
+        } */}
+        <div class="sub-title">
+          <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
+        </div>
+        <div>{units.map(unit => (
+          <div>
+            <UnitCost key={unit} number={unit} />
+          </div>
+        ))}</div>
+        <br/>
+        <div class="sub-title">
+          <Button onClick={() => setProducts([...products, products.length + 1])}>Agregar productos  <AddCircleIcon /></Button>
+        </div>
         <div>{products.map(product => (
           <Product key={product} number={product} />
-        ))}
-        </div>
+        ))}</div>
+        <br/><br/>
+        <Grid item md={12} class="text-center">
+          <Button variant="contained" color="primary" type="submit">
+            Guardar cotización
+          </Button>
+          <Button variant="contained" color="secondary" onClick={generatePDF}>
+            Generar PDF <PictureAsPdfIcon />
+          </Button>
+        </Grid>
 
-        <Button variant="contained" color="primary" type="submit">
-          Guardar cotización
-      </Button>
       </form>
 
 
 
-      <Button variant="contained" color="primary" onClick={generatePDF}>
-        Generar PDF <PictureAsPdfIcon />
-      </Button>
 
     </div>
   );
