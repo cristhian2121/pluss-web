@@ -21,7 +21,7 @@ p {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    border:1px solid black;
+    /*border:1px solid black;*/
 }
 
 .column {
@@ -29,7 +29,7 @@ p {
     flex-direction: column;
     flex-basis: 100%;
     flex: 1;
-    border:1px solid black;
+    /*border:1px solid black;*/
 }
 
 .information-client-pdf p {

@@ -191,7 +191,8 @@ export const FormQuotation = (props) => {
         image: obj[`image${i}`],
         size: obj[`size${i}`],
         cost: obj[`cost${i}`],
-        description: obj[`description${i}`]
+        description: obj[`description${i}`],
+        name: obj[`name${i}`]
       })
     }
     return productsList
@@ -312,7 +313,7 @@ export const FormQuotation = (props) => {
       </Button>
       </form>
 
-
+      <br></br>
 
       <Button variant="contained" color="primary" onClick={generatePDF}>
         Generar PDF <PictureAsPdfIcon />
