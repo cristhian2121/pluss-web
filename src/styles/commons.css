@@ -1,9 +1,15 @@
 .text-expand{
     font-size: 1.1em;
-    color: red;
+    color: #db2929;/*#97b10c;*/
     text-align: right;
+    font-weight: bold;
 }
 
 .container-padding {
     margin-bottom: 15px !important;
+}
+
+.messagge-validator {
+    font-size: 0.8 em;
+    color: red;
 }

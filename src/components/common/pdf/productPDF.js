@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../../styles/pdf.css'
 
-export const ProductPDF = product => {
+export const ProductPDF = ({ product }) => {
     return (
         <div className="product-section-pdf row">
             <div className="column product-pdf">
