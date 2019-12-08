@@ -21,6 +21,7 @@ p {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
+    /*border:1px solid black;*/
 }
 
 .column {
@@ -28,6 +29,7 @@ p {
     flex-direction: column;
     flex-basis: 100%;
     flex: 1;
+    /*border:1px solid black;*/
 }
 
 .information-client-pdf p {
@@ -80,7 +82,7 @@ p {
 }
 
 .sub-title-pdf {
-    font-size: 0.9em;
+    font-size: 2em;
     font-weight: bold;
 }
 
