@@ -12,13 +12,24 @@ export class User extends Component {
     constructor() {
         super();
         this.state = {
-          showForm: false
+          showForm: false,
+          dataFormUpdate: {}
         }
     }
     showForm = () => {
       this.setState({
         showForm: true
       })
+    }
+
+    dataUpdate =  (data) => {
+      console.log('data', data)
+      if (data !== '' || data!== null) {
+        this.setState({
+          showForm: true, 
+          dataFormUpdate: data
+        })
+      }
     }
 
     render() {
@@ -32,11 +43,11 @@ export class User extends Component {
             </div>
             <br/><br/>
             <div class="sub-title">
-              <Button onClick={this.showForm}>Crear Usuarios  <AddCircleIcon /></Button>
+              <Button onClick={this.showForm}>Crear/Editar Usuario </Button>
             </div>
-            { this.state.showForm ? <Create /> : ''}
+            { this.state.showForm ? <Create selectUpdate={this.state.dataFormUpdate} /> : ''}
             <br/><br/>
-            <List />
+            <List selectUpdate={this.dataUpdate}/>
           </div>
         );
       }

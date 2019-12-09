@@ -17,7 +17,12 @@ export class Create extends Component {
       dataGroups: [],
       passDiff: false,
       activeDialog: false,
-      messageAlert: ''
+      messageAlert: '',
+      code: props.selectUpdate.code,
+      first_name: props.selectUpdate.user.first_name,
+      identification_number: props.selectUpdate.identification_number,
+      username: props.selectUpdate.user.username,
+      phone_number: props.selectUpdate.phone_number
     }
     this.data = {
       code: null,
@@ -50,31 +55,37 @@ export class Create extends Component {
     }    
   }
   handleChange = e => {
+    console.log('llego', e.target.value)
+    this.render()
     switch (e.target.name){
       case "code":
-        this.data.code = e.target.value
+        this.setState({ code: e.target.value })
+        // this.data.code = e.target.value
         break
-      case "name":
-        this.data.first_name = e.target.value
+      case "first_name":
+        this.setState({ first_name: e.target.value })
+        // this.data.first_name = e.target.value
         break
-      case "document":
-        this.data.identification_number = e.target.value
+      case "identification_number":
+        this.setState({ identification_number: e.target.value })
+        // this.data.identification_number = e.target.value
         break
-      case "email":
-        this.data.username = e.target.value
-        this.data.email = e.target.value
+      case "username":
+        this.setState({ username: e.target.value })
+        // this.data.username = e.target.value
+        // this.data.email = e.target.value
         break
-      case "phone":
-        this.data.phone_number = e.target.value
+      case "phone_number":
+        this.setState({ phone_number: e.target.value })
+        // this.data.phone_number = e.target.value
         break
-      case "group":
+      case "groups":
         this.data.groups = e.target.value
         break
       case "password1":
         this.passwordConfirm = e.target.value
         break
       case "password":
-        console.log(this.passwordConfirm, e.target.value)
         if (this.passwordConfirm !== e.target.value) {
           this.setState({ passDiff: true })
         }else {
@@ -83,7 +94,6 @@ export class Create extends Component {
         }
         break
     }
-    console.log('llego', this.data.name)
   };
   clear = () => {
     document.getElementById("userForm").reset()
@@ -103,26 +113,71 @@ export class Create extends Component {
     }
     this.setState({ activeDialog: false })
   }
+  generateData = () => {
+    let elements = document.getElementById('userForm').elements;
+    let data = {};
+    console.log('dataform', elements)
+    for (let item of elements) {
+      data[item.name] = item.value;
+    }
+    data.user = ''
+    data.type_identification = 'CC'
+    console.log('aa', data)
+    return data
+  }
   save = () => {
-    fetch(`${conf.api_url}/profile/`, {
-      method: 'POST',
-      body: JSON.stringify(this.data),
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(async function(response) {
-      console.log('response', response)
-      let resp = await response.json()
-      if (response.status == 201 ) {
-        this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
-        this.clear()
-      }
-    })
-    .catch(err => {
-        console.log(err);
-        this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-    });
+    this.data = this.generateData()
+    console.log('editando', this.data)
+    // fetch(`${conf.api_url}/profile/`, {
+    //   method: 'POST',
+    //   body: JSON.stringify(this.data),
+    //   headers:{
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // .then(async (response) => {
+    //   console.log('response', response)
+    //   let resp = await response.json()
+    //   if (response.status == 201 ) {
+    //     this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
+    //     this.clear()
+    //   }
+    //   console.log('error', resp)
+    //   if (response.status == 400 ) {
+    //     this.setState({ activeDialog: true,  messageAlert: resp['error'] })
+    //   }
+    // })
+    // .catch(err => {
+    //     console.log(err);
+    //     this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+    // });
+  };
+  update = () => {
+    this.data = this.generateData()
+    console.log('entro por el editar casi ue no', this.data, this.state.code)
+    // fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}`, {
+    //   method: 'POST',
+    //   body: JSON.stringify(this.data),
+    //   headers:{
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // .then(async (response) => {
+    //   console.log('response', response)
+    //   let resp = await response.json()
+    //   if (response.status == 201 ) {
+    //     this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
+    //     this.clear()
+    //   }
+    //   console.log('error', resp)
+    //   if (response.status == 400 ) {
+    //     this.setState({ activeDialog: true,  messageAlert: resp['error'] })
+    //   }
+    // })
+    // .catch(err => {
+    //     console.log(err);
+    //     this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+    // });
 
   };
 
@@ -135,38 +190,49 @@ export class Create extends Component {
         <form id="userForm" >
           <TextField
             required
-            onChange={this.handleChange}
             name="code"
+            onChange={this.handleChange}
+            value={this.state.code}
             label="Código"
             margin="normal"
             // value={this.data.code}
             />
           <TextField
             required
-            onChange={this.handleChange}
-            name="name"
+            name="first_name"
             label="Nombre"
             margin="normal"
+            onChange={this.handleChange}
+            value={this.state.first_name}
+            // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.first_name : null}
             />
           <TextField
-            onChange={this.handleChange}
-            name="document"
+            name="identification_number"
             label="Documento"
             margin="normal"
+            onChange={this.handleChange}
+            value={this.state.identification_number}
+            // value={this.props.selectUpdate ? this.props.selectUpdate.identification_number : null}
             />
           <TextField
             required
-            onChange={this.handleChange}
-            name="email"
+            // onChange={this.handleChange}
+            name="username"
             label="Correo electrónico"
             margin="normal"
+            onChange={this.handleChange}
+            value={this.state.username}
+            // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.email : null}
             />
           <TextField
             required
-            onChange={this.handleChange}
-            name="phone"
+            // onChange={this.handleChange}
+            name="phone_number"
             label="Teléfono"
             margin="normal"
+            onChange={this.handleChange}
+            value={this.state.phone_number}
+            // value={this.props.selectUpdate ? this.props.selectUpdate.phone_number : null}
             />
           <TextField
             required
@@ -175,6 +241,7 @@ export class Create extends Component {
             name="password1"
             label="Contraseña"
             margin="normal"
+            value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
             />
           <FormControl>
             <TextField
@@ -184,25 +251,29 @@ export class Create extends Component {
               name="password"
               label="Confirme contraseña"
               margin="normal"
+              value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
               />
             {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
           </FormControl>
           <FormControl margin="normal">
-            <InputLabel id="group">Tipo usuario</InputLabel>
+            <InputLabel id="groups">Tipo usuario</InputLabel>
             <Select
-              labelId="group"
-              name="group"
+              labelId="groups"
+              name="groups"
               onChange={this.handleChange}
               // onInput={this.handleChange}
+              // value={this.props.selectUpdate ? this.props.selectUpdate.user.groups : null}
             >              
               {this.state.dataGroups.map(groups => (
-                <MenuItem value={groups.id}>{groups.name}</MenuItem>
+                <MenuItem 
+                value={groups.id}
+                >{groups.name}</MenuItem>
                 ))}              
             </Select> 
           </FormControl>
           <br/><br/><br/>
           <div class="text-center">
-            <Button variant="contained" color="primary" type="submit" onClick={this.save}>
+            <Button variant="contained" color="primary" onClick={this.props.selectUpdate.user ? this.update : this.save}>
               Crear Usuario
             </Button>
           </div>
