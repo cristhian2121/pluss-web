@@ -9,6 +9,8 @@ import { Create } from './components/users'
 import { CreateQuotation } from './components/make-rates/create/'
 import PageNotFound from './components/common/page-not-found'
 import { Menu } from './components/common/nav-bar'
+import { Clients } from './components/clients/client'
+
 
 
 import "./App.css";
@@ -23,6 +25,7 @@ function App() {
             <Route exact path="/cotizaciones" component={MakeRate} />
             <Route exact path="/usuarios" component={Create} />
             <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
+            <Route exact path="/clientes" component={Clients} />
             <Route component={PageNotFound} />
           </Switch>
       </Menu>
