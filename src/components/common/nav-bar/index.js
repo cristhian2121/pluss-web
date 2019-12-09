@@ -20,6 +20,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import {LibraryBooks} from "@material-ui/icons";
 import Tooltip from '@material-ui/core/Tooltip';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
@@ -124,18 +125,18 @@ export default function Menu() {
         <List>
           {[
             {
-              // text: "Usuarios",
+              text: "Usuarios",
               icon: <PeopleIcon />,
               path: "/usuarios"
             },
             {
-              text: "Cotizaciones",
-              icon: <LibraryBooks />,
+              text: "Crear cotización",
+              icon: <AssignmentIcon />,
               path: "/cotizaciones/crear"
             },
             {
-              text: "CotizacionesListado",
-              icon: <AssignmentIcon />,
+              text: "Lista de cotizaciones",
+              icon: <AssignmentTurnedInIcon />,
               path: "/cotizaciones"
             },
             {
@@ -145,10 +146,12 @@ export default function Menu() {
             }
           ].map((section, index) => (
             <ListItem button key={section.text}>
-              <Link to={section.path}>
-                <ListItemIcon>{section.icon}</ListItemIcon>
-                <ListItemText primary={section.text} />
-              </Link>
+              <Tooltip title={section.text}>
+                <Link to={section.path}>
+                  <ListItemIcon>{section.icon}</ListItemIcon>
+                  {/* <ListItemText primary={section.text} /> */}
+                </Link>
+              </Tooltip>
             </ListItem>
           ))}
         </List>
