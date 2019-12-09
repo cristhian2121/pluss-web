@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -19,7 +19,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { Link } from "react-router-dom"
 
+// component
 
+import { ProductPDF } from '../../common/pdf/productPDF'
 
 // css
 import '../../../styles/commons.css';
@@ -31,9 +33,9 @@ import { da } from "date-fns/locale";
 export const FormQuotation = (props) => {
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
-  const [units, setunits] = useState([])
+  const [showproductForm, setShowproductForm] = useState(false)
+  const [units, setUnits] = useState([])
   const [products, setProducts] = useState([])
-  const [quotationData, setQuotationData] = useState({})
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -45,103 +47,182 @@ export const FormQuotation = (props) => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const Product = ({ number }) => {
+  const ProductForm = () => {
     return (
-      <Grid container spacing={1} >
-        <Grid item md={3}>
-          <TextField
-            id={'image' + number}
-            name={'image' + number}
-            className=""
-            label="Url imagen"
-          />
+      <Fragment>
+        <Grid container spacing={1} >
+          <Grid item md={3} className="input-validation-image">
+            <TextField
+              id='image'
+              name='image'
+              label="Url imagen"
+            />
+          </Grid>
+          <Grid item md={3} className="input-validation-name">
+            <TextField
+              id='name'
+              name='name'
+              label="Nombre"
+            />
+          </Grid>
+          <Grid item md={3} className="input-validation-size">
+            <TextField
+              id='size'
+              name='size'
+              label="Medidas"
+            />
+          </Grid>
+          <Grid item md={3} className="input-validation-colors">
+            <TextField
+              id='colors'
+              name='colors'
+              label="Colores disponibles"
+            />
+          </Grid>
+          <Grid item md={3} className="input-validation-prints">
+            <TextField
+              id='prints'
+              name='prints'
+              label="tintas"
+            />
+          </Grid>
+          <Grid item md={3} className="input-validation-description">
+            <TextField
+              id='description'
+              name='description'
+              multiline
+              rowsMax="4"
+              label="Descripción"
+            />
+          </Grid>
+          <Grid item md={3} className="input-validation-cost">
+            <TextField
+              id='cost'
+              name='cost'
+              label="Precio en pagina"
+            />
+          </Grid>
         </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'size' + number}
-            name={'size' + number}
-            className=""
-            label="Medidas"
-          />
+        <p>Valor por unidades</p>
+        <Grid container spacing={1}>
+          <Grid item className="input-validation-discount">
+            <TextField
+              id='discount'
+              name='discount'
+              label="Descuento %"
+            />
+          </Grid>
+          <Grid item className="input-validation-mark">
+            <TextField
+              id='mark'
+              name='mark'
+              label="Marcación"
+            />
+          </Grid>
+          <Grid item className="input-validation-profitableness">
+            <TextField
+              id='profitableness'
+              name='profitableness'
+              label="Rentabilidad %"
+            />
+          </Grid>
+          <Grid item md={2} className="input-validation-transport">
+            <TextField
+              id='transport'
+              name='transport'
+              label="Transporte"
+            />
+          </Grid>
         </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'cost' + number}
-            name={'cost' + number}
-            className=""
-            label="Costo"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'description' + number}
-            name={'description' + number}
-            multiline
-            rowsMax="4"
-            className=""
-            label="Descripción"
-          />
-        </Grid>
-      </Grid>
+        <Button color="primary" onClick={handleAddProduct}>
+          Agregar <AddCircleIcon />
+        </Button>
+      </Fragment>
     )
 
   }
 
-  const UnitCost = ({ number }) => {
+  const ValuesCalculated = () => {
+    return (
+      <Grid item md={2}>
+        <p>Costo: </p>
+        <p>Valor de venta: </p>
+      </Grid>
+    )
+  }
+
+  const handleAddUnits = () => {
+    const $unit = document.querySelector(`#unit`)
+    if ($unit) {
+      const unit = $unit.value
+      setUnits(units => [...units, unit]);
+    }
+  }
+
+  const validateProduct = products => {
+    const properties = Object.values(products);
+    const keys = Object.keys(products);
+    let i = 0;
+    let validate = true;
+    for (i; i < properties.length; i++) {
+      let $input = document.querySelector(`#${keys[i]}`)
+      const $parent = document.querySelector(`.input-validation-${$input.name}`)
+      const $elementMessagge = document.querySelector(`.messagge-${keys[i]}`)
+      if (!properties[i]) {
+        validate = false;
+        if (!$elementMessagge) {
+          const element = document.createElement('P')
+          const text = document.createTextNode(`El campo es obligatorio`)
+          element.className = `messagge-${keys[i]} messagge-validator`
+          element.appendChild(text)
+          $parent.insertBefore(element, $input.nextSibling)
+        }
+      } else {
+        if ($elementMessagge) {
+          $parent.removeChild($elementMessagge)
+        }
+      }
+    }
+    return validate
+  }
+
+  const handleAddProduct = () => {
+    const product = {
+      image: document.querySelector(`#image`).value,
+      size: document.querySelector(`#size`).value,
+      name: document.querySelector(`#name`).value,
+
+      cost: document.querySelector(`#cost`).value,
+      prints: document.querySelector(`#prints`).value,
+      description: document.querySelector(`#description`).value,
+
+      discount: document.querySelector(`#discount`).value,
+      mark: document.querySelector(`#mark`).value,
+      profitableness: document.querySelector(`#profitableness`).value,
+
+      colors: document.querySelector('#colors').value,
+      transport: document.querySelector('#transport').value
+    }
+    if (!validateProduct(product)) return
+    setProducts([...products, product])
+  }
+
+  const UnitCost = () => {
     return (
       <Grid container spacing={3} >
-        <Grid item md={2}>
+        <Grid item md={2} className="unit">
           <TextField
-            id={'unit' + number}
-            name={'unit' + number}
+            id={'unit'}
+            name={'unit'}
             className=""
             label="Unidades"
           />
         </Grid>
         <Grid item md={2}>
-          <TextField
-            id={'discount' + number}
-            name={'discount' + number}
-            className=""
-            label="% descuento"
-          />
+          <Button color="primary" onClick={handleAddUnits}>
+            Agregar <AddCircleIcon />
+          </Button>
         </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'mark' + number}
-            name={'mark' + number}
-            className=""
-            label="Marcación"
-          />
-        </Grid>
-
-        {/* Segunda fila */}
-
-        <Grid item md={2}>
-          <TextField
-            id={'profitableness' + number}
-            name={'profitableness' + number}
-            className=""
-            label="% Rentabilidad"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'total' + number}
-            name={'total' + number}
-            className=""
-            label="Valor de venta"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'transport' + number}
-            name={'transport' + number}
-            className=""
-            label="Transporte"
-          />
-        </Grid>
-
       </Grid>
     )
   }
@@ -153,9 +234,6 @@ export const FormQuotation = (props) => {
       console.log('FECHA', da.localize);
       props.eventCreateQuotation(data)
     }
-    // const consecutive = document.getElementById('consecutive').value
-    // const unit1 = document.getElementById('unit1').value
-    // const quotationDate = document.getElementById('date-picker-inline').value
   }
 
   const generatePDF = () => {
@@ -171,27 +249,36 @@ export const FormQuotation = (props) => {
       obj[item.name] = item.value;
       obj.products = products
     }
-    obj.products = generateProducts({...obj});
+    // obj.products = generateProducts({ ...obj });
     return obj
   }
 
   const generateProducts = (obj) => {
-    const productsList = []
+    let productsList;
     for (let i of products) {
-      productsList.push({
+      productsList = {
         image: obj[`image${i}`],
         size: obj[`size${i}`],
+        name: obj[`name${i}`],
         cost: obj[`cost${i}`],
-        description: obj[`description${i}`]
-      })
+        prints: obj[`prints${i}`],
+        description: obj[`description${i}`],
+        discount: obj[`discount${i}`],
+        mark: obj[`mark${i}`],
+        profitableness: obj[`profitableness${i}`],
+        transport: obj[`transport${i}`]
+      }
     }
     return productsList
   }
 
   return (
     <div>
-      <h3>Cotizaciones</h3>
-      <form id="quotationForm" onSubmit={saveQuotation}>
+      <div className="title">
+        Crear cotización
+      </div>
+      <br />
+      <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
         <Grid container spacing={3}>
           <Grid item md={3}>
             <TextField
@@ -279,35 +366,52 @@ export const FormQuotation = (props) => {
           </Grid>
           {/* fila 3 */}
         </Grid>
-        <div className="text-expand"><span onClick={showUnits}> Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
-        </div>
-
-        {showUnitForm &&
-          <div className="container-padding">
-            <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
-            <div>{units.map(unit => (
-              <div>
-                <UnitCost key={unit} number={unit} />
-              </div>
-            ))}</div>
-          </div>
-        }
-        <Button onClick={() => setProducts([...products, products.length + 1])}>Agregar productos  <AddCircleIcon /></Button>
-        <div>{products.map(product => (
-          <Product key={product} number={product} />
-        ))}
-        </div>
-
-        <Button variant="contained" color="primary" type="submit">
-          Guardar cotización
-      </Button>
       </form>
+      <br />
+      <div className="sub-title">
+        Agregar Unidades
+        </div>
 
+      {/* Unidades */}
+      <UnitCost />
 
+      {/* Mostrar unidades */}
+      <div>
+        {units.map(unit => (
+          <span style={{ paddingRight: '1em' }}>{unit},</span>
+        ))}
+      </div>
 
-      <Button variant="contained" color="primary" onClick={generatePDF}>
-        Generar PDF <PictureAsPdfIcon />
-      </Button>
+      <br />
+      <div className="sub-title">
+        <Button onClick={() => setShowproductForm(!showproductForm)}>Agregar productos </Button>
+      </div>
+      {/* Anadir producto */}
+      {
+        showproductForm &&
+        <>
+          <ProductForm />
+          <ValuesCalculated />
+        </>
+      }
+
+      {/* Ver productos */}
+      <div>{products.map((product, index) => (
+        <div key={index}>
+          {<ProductPDF product={product} />}
+        </div>
+        // <Product key={product} number={product} />
+      ))}</div>
+      <br /><br />
+      <Grid item md={12} className="text-center">
+        <Button variant="contained" color="primary" type="submit" onClick={saveQuotation}>
+          Guardar cotización
+          </Button>
+        <Button variant="contained" color="secondary" onClick={generatePDF}>
+          Generar PDF <PictureAsPdfIcon />
+        </Button>
+      </Grid>
+
 
     </div>
   );
