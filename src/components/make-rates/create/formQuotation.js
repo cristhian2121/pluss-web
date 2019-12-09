@@ -5,14 +5,12 @@ import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 // Icons
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -20,8 +18,10 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { Link } from "react-router-dom"
 
 // component
+import { ProductForm } from './addProduct'
 
-import { ProductPDF } from '../../common/pdf/productPDF'
+
+import { UnitsCost } from './unitsCost'
 
 // css
 import '../../../styles/commons.css';
@@ -34,8 +34,8 @@ export const FormQuotation = (props) => {
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
-  const [units, setUnits] = useState([])
-  const [products, setProducts] = useState([])
+  const [costUnit, SetCostUnit] = useState({})
+  // const [products, setProducts] = useState([])
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -47,117 +47,15 @@ export const FormQuotation = (props) => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const ProductForm = () => {
-    return (
-      <Fragment>
-        <Grid container spacing={1} >
-          <Grid item md={3} className="input-validation-image">
-            <TextField
-              id='image'
-              name='image'
-              label="Url imagen"
-            />
-          </Grid>
-          <Grid item md={3} className="input-validation-name">
-            <TextField
-              id='name'
-              name='name'
-              label="Nombre"
-            />
-          </Grid>
-          <Grid item md={3} className="input-validation-size">
-            <TextField
-              id='size'
-              name='size'
-              label="Medidas"
-            />
-          </Grid>
-          <Grid item md={3} className="input-validation-colors">
-            <TextField
-              id='colors'
-              name='colors'
-              label="Colores disponibles"
-            />
-          </Grid>
-          <Grid item md={3} className="input-validation-prints">
-            <TextField
-              id='prints'
-              name='prints'
-              label="tintas"
-            />
-          </Grid>
-          <Grid item md={3} className="input-validation-description">
-            <TextField
-              id='description'
-              name='description'
-              multiline
-              rowsMax="4"
-              label="Descripción"
-            />
-          </Grid>
-          <Grid item md={3} className="input-validation-cost">
-            <TextField
-              id='cost'
-              name='cost'
-              label="Precio en pagina"
-            />
-          </Grid>
-        </Grid>
-        <p>Valor por unidades</p>
-        <Grid container spacing={1}>
-          <Grid item className="input-validation-discount">
-            <TextField
-              id='discount'
-              name='discount'
-              label="Descuento %"
-            />
-          </Grid>
-          <Grid item className="input-validation-mark">
-            <TextField
-              id='mark'
-              name='mark'
-              label="Marcación"
-            />
-          </Grid>
-          <Grid item className="input-validation-profitableness">
-            <TextField
-              id='profitableness'
-              name='profitableness'
-              label="Rentabilidad %"
-            />
-          </Grid>
-          <Grid item md={2} className="input-validation-transport">
-            <TextField
-              id='transport'
-              name='transport'
-              label="Transporte"
-            />
-          </Grid>
-        </Grid>
-        <Button color="primary" onClick={handleAddProduct}>
-          Agregar <AddCircleIcon />
-        </Button>
-      </Fragment>
-    )
-
+  const calculateValue = (event) => {
+    const eventAux = { ...event }
+    console.log(eventAux.target.value);
+    SetCostUnit(costUnit => {
+      return { ...costUnit, discount: eventAux.target.value }
+    })
   }
 
-  const ValuesCalculated = () => {
-    return (
-      <Grid item md={2}>
-        <p>Costo: </p>
-        <p>Valor de venta: </p>
-      </Grid>
-    )
-  }
-
-  const handleAddUnits = () => {
-    const $unit = document.querySelector(`#unit`)
-    if ($unit) {
-      const unit = $unit.value
-      setUnits(units => [...units, unit]);
-    }
-  }
+  
 
   const validateProduct = products => {
     const properties = Object.values(products);
@@ -187,90 +85,90 @@ export const FormQuotation = (props) => {
   }
 
   const handleAddProduct = () => {
-    const product = {
-      image: document.querySelector(`#image`).value,
-      size: document.querySelector(`#size`).value,
-      name: document.querySelector(`#name`).value,
+    // const product = {
+    //   image: document.querySelector(`#image`).value,
+    //   size: document.querySelector(`#size`).value,
+    //   name: document.querySelector(`#name`).value,
 
-      cost: document.querySelector(`#cost`).value,
-      prints: document.querySelector(`#prints`).value,
-      description: document.querySelector(`#description`).value,
+    //   cost: document.querySelector(`#cost`).value,
+    //   prints: document.querySelector(`#prints`).value,
+    //   description: document.querySelector(`#description`).value,
 
-      discount: document.querySelector(`#discount`).value,
-      mark: document.querySelector(`#mark`).value,
-      profitableness: document.querySelector(`#profitableness`).value,
+    //   discount: document.querySelector(`#discount`).value,
+    //   mark: document.querySelector(`#mark`).value,
+    //   profitableness: document.querySelector(`#profitableness`).value,
 
-      colors: document.querySelector('#colors').value,
-      transport: document.querySelector('#transport').value
-    }
-    if (!validateProduct(product)) return
-    setProducts([...products, product])
+    //   colors: document.querySelector('#colors').value,
+    //   transport: document.querySelector('#transport').value
+    // }
+    // if (!validateProduct(product)) return
+    // setProducts([...products, product])
   }
 
-  const UnitCost = () => {
-    return (
-      <Grid container spacing={3} >
-        <Grid item md={2} className="unit">
-          <TextField
-            id={'unit'}
-            name={'unit'}
-            className=""
-            label="Unidades"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <Button color="primary" onClick={handleAddUnits}>
-            Agregar <AddCircleIcon />
-          </Button>
-        </Grid>
-      </Grid>
-    )
-  }
+  // const UnitCost = () => {
+  //   return (
+  //     <Grid container spacing={3} >
+  //       <Grid item md={2} className="unit">
+  //         <TextField
+  //           id={'unit'}
+  //           name={'unit'}
+  //           className=""
+  //           label="Unidades"
+  //         />
+  //       </Grid>
+  //       <Grid item md={2}>
+  //         <Button color="primary" onClick={handleAddUnits}>
+  //           Agregar <AddCircleIcon />
+  //         </Button>
+  //       </Grid>
+  //     </Grid>
+  //   )
+  // }
 
   const saveQuotation = event => {
-    if (event) {
-      event.preventDefault();
-      const data = generateData()
-      console.log('FECHA', da.localize);
-      props.eventCreateQuotation(data)
-    }
+    // if (event) {
+    //   event.preventDefault();
+    //   const data = generateData()
+    //   console.log('FECHA', da.localize);
+    //   props.eventCreateQuotation(data)
+    // }
   }
 
   const generatePDF = () => {
-    const data = generateData()
-    console.log('FECHA', da.localize);
-    props.eventGeneratePDF(data)
+    // const data = generateData()
+    // console.log('FECHA', da.localize);
+    // props.eventGeneratePDF(data)
   }
 
-  const generateData = () => {
-    let elements = document.getElementById('quotationForm').elements;
-    let obj = {};
-    for (let item of elements) {
-      obj[item.name] = item.value;
-      obj.products = products
-    }
-    // obj.products = generateProducts({ ...obj });
-    return obj
-  }
+  // const generateData = () => {
+  //   let elements = document.getElementById('quotationForm').elements;
+  //   let obj = {};
+  //   for (let item of elements) {
+  //     obj[item.name] = item.value;
+  //     obj.products = products
+  //   }
+  //   // obj.products = generateProducts({ ...obj });
+  //   return obj
+  // }
 
-  const generateProducts = (obj) => {
-    let productsList;
-    for (let i of products) {
-      productsList = {
-        image: obj[`image${i}`],
-        size: obj[`size${i}`],
-        name: obj[`name${i}`],
-        cost: obj[`cost${i}`],
-        prints: obj[`prints${i}`],
-        description: obj[`description${i}`],
-        discount: obj[`discount${i}`],
-        mark: obj[`mark${i}`],
-        profitableness: obj[`profitableness${i}`],
-        transport: obj[`transport${i}`]
-      }
-    }
-    return productsList
-  }
+  // const generateProducts = (obj) => {
+  //   let productsList;
+  //   for (let i of products) {
+  //     productsList = {
+  //       image: obj[`image${i}`],
+  //       size: obj[`size${i}`],
+  //       name: obj[`name${i}`],
+  //       cost: obj[`cost${i}`],
+  //       prints: obj[`prints${i}`],
+  //       description: obj[`description${i}`],
+  //       discount: obj[`discount${i}`],
+  //       mark: obj[`mark${i}`],
+  //       profitableness: obj[`profitableness${i}`],
+  //       transport: obj[`transport${i}`]
+  //     }
+  //   }
+  //   return productsList
+  // }
 
   return (
     <div>
@@ -373,14 +271,10 @@ export const FormQuotation = (props) => {
         </div>
 
       {/* Unidades */}
-      <UnitCost />
+      <UnitsCost />
 
       {/* Mostrar unidades */}
-      <div>
-        {units.map(unit => (
-          <span style={{ paddingRight: '1em' }}>{unit},</span>
-        ))}
-      </div>
+
 
       <br />
       <div className="sub-title">
@@ -391,17 +285,10 @@ export const FormQuotation = (props) => {
         showproductForm &&
         <>
           <ProductForm />
-          <ValuesCalculated />
         </>
       }
 
-      {/* Ver productos */}
-      <div>{products.map((product, index) => (
-        <div key={index}>
-          {<ProductPDF product={product} />}
-        </div>
-        // <Product key={product} number={product} />
-      ))}</div>
+
       <br /><br />
       <Grid item md={12} className="text-center">
         <Button variant="contained" color="primary" type="submit" onClick={saveQuotation}>
