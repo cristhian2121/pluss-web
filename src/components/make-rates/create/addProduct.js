@@ -14,6 +14,11 @@ export const ProductForm = (props) => {
 
     const [products, setProducts] = useState([])
     const [newProduct, setNewProduct] = useState({})
+    const [transportValue, setTransportValue] = useState(0)
+    const [profitablenessValue, setProfitablenessValue] = useState(0)
+    const [markValue, setMarkValue] = useState(0)
+    const [discountValue, setDiscountValue] = useState(0)
+    const [costValue, setCostValue] = useState(0)
 
     const calculateValue = () => {
 
@@ -69,6 +74,27 @@ export const ProductForm = (props) => {
         return validate
     }
 
+    const handleChange = (event) => {
+        switch (event.target.name) {
+            case 'discount':
+                setDiscountValue(parseInt(event.target.value))
+                break;
+            case 'mark':
+                setMarkValue(parseInt(event.target.value))
+                break;
+            case 'profitableness':
+                setProfitablenessValue(parseInt(event.target.value))
+                break;
+            case 'transport':
+                setTransportValue(parseInt(event.target.value))
+                break
+            case 'cost':
+                setCostValue(parseInt(event.target.value))
+                break;
+            default: break;
+        }
+    }
+
     return (
         <Fragment>
             <Grid container spacing={1} >
@@ -121,6 +147,7 @@ export const ProductForm = (props) => {
                         id='cost'
                         name='cost'
                         label="Precio en pagina"
+                        onChange={handleChange}
                     />
                 </Grid>
             </Grid>
@@ -131,7 +158,7 @@ export const ProductForm = (props) => {
                         id='discount'
                         name='discount'
                         label="Descuento %"
-                        onChange={event => calculateValue(event)}
+                        onChange={handleChange}
                     />
                 </Grid>
                 <Grid item className="input-validation-mark">
@@ -139,6 +166,7 @@ export const ProductForm = (props) => {
                         id='mark'
                         name='mark'
                         label="Marcación"
+                        onChange={handleChange}
                     />
                 </Grid>
                 <Grid item className="input-validation-profitableness">
@@ -146,6 +174,7 @@ export const ProductForm = (props) => {
                         id='profitableness'
                         name='profitableness'
                         label="Rentabilidad %"
+                        onChange={handleChange}
                     />
                 </Grid>
                 <Grid item md={2} className="input-validation-transport">
@@ -153,9 +182,16 @@ export const ProductForm = (props) => {
                         id='transport'
                         name='transport'
                         label="Transporte"
+                        onChange={handleChange}
                     />
                 </Grid>
-                <TotalCost product={newProduct} />
+                <TotalCost
+                    transport={transportValue}
+                    profitableness={profitablenessValue}
+                    mark={markValue}
+                    discount={discountValue}
+                    cost={costValue}
+                />
             </Grid>
             <Button color="primary" onClick={handleAddProduct}>
                 Agregar <AddCircleIcon />
