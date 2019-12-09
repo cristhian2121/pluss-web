@@ -14,6 +14,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import FaceIcon from '@material-ui/icons/Face';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -142,6 +143,11 @@ export const Menu = ({ children }) => {
               text: "Productos",
               icon: <AddShoppingCartIcon />,
               path: "/productos"
+            },
+            {
+              text: "Clientes",
+              icon: <FaceIcon />,
+              path: "/clientes"
             }
           ].map((section, index) => (
             <ListItem button key={section.text}>
