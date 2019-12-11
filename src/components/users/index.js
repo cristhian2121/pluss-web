@@ -56,7 +56,6 @@ export class Create extends Component {
   }
 
   componentDidMount() {
-    console.log('ddddddddddddddd');
     this.getGroups()
   }
   getGroups = async () => {
@@ -78,38 +77,29 @@ export class Create extends Component {
     switch (e.target.name) {
       case "code":
         this.setState({ code: e.target.value })
-        // this.data.code = e.target.value
         break
       case "first_name":
         this.setState({ first_name: e.target.value })
-        // this.data.first_name = e.target.value
         break
       case "identification_number":
         this.setState({ identification_number: e.target.value })
-        // this.data.identification_number = e.target.value
         break
       case "username":
         this.setState({ username: e.target.value })
-        // this.data.username = e.target.value
-        // this.data.email = e.target.value
         break
       case "phone_number":
         this.setState({ phone_number: e.target.value })
-        // this.data.phone_number = e.target.value
         break
       case "groups":
         this.setState({ groups: e.target.value })
-        // this.data.groups = e.target.value
         break
       case "password1":
-        // this.passwordConfirm = e.target.value
         this.setState({ passwordConfirm: e.target.value })
         break
       case "password":
         if (this.state.passwordConfirm !== e.target.value) {
           this.setState({ passDiff: true, password: e.target.value })
         } else {
-          // this.data.password = e.target.value
           this.setState({ passDiff: false, password: e.target.value })
         }
         break
@@ -183,36 +173,39 @@ export class Create extends Component {
       }
     })
       .then(async (response) => {
-        let resp = await response.json()
-        console.log('response', resp)
-        fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
-          method: 'PUT',
-          body: JSON.stringify(this.data),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(async (response) => {
-            let resp = await response.json()
-            console.log('response', resp)
-            // if (response.status == 201 ) {
-            //   this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
-            //   this.clear()
-            // }
-            // console.log('error', resp)
-            // if (response.status == 400 ) {
-            //   this.setState({ activeDialog: true,  messageAlert: resp['error'] })
-            // }
+        let resp1 = await response.json()
+        console.log('response', resp1, response.status)
+        if (response.status == 200 ||  response.status == 201) {
+          fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
+            method: 'PUT',
+            body: JSON.stringify(this.data),
+            headers: {
+              'Content-Type': 'application/json'
+            }
           })
-          .catch(err => {
-            console.log(err);
-            // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-          });
-
+            .then(async (response) => {
+              let resp = await response.json()
+              if (response.status == 201 ) {
+                this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
+                this.clear()
+              }
+              if (response.status == 400 ) {
+                this.setState({ activeDialog: true,  messageAlert: resp['error'] })
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+            });
+        }
+        if (response.status == 400 ) {
+          console.log(resp1)
+          this.setState({ activeDialog: true,  messageAlert: resp1['error'] })
+        }
       })
       .catch(err => {
         console.log(err);
-        // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+        this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
       });
 
   };
@@ -220,9 +213,6 @@ export class Create extends Component {
   render() {
     return (
       <div>
-        {/* <div className="sub-title">
-          Nuevo usuario
-        </div> */}
         <form id="userForm" >
           <TextField
             required
@@ -231,7 +221,6 @@ export class Create extends Component {
             value={this.state.code}
             label="Código"
             margin="normal"
-          // value={this.props.selectUpdate ? this.props.selectUpdate.code : null}
           />
           <TextField
             required
@@ -240,7 +229,6 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.first_name}
-          // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.first_name : null}
           />
           <TextField
             name="identification_number"
@@ -248,27 +236,22 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.identification_number}
-          // value={this.props.selectUpdate ? this.props.selectUpdate.identification_number : null}
           />
           <TextField
             required
-            // onChange={this.handleChange}
             name="username"
             label="Correo electrónico"
             margin="normal"
             onChange={this.handleChange}
             value={this.state.username}
-          // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.email : null}
           />
           <TextField
             required
-            // onChange={this.handleChange}
             name="phone_number"
             label="Teléfono"
             margin="normal"
             onChange={this.handleChange}
             value={this.state.phone_number}
-          // value={this.props.selectUpdate ? this.props.selectUpdate.phone_number : null}
           />
           <TextField
             required
@@ -278,7 +261,6 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.passwordConfirm}
-          // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
           />
           <FormControl>
             <TextField
@@ -289,7 +271,6 @@ export class Create extends Component {
               margin="normal"
               onChange={this.handleChange}
               value={this.state.password}
-            // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
             />
             {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
           </FormControl>
@@ -299,7 +280,6 @@ export class Create extends Component {
               labelId="groups"
               name="groups"
               onChange={this.handleChange}
-            // onInput={this.handleChange}
             // value={this.props.selectUpdate ? this.props.selectUpdate.user.groups : null}
             >
               {this.state.dataGroups.map(groups => (

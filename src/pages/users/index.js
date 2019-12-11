@@ -3,10 +3,7 @@ import React, { Component } from "react";
 import { Create } from "../../components/users/index";
 import { List } from "../../components/users/list"
 
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {Alert} from '../../components/common/alerts'
 
 export class User extends Component {
@@ -39,17 +36,13 @@ export class User extends Component {
           <div>
             <div className="title">
                 Administrador de usuarios
-              {/* <Fab color="primary" size="small" aria-label="add" onClick={this.handleOpen}>
-                <AddIcon />
-              </Fab> */}
             </div>
             <br/><br/>
             <div className="sub-title">
               <Button onClick={this.showForm}>
-                {this.dataFormUpdate ? 'Crear' : 'Editar'} Usuario
+                {this.state.dataFormUpdate.user ? 'Editar' : 'Crear'} Usuario
               </Button>
             </div>
-            {this.state.dataFormUpdate.code}
             { this.state.showForm ? <Create selectUpdate={this.state.dataFormUpdate} /> : ''}
             <br/><br/>
             <List selectUpdate={this.dataUpdate}/>
