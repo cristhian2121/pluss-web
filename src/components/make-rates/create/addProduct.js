@@ -14,10 +14,10 @@ export const ProductForm = (props) => {
 
     const [products, setProducts] = useState([])
     const [newProduct, setNewProduct] = useState({})
-    const [transportValue, setTransportValue] = useState(0)
-    const [profitablenessValue, setProfitablenessValue] = useState(0)
-    const [markValue, setMarkValue] = useState(0)
-    const [discountValue, setDiscountValue] = useState(0)
+    const [transportValue, setTransportValue] = useState([])
+    const [profitablenessValue, setProfitablenessValue] = useState([])
+    const [markValue, setMarkValue] = useState([])
+    const [discountValue, setDiscountValue] = useState([])
     const [costValue, setCostValue] = useState(0)
 
     const calculateValue = () => {
@@ -33,18 +33,11 @@ export const ProductForm = (props) => {
             cost: document.querySelector(`#cost`).value,
             prints: document.querySelector(`#prints`).value,
             description: document.querySelector(`#description`).value,
-
-            discount: document.querySelector(`#discount`).value,
-            mark: document.querySelector(`#mark`).value,
-            profitableness: document.querySelector(`#profitableness`).value,
-
-            colors: document.querySelector('#colors').value,
-            transport: document.querySelector('#transport').value
         }
         if (!validateProduct(product)) return
         setNewProduct(product => { return { ...product } })
         setProducts([...products, product])
-        // props.handleAddProduct()
+        props.handleAddProduct(product)
     }
 
     const validateProduct = products => {
@@ -74,22 +67,32 @@ export const ProductForm = (props) => {
         return validate
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event, index) => {
+        console.log('event.target.name: ', event.target.name);
+        const value = parseInt(event.target.value)
         switch (event.target.name) {
             case 'discount':
-                setDiscountValue(parseInt(event.target.value))
+                let discountAux = [...discountValue]
+                discountAux[index] = value
+                setDiscountValue(discountAux)
                 break;
             case 'mark':
-                setMarkValue(parseInt(event.target.value))
+                let markValueAux = [...markValue]
+                markValueAux[index] = value
+                setMarkValue(markValueAux)
                 break;
             case 'profitableness':
-                setProfitablenessValue(parseInt(event.target.value))
+                let profitablenessValueAux = [...profitablenessValue]
+                profitablenessValueAux[index] = value
+                setProfitablenessValue(profitablenessValueAux)
                 break;
             case 'transport':
-                setTransportValue(parseInt(event.target.value))
+                let transportValueAux = [...transportValue]
+                transportValueAux[index] = value
+                setTransportValue(transportValueAux)
                 break
             case 'cost':
-                setCostValue(parseInt(event.target.value))
+                setCostValue(value)
                 break;
             default: break;
         }
@@ -147,52 +150,55 @@ export const ProductForm = (props) => {
                         id='cost'
                         name='cost'
                         label="Precio en pagina"
-                        onChange={handleChange}
+                        onChange={event => handleChange(event, 0)}
                     />
                 </Grid>
             </Grid>
             <p>Valor por unidades</p>
-            <Grid container spacing={1}>
-                <Grid item className="input-validation-discount">
-                    <TextField
-                        id='discount'
-                        name='discount'
-                        label="Descuento %"
-                        onChange={handleChange}
+            {props.units.map((unit, index) => (
+                <Grid container spacing={1} key={index}>
+                    <span>{unit} Unidades</span>
+                    <Grid item className="input-validation-discount">
+                        <TextField
+                            id={`discount${index}`}
+                            name={`discount`}
+                            label="Descuento %"
+                            onChange={event => handleChange(event, index)}
+                        />
+                    </Grid>
+                    <Grid item className="input-validation-mark">
+                        <TextField
+                            id={`mark${index}`}
+                            name={`mark`}
+                            label="Marcación"
+                            onChange={event => handleChange(event, index)}
+                        />
+                    </Grid>
+                    <Grid item className="input-validation-profitableness">
+                        <TextField
+                            id={`profitableness${index}`}
+                            name={`profitableness`}
+                            label="Rentabilidad %"
+                            onChange={event => handleChange(event, index)}
+                        />
+                    </Grid>
+                    <Grid item md={2} className="input-validation-transport">
+                        <TextField
+                            id={`transport${index}`}
+                            name={`transport`}
+                            label="Transporte"
+                            onChange={event => handleChange(event, index)}
+                        />
+                    </Grid>
+                    <TotalCost
+                        transport={transportValue[index]}
+                        profitableness={profitablenessValue[index]}
+                        mark={markValue[index]}
+                        discount={discountValue[index]}
+                        cost={costValue}
                     />
                 </Grid>
-                <Grid item className="input-validation-mark">
-                    <TextField
-                        id='mark'
-                        name='mark'
-                        label="Marcación"
-                        onChange={handleChange}
-                    />
-                </Grid>
-                <Grid item className="input-validation-profitableness">
-                    <TextField
-                        id='profitableness'
-                        name='profitableness'
-                        label="Rentabilidad %"
-                        onChange={handleChange}
-                    />
-                </Grid>
-                <Grid item md={2} className="input-validation-transport">
-                    <TextField
-                        id='transport'
-                        name='transport'
-                        label="Transporte"
-                        onChange={handleChange}
-                    />
-                </Grid>
-                <TotalCost
-                    transport={transportValue}
-                    profitableness={profitablenessValue}
-                    mark={markValue}
-                    discount={discountValue}
-                    cost={costValue}
-                />
-            </Grid>
+            ))}
             <Button color="primary" onClick={handleAddProduct}>
                 Agregar <AddCircleIcon />
             </Button>

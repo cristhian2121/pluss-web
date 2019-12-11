@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-export const UnitsCost = () => {
+export const UnitsCost = (props) => {
 
 
     const [units, setUnits] = useState([])
@@ -14,7 +14,9 @@ export const UnitsCost = () => {
         const $unit = document.querySelector(`#unit`)
         if ($unit) {
             const unit = $unit.value
+            const _units = [...units, unit]
             setUnits(units => [...units, unit]);
+            props.handleAddUnit(_units)
         }
     }
 
@@ -36,9 +38,10 @@ export const UnitsCost = () => {
                 </Grid>
             </Grid>
 
+            {/* Mostrar unidades */}
             <div>
                 {units.map(unit => (
-                    <span style={{ paddingRight: '1em' }}>{unit},</span>
+                    <span key={unit} style={{ paddingRight: '1em' }}>{unit},</span>
                 ))}
             </div>
         </>

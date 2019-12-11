@@ -35,7 +35,8 @@ export const FormQuotation = (props) => {
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
   const [costUnit, SetCostUnit] = useState({})
-  // const [products, setProducts] = useState([])
+  const [units, SetUnits] = useState([])
+  const [products, setProducts] = useState([])
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -47,15 +48,23 @@ export const FormQuotation = (props) => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const calculateValue = (event) => {
-    const eventAux = { ...event }
-    console.log(eventAux.target.value);
-    SetCostUnit(costUnit => {
-      return { ...costUnit, discount: eventAux.target.value }
-    })
+  // const calculateValue = (event) => {
+  //   const eventAux = { ...event }
+  //   console.log(eventAux.target.value);
+  //   SetCostUnit(costUnit => {
+  //     return { ...costUnit, discount: eventAux.target.value }
+  //   })
+  // }
+
+  const handleAddUnit = (_units) => {
+    console.log('_units: ', _units);
+    SetUnits(units => [..._units])
   }
 
-  
+  const handleAddProduct = (_product) => {
+    console.log('_product: ', _product);
+    setProducts(products => [...products, _product])
+  }
 
   const validateProduct = products => {
     const properties = Object.values(products);
@@ -84,26 +93,6 @@ export const FormQuotation = (props) => {
     return validate
   }
 
-  const handleAddProduct = () => {
-    // const product = {
-    //   image: document.querySelector(`#image`).value,
-    //   size: document.querySelector(`#size`).value,
-    //   name: document.querySelector(`#name`).value,
-
-    //   cost: document.querySelector(`#cost`).value,
-    //   prints: document.querySelector(`#prints`).value,
-    //   description: document.querySelector(`#description`).value,
-
-    //   discount: document.querySelector(`#discount`).value,
-    //   mark: document.querySelector(`#mark`).value,
-    //   profitableness: document.querySelector(`#profitableness`).value,
-
-    //   colors: document.querySelector('#colors').value,
-    //   transport: document.querySelector('#transport').value
-    // }
-    // if (!validateProduct(product)) return
-    // setProducts([...products, product])
-  }
 
   // const UnitCost = () => {
   //   return (
@@ -135,21 +124,22 @@ export const FormQuotation = (props) => {
   }
 
   const generatePDF = () => {
-    // const data = generateData()
+    const data = generateData()
     // console.log('FECHA', da.localize);
-    // props.eventGeneratePDF(data)
+    props.eventGeneratePDF(data)
   }
 
-  // const generateData = () => {
-  //   let elements = document.getElementById('quotationForm').elements;
-  //   let obj = {};
-  //   for (let item of elements) {
-  //     obj[item.name] = item.value;
-  //     obj.products = products
-  //   }
-  //   // obj.products = generateProducts({ ...obj });
-  //   return obj
-  // }
+  const generateData = () => {
+    let elements = document.getElementById('quotationForm').elements;
+    let obj = {};
+    for (let item of elements) {
+      obj[item.name] = item.value;
+    }
+    obj.products = products
+    obj.units = units
+    // obj.products = generateProducts({ ...obj });
+    return obj
+  }
 
   // const generateProducts = (obj) => {
   //   let productsList;
@@ -271,10 +261,7 @@ export const FormQuotation = (props) => {
         </div>
 
       {/* Unidades */}
-      <UnitsCost />
-
-      {/* Mostrar unidades */}
-
+      <UnitsCost handleAddUnit={handleAddUnit} />
 
       <br />
       <div className="sub-title">
@@ -284,7 +271,7 @@ export const FormQuotation = (props) => {
       {
         showproductForm &&
         <>
-          <ProductForm />
+          <ProductForm units={units} addProduct={handleAddProduct} />
         </>
       }
 
