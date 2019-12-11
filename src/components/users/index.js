@@ -18,14 +18,14 @@ export class Create extends Component {
       passDiff: false,
       activeDialog: false,
       messageAlert: '',
-      code: props.selectUpdate.code,
+      code: props.selectUpdate ? props.selectUpdate.code : null,
       first_name: props.selectUpdate.user ? props.selectUpdate.user.first_name : null,
       identification_number: props.selectUpdate.identification_number,
       username: props.selectUpdate.user ? props.selectUpdate.user.username : null,
       phone_number: props.selectUpdate ? props.selectUpdate.phone_number : null,
       password: props.selectUpdate.user ? props.selectUpdate.user.password : null,
       passwordConfirm: props.selectUpdate.user ? props.selectUpdate.user.password : null,
-      groups: []
+      groups: props.selectUpdate.user ? props.selectUpdate.user.groups : []
     }
     // this.data = {
     //   code: null,
@@ -41,7 +41,22 @@ export class Create extends Component {
     // }
     // this.passwordConfirm = null
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      code: nextProps.selectUpdate.code,
+      first_name: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.first_name : null,
+      identification_number: nextProps.selectUpdate.identification_number,
+      username: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.username : null,
+      phone_number: nextProps.selectUpdate ? nextProps.selectUpdate.phone_number : null,
+      password: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
+      passwordConfirm: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
+      groups: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.groups : []
+    })
+  }
+
   componentDidMount() {
+    console.log('ddddddddddddddd');
     this.getGroups()
   }
   getGroups = async () => {
@@ -55,12 +70,12 @@ export class Create extends Component {
       })
     } catch (error) {
       console.log('error', error)
-    }    
+    }
   }
   handleChange = e => {
     console.log('llego', e.target.value)
     this.render()
-    switch (e.target.name){
+    switch (e.target.name) {
       case "code":
         this.setState({ code: e.target.value })
         // this.data.code = e.target.value
@@ -83,7 +98,7 @@ export class Create extends Component {
         // this.data.phone_number = e.target.value
         break
       case "groups":
-          this.setState({ groups: e.target.value })
+        this.setState({ groups: e.target.value })
         // this.data.groups = e.target.value
         break
       case "password1":
@@ -93,7 +108,7 @@ export class Create extends Component {
       case "password":
         if (this.state.passwordConfirm !== e.target.value) {
           this.setState({ passDiff: true, password: e.target.value })
-        }else {
+        } else {
           // this.data.password = e.target.value
           this.setState({ passDiff: false, password: e.target.value })
         }
@@ -137,24 +152,24 @@ export class Create extends Component {
     fetch(`${conf.api_url}/profile/`, {
       method: 'POST',
       body: JSON.stringify(this.data),
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       }
     })
-    .then(async (response) => {
-      let resp = await response.json()
-      if (response.status == 201 ) {
-        this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
-        this.clear()
-      }
-      if (response.status == 400 ) {
-        this.setState({ activeDialog: true,  messageAlert: resp['error'] })
-      }
-    })
-    .catch(err => {
+      .then(async (response) => {
+        let resp = await response.json()
+        if (response.status == 201) {
+          this.setState({ activeDialog: true, messageAlert: resp['detail'] })
+          this.clear()
+        }
+        if (response.status == 400) {
+          this.setState({ activeDialog: true, messageAlert: resp['error'] })
+        }
+      })
+      .catch(err => {
         console.log(err);
-        this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-    });
+        this.setState({ activeDialog: true, messageAlert: 'Por favor valide los campos obligatorios' })
+      });
   };
   update = () => {
     this.data = this.generateData()
@@ -163,49 +178,49 @@ export class Create extends Component {
     fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
       method: 'PUT',
       body: JSON.stringify(this.data),
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       }
     })
-    .then(async (response) => {
-      let resp = await response.json()
-      console.log('response', resp)
-      fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
-        method: 'PUT',
-        body: JSON.stringify(this.data),
-        headers:{
-          'Content-Type': 'application/json'
-        }
-      })
       .then(async (response) => {
         let resp = await response.json()
         console.log('response', resp)
-        // if (response.status == 201 ) {
-        //   this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
-        //   this.clear()
-        // }
-        // console.log('error', resp)
-        // if (response.status == 400 ) {
-        //   this.setState({ activeDialog: true,  messageAlert: resp['error'] })
-        // }
+        fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
+          method: 'PUT',
+          body: JSON.stringify(this.data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(async (response) => {
+            let resp = await response.json()
+            console.log('response', resp)
+            // if (response.status == 201 ) {
+            //   this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
+            //   this.clear()
+            // }
+            // console.log('error', resp)
+            // if (response.status == 400 ) {
+            //   this.setState({ activeDialog: true,  messageAlert: resp['error'] })
+            // }
+          })
+          .catch(err => {
+            console.log(err);
+            // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+          });
+
       })
       .catch(err => {
-          console.log(err);
-          // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-      });
-  
-    })
-    .catch(err => {
         console.log(err);
         // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-    });
+      });
 
   };
 
   render() {
     return (
       <div>
-        {/* <div class="sub-title">
+        {/* <div className="sub-title">
           Nuevo usuario
         </div> */}
         <form id="userForm" >
@@ -216,8 +231,8 @@ export class Create extends Component {
             value={this.state.code}
             label="Código"
             margin="normal"
-            // value={this.data.code}
-            />
+          // value={this.props.selectUpdate ? this.props.selectUpdate.code : null}
+          />
           <TextField
             required
             name="first_name"
@@ -225,16 +240,16 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.first_name}
-            // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.first_name : null}
-            />
+          // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.first_name : null}
+          />
           <TextField
             name="identification_number"
             label="Documento"
             margin="normal"
             onChange={this.handleChange}
             value={this.state.identification_number}
-            // value={this.props.selectUpdate ? this.props.selectUpdate.identification_number : null}
-            />
+          // value={this.props.selectUpdate ? this.props.selectUpdate.identification_number : null}
+          />
           <TextField
             required
             // onChange={this.handleChange}
@@ -243,8 +258,8 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.username}
-            // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.email : null}
-            />
+          // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.email : null}
+          />
           <TextField
             required
             // onChange={this.handleChange}
@@ -253,8 +268,8 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.phone_number}
-            // value={this.props.selectUpdate ? this.props.selectUpdate.phone_number : null}
-            />
+          // value={this.props.selectUpdate ? this.props.selectUpdate.phone_number : null}
+          />
           <TextField
             required
             type="password"
@@ -263,8 +278,8 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.passwordConfirm}
-            // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
-            />
+          // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
+          />
           <FormControl>
             <TextField
               required
@@ -274,8 +289,8 @@ export class Create extends Component {
               margin="normal"
               onChange={this.handleChange}
               value={this.state.password}
-              // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
-              />
+            // value={this.props.selectUpdate.user ? this.props.selectUpdate.user.password : null}
+            />
             {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
           </FormControl>
           <FormControl margin="normal">
@@ -284,20 +299,20 @@ export class Create extends Component {
               labelId="groups"
               name="groups"
               onChange={this.handleChange}
-              // onInput={this.handleChange}
-              // value={this.props.selectUpdate ? this.props.selectUpdate.user.groups : null}
-            >              
+            // onInput={this.handleChange}
+            // value={this.props.selectUpdate ? this.props.selectUpdate.user.groups : null}
+            >
               {this.state.dataGroups.map(groups => (
-                <MenuItem 
-                value={groups.id}
+                <MenuItem
+                  value={groups.id}
                 >{groups.name}</MenuItem>
-                ))}              
-            </Select> 
+              ))}
+            </Select>
           </FormControl>
-          <br/><br/><br/>
-          <div class="text-center">
+          <br /><br /><br />
+          <div className="text-center">
             <Button variant="contained" color="primary" onClick={this.props.selectUpdate.user ? this.update : this.save}>
-              Crear Usuario
+              {this.props.selectUpdate.user ? 'Guardar' : 'Crear Usuario'}
             </Button>
           </div>
         </form>

@@ -44,7 +44,7 @@ export class List extends Component {
             
             <br/>
             <MaterialTable
-                title={<div class="sub-title">
+                title={<div className="sub-title">
                 Lista de usuarios
                 </div>}
                 columns={this.state.columns}

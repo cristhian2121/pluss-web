@@ -190,7 +190,7 @@ export const FormQuotation = (props) => {
 
   return (
     <div>
-      <div class="title">
+      <div className="title">
         Crear cotización
       </div>
       <br/>
@@ -291,7 +291,7 @@ export const FormQuotation = (props) => {
           <div className="container-padding">
           </div>
         } */}
-        <div class="sub-title">
+        <div className="sub-title">
           <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
         </div>
         <div>{units.map(unit => (
@@ -300,14 +300,14 @@ export const FormQuotation = (props) => {
           </div>
         ))}</div>
         <br/>
-        <div class="sub-title">
+        <div className="sub-title">
           <Button onClick={() => setProducts([...products, products.length + 1])}>Agregar productos  <AddCircleIcon /></Button>
         </div>
         <div>{products.map(product => (
           <Product key={product} number={product} />
         ))}</div>
         <br/><br/>
-        <Grid item md={12} class="text-center">
+        <Grid item md={12} className="text-center">
           <Button variant="contained" color="primary" type="submit">
             Guardar cotización
           </Button>

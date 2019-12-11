@@ -1,7 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import { CreateMakeRate } from "./components/make-rates/create/index";
 import Login from "./pages/login";
 import Menu from './components/common/nav-bar/index'
 
