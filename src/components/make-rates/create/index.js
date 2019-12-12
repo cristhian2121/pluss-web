@@ -28,8 +28,8 @@ class CreateQuotationHook extends Component {
   }
 
   componentDidMount(){
-    const $navBar = document.querySelector('#nav-var-pluss')
-    $navBar.style.visibility = 'visible'
+    // const $navBar = document.querySelector('#nav-var-pluss')
+    // $navBar.style.visibility = 'visible'
   }
 
   generatePDF(quotation) {

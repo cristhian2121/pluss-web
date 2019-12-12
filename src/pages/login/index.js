@@ -34,6 +34,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Login() {
+  setTimeout(() => {
+    // const $navBar = document.querySelector('#nav-var-pluss')
+    // $navBar.style.visibility = 'collapse'
+  }, 100);
+
   return (
     <SnackbarProvider maxSnack={3}>
       <IntegrationNotistack />
@@ -143,7 +148,7 @@ function IntegrationNotistack() {
       <Box mt={8}>
         <Copyright />
       </Box>
-      {loginRoot ?  <Redirect to='/'/> : ''}
+      {loginRoot ?  <Redirect to='/cotizaciones'/> : ''}
     </Container>
   );
 }
