@@ -55,7 +55,7 @@ export const ProductForm = (props) => {
             }
             const preCost = (product.cost * (1 - constProduct.discount / 100)).toFixed(2)
             const costAux = (parseInt(preCost) + constProduct.mark) * (1 + (constProduct.profitableness / 100)) + constProduct.transport
-            product.prices = parseInt(costAux)
+            product.prices.push(parseInt(costAux.toFixed(2)))
             product.costs.push(constProduct)
         }
         return product

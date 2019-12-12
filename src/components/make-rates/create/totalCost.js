@@ -11,7 +11,7 @@ export const TotalCost = ({ transport, profitableness, mark, discount, cost }) =
   useEffect(() => {
     setPreCost((cost * (1 - discount / 100).toFixed(2)))
     setProfitable(((parseInt(preCost) + mark) * (profitableness / 100)).toFixed(2))
-    setTotal((parseInt(preCost) + mark) * (1 + (profitableness / 100)) + transport)
+    setTotal(((parseInt(preCost) + mark) * (1 + (profitableness / 100)) + transport).toFixed(2))
   })
 
   return (

@@ -18,7 +18,7 @@ export const ProductPDF = ({ product }) => {
                 </div>
                 {product.units.map((unit, index) => (
                     <div className="row" key={index}>
-                        <p><span>{unit}</span> $ /U</p>
+                        <p><span>{unit}</span> $ {product.prices[index]}/U</p>
                     </div>
                 ))}
                 <div className="row">

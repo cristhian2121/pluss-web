@@ -140,25 +140,6 @@ export const FormQuotation = (props) => {
     return obj
   }
 
-  // const generateProducts = (obj) => {
-  //   let productsList;
-  //   for (let i of products) {
-  //     productsList = {
-  //       image: obj[`image${i}`],
-  //       size: obj[`size${i}`],
-  //       name: obj[`name${i}`],
-  //       cost: obj[`cost${i}`],
-  //       prints: obj[`prints${i}`],
-  //       description: obj[`description${i}`],
-  //       discount: obj[`discount${i}`],
-  //       mark: obj[`mark${i}`],
-  //       profitableness: obj[`profitableness${i}`],
-  //       transport: obj[`transport${i}`]
-  //     }
-  //   }
-  //   return productsList
-  // }
-
   return (
     <div>
       <div className="title">
@@ -273,17 +254,16 @@ export const FormQuotation = (props) => {
           <ProductForm units={units} addProduct={handleAddProduct} />
         </>
       }
-
-
-      <br /><br />
-      <Grid item md={12} className="text-center">
-        <Button variant="contained" color="primary" type="submit" onClick={saveQuotation}>
-          Guardar cotización
+      <div className="col-12 px-0 d-flex justify-content-end">
+        <Grid item md={12}>
+          <Button className="button-accion" variant="contained" color="primary" type="submit" onClick={saveQuotation}>
+            Guardar cotización
           </Button>
-        <Button variant="contained" color="secondary" onClick={generatePDF}>
-          Generar PDF <PictureAsPdfIcon />
-        </Button>
-      </Grid>
+          <Button className="button-accion" variant="contained" color="secondary" onClick={generatePDF}>
+            Generar PDF <PictureAsPdfIcon />
+          </Button>
+        </Grid>
+      </div>
 
 
     </div>
