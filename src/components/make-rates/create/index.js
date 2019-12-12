@@ -1,210 +1,95 @@
-import React, { useState } from "react";
-
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import DateFnsUtils from '@date-io/date-fns';
+import React, { Component } from 'react'
 import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+  Link,
+  Redirect
+} from 'react-router-dom'
 
-// Icons
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandMore';
-import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+// components
+import { FormQuotation } from './formQuotation'
+import { GeneratePDF } from '../../common/pdf'
+import { Menu } from '../../common/nav-bar'
 
+// redux
+import { connect } from 'react-redux'
+import * as quotationActions from '../../../actions/quotationActions'
 
+class CreateQuotationHook extends Component {
 
+  preViewPDF = false;
 
-
-// css
-import '../../../styles/commons.css';
-
-
-
-
-export const CreateMakeRate = () => {
-  //   constructor() {}
-  const [showUnitForm, setshowUnitForm] = useState(false);
-  const [units, setunits] = useState([])
-
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-
-  const handleDateChange = date => {
-    setSelectedDate(date);
-  };
-
-  const showUnits = () => {
-    console.log('show', showUnitForm)
-    setshowUnitForm(!showUnitForm)
+  constructor(props) {
+    super(props)
+    this.state = {
+      downloadPDF: false,
+      preView: false
+    }
+    this.createQuotation = this.createQuotation.bind(this)
+    this.generatePDF = this.generatePDF.bind(this)
   }
 
-  const UnitCost = (key) => {
-    console.log('hola', key)
-    return (
-      <Grid container spacing={3} >
-        <Grid item md={1}>
-          <TextField
-            id={'unit' + key}
-            className=""
-            label="Unidades"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'cost' + key}
-            className=""
-            label="Costo"
-          />
-        </Grid>
-        <Grid item md={1}>
-          <TextField
-            id="discount"
-            className=""
-            label="% descuento"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id="discount"
-            className=""
-            label="Marcasión"
-          />
-        </Grid>
+  componentDidMount(){
+    const $navBar = document.querySelector('#nav-var-pluss')
+    $navBar.style.visibility = 'visible'
+  }
 
-        {/* Segunda fila */}
+  generatePDF(quotation) {
+    this.props.createQuotation(quotation);
+    this.setState({ preView: true })
+    this.preViewPDF = true
+    this.redirectToPDF()
+    const $link = document.querySelector('#new-tap');
+    // $link.print()
+    // this.amor($link)
+    // window.open('/cotizacion', '_blank','',true)
+  }
 
-        <Grid item md={1}>
-          <TextField
-            id="discount"
-            className=""
-            label="% Rentabilidad"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id="discount"
-            className=""
-            label="Valor de venta"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id="discount"
-            className=""
-            label="Transporte"
-          />
-        </Grid>
-      </Grid>
+  amor($link) {
+    let mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+    mywindow.document.appendChild(
+      $link
     )
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    mywindow.print();
+    mywindow.close();
   }
 
-  const saveQuotation = () => {
-
+  redirectToPDF() {
+    if (this.preViewPDF) {
+      // return <Redirect to='/cotizacion' push={true} />
+      this.props.history.push('/cotizacion')
+    }
   }
 
-  return (
-    <div>
-      <h3>Cotizaciones</h3>
+  createQuotation(data) {
+    this.props.createQuotation({ ...data })
+  }
 
-      <Grid container spacing={3}>
-        <Grid item md={3}>
-          <TextField
-            id="consecutive"
-            className=""
-            label="Cosecutivo"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              id="date-picker-inline"
-              label="Fecha de cotización"
-              value={selectedDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </MuiPickersUtilsProvider>
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="client"
-            className=""
-            label="Nombre del cliente"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="clientPhone"
-            className=""
-            label="Telefóno del cliente"
-            margin="normal"
-          />
-        </Grid>
-
-        {/* segunda fila  */}
-
-        <Grid item md={3}>
-          <TextField
-            id="user"
-            className=""
-            label="Ejecutivo de ventas"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="city"
-            className=""
-            label="Ciudad"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="deliveryTime"
-            className=""
-            label="Tiempo de entrega"
-            margin="normal"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id="payTime"
-            className=""
-            label="Formato de pago"
-            margin="normal"
-          />
-        </Grid>
-        {/* fila 3 */}
-      </Grid>
-
-      <div className="text-expand"><span onClick={showUnits}> Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
+  render() {
+    console.log('***', this.props)
+    return (
+      <div>
+        {/* <Menu /> */}
+        <FormQuotation
+          eventGeneratePDF={this.generatePDF}
+          eventCreateQuotation={this.createQuotation} />
+        {/* {this.redirectToPDF()} */}
       </div>
-      {showUnitForm &&
-        <div className="container-padding">
-          <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
-          <div>{units.map(unit => <UnitCost key={unit} />)}</div>
-        </div>
-      }
-      <Button variant="contained" color="primary" onClick={saveQuotation}>
-        Guardar cotización
-      </Button>
-      <Button variant="contained" color="primary" onClick="">
-        Generar PDF <PictureAsPdfIcon />
-      </Button>
-    </div>
-  );
+    );
+  }
+}
+
+// pass state to props (console.log(pros)) end i selected the into return
+
+const mapStateToProps = (reducers) => {
+  return reducers.quotationReducer;
+};
+
+// connect reducer to component
+const CreateQuotation = connect(mapStateToProps, quotationActions)(CreateQuotationHook);
+export {
+  CreateQuotation
 }

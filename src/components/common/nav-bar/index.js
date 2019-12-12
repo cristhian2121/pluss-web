@@ -14,18 +14,22 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import FaceIcon from '@material-ui/icons/Face';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import {LibraryBooks} from "@material-ui/icons";
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import PageNotFound from "../page-not-found";
 import { CreateMakeRate } from "../../make-rates/create/index";
-import { User } from "../../users/index";
+import { User } from "../../../pages/users/index";
+import { CreateQuotation } from "../../make-rates/create";
 import { MakeRate } from "../../make-rates/list/index";
+import { GeneratePDF } from '../pdf'
 
 const drawerWidth = 240;
 
@@ -77,20 +81,13 @@ const useStyles = makeStyles(theme => ({
       width: theme.spacing(9) + 1
     }
   },
-  toolbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar
-  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3)
   }
 }));
 
-export default function Menu() {
+export const Menu = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -104,7 +101,7 @@ export default function Menu() {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} id="nav-var-pluss">
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
@@ -128,13 +125,13 @@ export default function Menu() {
         <List>
           {[
             {
-              text: "Usuarios",
+              // text: "Usuarios",
               icon: <PeopleIcon />,
               path: "/usuarios"
             },
             {
               text: "Cotizaciones",
-              icon: <AssignmentIcon />,
+              icon: <LibraryBooks />,
               path: "/cotizaciones/crear"
             },
             {
@@ -146,6 +143,11 @@ export default function Menu() {
               text: "Productos",
               icon: <AddShoppingCartIcon />,
               path: "/productos"
+            },
+            {
+              text: "Clientes",
+              icon: <FaceIcon />,
+              path: "/clientes"
             }
           ].map((section, index) => (
             <ListItem button key={section.text}>
@@ -160,12 +162,7 @@ export default function Menu() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Switch>
-          <Route exact path="/cotizaciones" component={MakeRate} />
-          <Route exact path="/usuarios" component={User} />
-          <Route exact path="/cotizaciones/crear" component={CreateMakeRate} />
-          <Route component={PageNotFound} />
-        </Switch>
+        {children}
       </main>
     </div>
   );
