@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { Create } from "../../components/users/index";
 import { List } from "../../components/users/list"
 
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import {Alert} from '../../components/common/alerts'
 
@@ -16,12 +18,11 @@ export class User extends Component {
     }
     showForm = () => {
       this.setState({
-        showForm: true
+        showForm: !this.state.showForm
       })
     }
 
     dataUpdate =  (data) => {
-      console.log('data', data)
       Alert('mensaje popo', true)
       if (data !== '' || data!== null) {
         this.setState({
@@ -30,7 +31,6 @@ export class User extends Component {
         })
       }
     }
-
     render() {
         return (
           <div>
@@ -40,7 +40,7 @@ export class User extends Component {
             <br/><br/>
             <div className="sub-title">
               <Button onClick={this.showForm}>
-                {this.state.dataFormUpdate.user ? 'Editar' : 'Crear'} Usuario
+                {this.state.dataFormUpdate.user ? 'Editar' : 'Crear'} Usuario {this.state.showForm ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
               </Button>
             </div>
             { this.state.showForm ? <Create selectUpdate={this.state.dataFormUpdate} /> : ''}
@@ -49,4 +49,4 @@ export class User extends Component {
           </div>
         );
       }
-}
+  }
