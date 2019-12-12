@@ -7,12 +7,15 @@ import {
 // components
 import { FormQuotation } from './formQuotation'
 import { GeneratePDF } from '../../common/pdf'
+import { Menu } from '../../common/nav-bar'
 
 // redux
 import { connect } from 'react-redux'
 import * as quotationActions from '../../../actions/quotationActions'
 
 class CreateQuotationHook extends Component {
+
+  preViewPDF = false;
 
   constructor(props) {
     super(props)
@@ -24,9 +27,15 @@ class CreateQuotationHook extends Component {
     this.generatePDF = this.generatePDF.bind(this)
   }
 
+  componentDidMount(){
+    const $navBar = document.querySelector('#nav-var-pluss')
+    $navBar.style.visibility = 'visible'
+  }
+
   generatePDF(quotation) {
     this.props.createQuotation(quotation);
     this.setState({ preView: true })
+    this.preViewPDF = true
     this.redirectToPDF()
     const $link = document.querySelector('#new-tap');
     // $link.print()
@@ -49,8 +58,9 @@ class CreateQuotationHook extends Component {
   }
 
   redirectToPDF() {
-    if (this.state.preView) {
-      return <Redirect to='/cotizacion' push={true} />
+    if (this.preViewPDF) {
+      // return <Redirect to='/cotizacion' push={true} />
+      this.props.history.push('/cotizacion')
     }
   }
 
@@ -62,11 +72,11 @@ class CreateQuotationHook extends Component {
     console.log('***', this.props)
     return (
       <div>
-        {/* {this.state.downloadPDF && <GeneratePFD />} */}
+        {/* <Menu /> */}
         <FormQuotation
           eventGeneratePDF={this.generatePDF}
           eventCreateQuotation={this.createQuotation} />
-        {this.redirectToPDF()}
+        {/* {this.redirectToPDF()} */}
       </div>
     );
   }

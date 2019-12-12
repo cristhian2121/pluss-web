@@ -8,3 +8,8 @@
 .container-padding {
     margin-bottom: 15px !important;
 }
+
+.messagge-validator {
+    font-size: 0.8 em;
+    color: red;
+}

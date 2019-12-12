@@ -10,6 +10,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import FaceIcon from '@material-ui/icons/Face';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -77,7 +78,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Menu() {
+export const Menu = ({ children }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -86,7 +87,7 @@ export default function Menu() {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} id="nav-var-pluss">
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
@@ -128,6 +129,11 @@ export default function Menu() {
               text: "Productos",
               icon: <AddShoppingCartIcon />,
               path: "/productos"
+            },
+            {
+              text: "Clientes",
+              icon: <FaceIcon />,
+              path: "/clientes"
             }
           ].map((section, index) => (
             <ListItem button key={section.text}>
@@ -144,13 +150,7 @@ export default function Menu() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Switch>
-          <Route exact path="/cotizaciones" component={MakeRate} />
-          <Route exact path="/usuarios" component={User} />
-          <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
-          <Route exact path="/cotizacion" component={GeneratePDF} />
-          <Route component={PageNotFound} />
-        </Switch>
+        {children}
       </main>
     </div>
   );

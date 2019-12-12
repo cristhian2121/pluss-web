@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 // Icons
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { Link } from "react-router-dom"
 
+// component
+import { ProductForm } from './addProduct'
 
+
+import { UnitsCost } from './unitsCost'
 
 // css
 import '../../../styles/commons.css';
@@ -31,9 +33,10 @@ import { da } from "date-fns/locale";
 export const FormQuotation = (props) => {
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
-  const [units, setunits] = useState([])
+  const [showproductForm, setShowproductForm] = useState(false)
+  const [costUnit, SetCostUnit] = useState({})
+  const [units, SetUnits] = useState([])
   const [products, setProducts] = useState([])
-  const [quotationData, setQuotationData] = useState({})
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -45,122 +48,83 @@ export const FormQuotation = (props) => {
     setshowUnitForm(!showUnitForm)
   }
 
-  const Product = ({ number }) => {
-    return (
-      <Grid container spacing={1} >
-        <Grid item md={3}>
-          <TextField
-            id={'image' + number}
-            name={'image' + number}
-            className=""
-            label="Url imagen"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'size' + number}
-            name={'size' + number}
-            className=""
-            label="Medidas"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'cost' + number}
-            name={'cost' + number}
-            className=""
-            label="Costo"
-          />
-        </Grid>
-        <Grid item md={3}>
-          <TextField
-            id={'description' + number}
-            name={'description' + number}
-            multiline
-            rowsMax="4"
-            className=""
-            label="Descripción"
-          />
-        </Grid>
-      </Grid>
-    )
+  // const calculateValue = (event) => {
+  //   const eventAux = { ...event }
+  //   console.log(eventAux.target.value);
+  //   SetCostUnit(costUnit => {
+  //     return { ...costUnit, discount: eventAux.target.value }
+  //   })
+  // }
 
+  const handleAddUnit = (_units) => {
+    console.log('_units: ', _units);
+    SetUnits(units => [..._units])
   }
 
-  const UnitCost = ({ number }) => {
-    return (
-      <Grid container spacing={3} >
-        <Grid item md={2}>
-          <TextField
-            id={'unit' + number}
-            name={'unit' + number}
-            className=""
-            label="Unidades"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'discount' + number}
-            name={'discount' + number}
-            className=""
-            label="% descuento"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'mark' + number}
-            name={'mark' + number}
-            className=""
-            label="Marcación"
-          />
-        </Grid>
-
-        {/* Segunda fila */}
-
-        <Grid item md={2}>
-          <TextField
-            id={'profitableness' + number}
-            name={'profitableness' + number}
-            className=""
-            label="% Rentabilidad"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'total' + number}
-            name={'total' + number}
-            className=""
-            label="Valor de venta"
-          />
-        </Grid>
-        <Grid item md={2}>
-          <TextField
-            id={'transport' + number}
-            name={'transport' + number}
-            className=""
-            label="Transporte"
-          />
-        </Grid>
-
-      </Grid>
-    )
+  const handleAddProduct = (_product) => {
+    console.log('_product: ', _product);
+    setProducts(products => [...products, _product])
   }
+
+  const validateProduct = products => {
+    const properties = Object.values(products);
+    const keys = Object.keys(products);
+    let i = 0;
+    let validate = true;
+    for (i; i < properties.length; i++) {
+      let $input = document.querySelector(`#${keys[i]}`)
+      const $parent = document.querySelector(`.input-validation-${$input.name}`)
+      const $elementMessagge = document.querySelector(`.messagge-${keys[i]}`)
+      if (!properties[i]) {
+        validate = false;
+        if (!$elementMessagge) {
+          const element = document.createElement('P')
+          const text = document.createTextNode(`El campo es obligatorio`)
+          element.className = `messagge-${keys[i]} messagge-validator`
+          element.appendChild(text)
+          $parent.insertBefore(element, $input.nextSibling)
+        }
+      } else {
+        if ($elementMessagge) {
+          $parent.removeChild($elementMessagge)
+        }
+      }
+    }
+    return validate
+  }
+
+
+  // const UnitCost = () => {
+  //   return (
+  //     <Grid container spacing={3} >
+  //       <Grid item md={2} className="unit">
+  //         <TextField
+  //           id={'unit'}
+  //           name={'unit'}
+  //           className=""
+  //           label="Unidades"
+  //         />
+  //       </Grid>
+  //       <Grid item md={2}>
+  //         <Button color="primary" onClick={handleAddUnits}>
+  //           Agregar <AddCircleIcon />
+  //         </Button>
+  //       </Grid>
+  //     </Grid>
+  //   )
+  // }
 
   const saveQuotation = event => {
-    if (event) {
-      event.preventDefault();
-      const data = generateData()
-      console.log('FECHA', da.localize);
-      props.eventCreateQuotation(data)
-    }
-    // const consecutive = document.getElementById('consecutive').value
-    // const unit1 = document.getElementById('unit1').value
-    // const quotationDate = document.getElementById('date-picker-inline').value
+    // if (event) {
+    //   event.preventDefault();
+    //   const data = generateData()
+    //   console.log('FECHA', da.localize);
+    //   props.eventCreateQuotation(data)
+    // }
   }
 
   const generatePDF = () => {
     const data = generateData()
-    console.log('FECHA', da.localize);
     props.eventGeneratePDF(data)
   }
 
@@ -169,32 +133,39 @@ export const FormQuotation = (props) => {
     let obj = {};
     for (let item of elements) {
       obj[item.name] = item.value;
-      obj.products = products
     }
-    obj.products = generateProducts({...obj});
+    obj.products = products
+    obj.units = units
+    // obj.products = generateProducts({ ...obj });
     return obj
   }
 
-  const generateProducts = (obj) => {
-    const productsList = []
-    for (let i of products) {
-      productsList.push({
-        image: obj[`image${i}`],
-        size: obj[`size${i}`],
-        cost: obj[`cost${i}`],
-        description: obj[`description${i}`]
-      })
-    }
-    return productsList
-  }
+  // const generateProducts = (obj) => {
+  //   let productsList;
+  //   for (let i of products) {
+  //     productsList = {
+  //       image: obj[`image${i}`],
+  //       size: obj[`size${i}`],
+  //       name: obj[`name${i}`],
+  //       cost: obj[`cost${i}`],
+  //       prints: obj[`prints${i}`],
+  //       description: obj[`description${i}`],
+  //       discount: obj[`discount${i}`],
+  //       mark: obj[`mark${i}`],
+  //       profitableness: obj[`profitableness${i}`],
+  //       transport: obj[`transport${i}`]
+  //     }
+  //   }
+  //   return productsList
+  // }
 
   return (
     <div>
       <div className="title">
         Crear cotización
       </div>
-      <br/>
-      <form id="quotationForm" onSubmit={saveQuotation}>
+      <br />
+      <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
         <Grid container spacing={3}>
           <Grid item md={3}>
             <TextField
@@ -282,43 +253,37 @@ export const FormQuotation = (props) => {
           </Grid>
           {/* fila 3 */}
         </Grid>
-        <br/>
-        {/* <div className="text-expand"><span onClick={showUnits}>
-          Unidades {showUnitForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}</span>
-        </div> */}
-
-        {/* {showUnitForm &&
-          <div className="container-padding">
-          </div>
-        } */}
-        <div className="sub-title">
-          <Button onClick={() => setunits([...units, units.length + 1])}>Agregar Unidades  <AddCircleIcon /></Button>
-        </div>
-        <div>{units.map(unit => (
-          <div>
-            <UnitCost key={unit} number={unit} />
-          </div>
-        ))}</div>
-        <br/>
-        <div className="sub-title">
-          <Button onClick={() => setProducts([...products, products.length + 1])}>Agregar productos  <AddCircleIcon /></Button>
-        </div>
-        <div>{products.map(product => (
-          <Product key={product} number={product} />
-        ))}</div>
-        <br/><br/>
-        <Grid item md={12} className="text-center">
-          <Button variant="contained" color="primary" type="submit">
-            Guardar cotización
-          </Button>
-          <Button variant="contained" color="secondary" onClick={generatePDF}>
-            Generar PDF <PictureAsPdfIcon />
-          </Button>
-        </Grid>
-
       </form>
+      <br />
+      <div className="sub-title">
+        Agregar Unidades
+        </div>
+
+      {/* Unidades */}
+      <UnitsCost handleAddUnit={handleAddUnit} />
+
+      <br />
+      <div className="sub-title">
+        <Button onClick={() => setShowproductForm(!showproductForm)}>Agregar productos </Button>
+      </div>
+      {/* Anadir producto */}
+      {
+        showproductForm &&
+        <>
+          <ProductForm units={units} addProduct={handleAddProduct} />
+        </>
+      }
 
 
+      <br /><br />
+      <Grid item md={12} className="text-center">
+        <Button variant="contained" color="primary" type="submit" onClick={saveQuotation}>
+          Guardar cotización
+          </Button>
+        <Button variant="contained" color="secondary" onClick={generatePDF}>
+          Generar PDF <PictureAsPdfIcon />
+        </Button>
+      </Grid>
 
 
     </div>
