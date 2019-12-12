@@ -125,7 +125,6 @@ export const FormQuotation = (props) => {
 
   const generatePDF = () => {
     const data = generateData()
-    // console.log('FECHA', da.localize);
     props.eventGeneratePDF(data)
   }
 

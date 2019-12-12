@@ -16,22 +16,18 @@ export const ProductPDF = ({ product }) => {
                 <div className="row">
                     <div className="text-descripcion span">Unidades y Precio</div>
                 </div>
-                <div className="row">
-                    <p><span>900 por</span> $5.000/U</p>
-                </div>
-                <div className="row">
-                    <p><span>600 por</span> $7.600/U</p>
-                </div>
-                <div className="row">
-                    <p><span>400 por</span> $8.300/U</p>
-                </div>
+                {product.units.map((unit, index) => (
+                    <div className="row" key={index}>
+                        <p><span>{unit}</span> $ /U</p>
+                    </div>
+                ))}
                 <div className="row">
                     <div className="text-descripcion span">Personalizaciòn</div>
                 </div>
                 <div className="row">
                     <p><span>1 Logo, 1 tinta, 1 Cara,/ Tampografia con tratamiento</span></p>
                 </div>
-                
+
             </div>
         </div>
     )

@@ -25,19 +25,40 @@ export const ProductForm = (props) => {
     }
 
     const handleAddProduct = () => {
+        const product = buildProduct()
+        console.log('product: ', product);
+        // if (!validateProduct(product)) return
+        setNewProduct(product => { return { ...product } })
+        setProducts([...products, product])
+        console.log('product: ', product);
+        // props.handleAddProduct(product)
+    }
+
+    const buildProduct = () => {
         const product = {
             image: document.querySelector(`#image`).value,
             size: document.querySelector(`#size`).value,
             name: document.querySelector(`#name`).value,
-
             cost: document.querySelector(`#cost`).value,
             prints: document.querySelector(`#prints`).value,
             description: document.querySelector(`#description`).value,
         }
-        if (!validateProduct(product)) return
-        setNewProduct(product => { return { ...product } })
-        setProducts([...products, product])
-        props.handleAddProduct(product)
+        product.costs = []
+        product.prices = []
+        product.units = props.units
+        for (let index in props.units) {
+            const constProduct = {
+                discount: parseInt(document.getElementById(`discount${index}`).value),
+                mark: parseInt(document.getElementById(`mark${index}`).value),
+                profitableness: parseInt(document.getElementById(`profitableness${index}`).value),
+                transport: parseInt(document.getElementById(`transport${index}`).value)
+            }
+            const preCost = (product.cost * (1 - constProduct.discount / 100)).toFixed(2)
+            const costAux = (parseInt(preCost) + constProduct.mark) * (1 + (constProduct.profitableness / 100)) + constProduct.transport
+            product.prices = parseInt(costAux)
+            product.costs.push(constProduct)
+        }
+        return product
     }
 
     const validateProduct = products => {
