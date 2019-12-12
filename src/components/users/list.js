@@ -4,13 +4,19 @@ import MaterialTable from 'material-table';
 import conf from '../../config'
 
 export class List extends Component {
+
+    constructor(props){
+        super(props)
+    }
+
     state = {
         columns: [
-            { title: 'Id', field: 'id' },
-            { title: 'Usuario', field: 'username' },
-            { title: 'Nombre', field: 'first_name' },
-            { title: 'Correo electrónico', field: 'email' },
-            { title: 'user', field: 'user' }
+            { title: 'codigo', field: 'code' },
+            { title: 'Nombre', field: 'user.first_name' },
+            { title: 'Correo electrónico', field: 'user.email' },
+            { title: 'Documento', field: 'identification_number' },
+            { title: 'Teléfono', field: 'phone_number'},
+            { title: 'Estado', field: 'user.is_active'}
         ],
         dataUser: []
     };
@@ -21,8 +27,8 @@ export class List extends Component {
     getDataUsers = async () => {
         try {
             console.log('api', conf.api_url)
-            let response = await fetch(`${conf.api_url}/user/`)
-            let data = await response.json();
+            let response = await fetch(`${conf.api_url}/profile/`)
+            let data = await response.json()
         
             this.setState({
                 dataUser: data
@@ -35,14 +41,24 @@ export class List extends Component {
     render () {
       return (
         <div>
-            <div class="sub-title">
-            Lista de usuarios
-            </div>
+            
             <br/>
             <MaterialTable
-                title=""
+                title={<div className="sub-title">
+                Lista de usuarios
+                </div>}
                 columns={this.state.columns}
                 data={this.state.dataUser}
+                actions={[
+                    {
+                      icon: 'edit',
+                      tooltip: 'Editar usuario',
+                      onClick: (event, rowData) => {
+                        console.log('event que llega', event, rowData)
+                        this.props.selectUpdate(rowData)
+                      }
+                    }
+                  ]}
                 /> 
         </div>
       );

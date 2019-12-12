@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { GeneratePDF } from "./components/common/pdf";
 import Login from "./pages/login";
@@ -20,6 +20,7 @@ function App() {
     <div className="App">
       <Router>
         <Route exact path="/cotizacion" component={GeneratePDF} />
+        <Route exact path="/login" component={Login} />
         <Menu>
           <Switch>
             <Route exact path="/cotizaciones" component={MakeRate} />

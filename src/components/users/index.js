@@ -17,22 +17,44 @@ export class Create extends Component {
       dataGroups: [],
       passDiff: false,
       activeDialog: false,
-      messageAlert: ''
+      messageAlert: '',
+      code: props.selectUpdate ? props.selectUpdate.code : null,
+      first_name: props.selectUpdate.user ? props.selectUpdate.user.first_name : null,
+      identification_number: props.selectUpdate.identification_number,
+      username: props.selectUpdate.user ? props.selectUpdate.user.username : null,
+      phone_number: props.selectUpdate ? props.selectUpdate.phone_number : null,
+      password: props.selectUpdate.user ? props.selectUpdate.user.password : null,
+      passwordConfirm: props.selectUpdate.user ? props.selectUpdate.user.password : null,
+      groups: props.selectUpdate.user ? props.selectUpdate.user.groups : []
     }
-    this.data = {
-      code: null,
-      first_name: null,
-      user: '',
-      type_identification: 'CC',
-      identification_number: null,
-      email: null,
-      username: null,
-      phone_number: null,
-      groups: [],
-      password: null
-    }
-    this.passwordConfirm = null
+    // this.data = {
+    //   code: null,
+    //   first_name: null,
+    //   user: '',
+    //   type_identification: 'CC',
+    //   identification_number: null,
+    //   email: null,
+    //   username: null,
+    //   phone_number: null,
+    //   groups: [],
+    //   password: null
+    // }
+    // this.passwordConfirm = null
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      code: nextProps.selectUpdate.code,
+      first_name: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.first_name : null,
+      identification_number: nextProps.selectUpdate.identification_number,
+      username: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.username : null,
+      phone_number: nextProps.selectUpdate ? nextProps.selectUpdate.phone_number : null,
+      password: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
+      passwordConfirm: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
+      groups: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.groups : []
+    })
+  }
+
   componentDidMount() {
     this.getGroups()
   }
@@ -47,55 +69,54 @@ export class Create extends Component {
       })
     } catch (error) {
       console.log('error', error)
-    }    
+    }
   }
   handleChange = e => {
-    switch (e.target.name){
+    console.log('llego', e.target.value)
+    this.render()
+    switch (e.target.name) {
       case "code":
-        this.data.code = e.target.value
+        this.setState({ code: e.target.value })
         break
-      case "name":
-        this.data.first_name = e.target.value
+      case "first_name":
+        this.setState({ first_name: e.target.value })
         break
-      case "document":
-        this.data.identification_number = e.target.value
+      case "identification_number":
+        this.setState({ identification_number: e.target.value })
         break
-      case "email":
-        this.data.username = e.target.value
-        this.data.email = e.target.value
+      case "username":
+        this.setState({ username: e.target.value })
         break
-      case "phone":
-        this.data.phone_number = e.target.value
+      case "phone_number":
+        this.setState({ phone_number: e.target.value })
         break
-      case "group":
-        this.data.groups = e.target.value
+      case "groups":
+        this.setState({ groups: e.target.value })
         break
       case "password1":
-        this.passwordConfirm = e.target.value
+        this.setState({ passwordConfirm: e.target.value })
         break
       case "password":
-        console.log(this.passwordConfirm, e.target.value)
-        if (this.passwordConfirm !== e.target.value) {
-          this.setState({ passDiff: true })
-        }else {
-          this.data.password = e.target.value
-          this.setState({ passDiff: false })
+        if (this.state.passwordConfirm !== e.target.value) {
+          this.setState({ passDiff: true, password: e.target.value })
+        } else {
+          this.setState({ passDiff: false, password: e.target.value })
         }
         break
     }
-    console.log('llego', this.data.name)
   };
   clear = () => {
     document.getElementById("userForm").reset()
-    this.data.code = null
-    this.data.first_name = null
-    this.data.user = ''
-    this.data.identification_number = null
-    this.data.email = null
-    this.data.username = null
-    this.data.phone_number = null
-    this.data.groups = []
-    this.data.password = null
+    this.setState({
+      code: null,
+      first_name: null,
+      identification_number: null,
+      username: null,
+      phone_number: null,
+      password: null,
+      passwordConfirm: null,
+      groups: []
+    })
   };
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -103,107 +124,175 @@ export class Create extends Component {
     }
     this.setState({ activeDialog: false })
   }
+  generateData = () => {
+    let elements = document.getElementById('userForm').elements;
+    let data = {};
+    console.log('dataform', elements)
+    for (let item of elements) {
+      data[item.name] = item.value;
+    }
+    data.user = this.props.selectUpdate.user ? this.props.selectUpdate.user.id : ''
+    data.type_identification = 'CC'
+    console.log('aa', data)
+    return data
+  }
   save = () => {
+    this.data = this.generateData()
+    console.log('editando', this.data)
     fetch(`${conf.api_url}/profile/`, {
       method: 'POST',
       body: JSON.stringify(this.data),
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       }
     })
-    .then(async function(response) {
-      console.log('response', response)
-      let resp = await response.json()
-      if (response.status == 201 ) {
-        this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
-        this.clear()
+      .then(async (response) => {
+        let resp = await response.json()
+        if (response.status == 201) {
+          this.setState({ activeDialog: true, messageAlert: resp['detail'] })
+          this.clear()
+        }
+        if (response.status == 400) {
+          this.setState({ activeDialog: true, messageAlert: resp['error'] })
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ activeDialog: true, messageAlert: 'Por favor valide los campos obligatorios' })
+      });
+  };
+  update = () => {
+    this.data = this.generateData()
+    this.data.groups = this.data.groups.split(',')
+    console.log('entro por el editar casi ue no', this.data, this.props.selectUpdate.id)
+    fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
+      method: 'PUT',
+      body: JSON.stringify(this.data),
+      headers: {
+        'Content-Type': 'application/json'
       }
     })
-    .catch(err => {
+      .then(async (response) => {
+        let resp1 = await response.json()
+        console.log('response', resp1, response.status)
+        if (response.status == 200 ||  response.status == 201) {
+          fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
+            method: 'PUT',
+            body: JSON.stringify(this.data),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(async (response) => {
+              let resp = await response.json()
+              if (response.status == 201 ) {
+                this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
+                this.clear()
+              }
+              if (response.status == 400 ) {
+                this.setState({ activeDialog: true,  messageAlert: resp['error'] })
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+            });
+        }
+        if (response.status == 400 ) {
+          console.log(resp1)
+          this.setState({ activeDialog: true,  messageAlert: resp1['error'] })
+        }
+      })
+      .catch(err => {
         console.log(err);
         this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-    });
+      });
 
   };
 
   render() {
     return (
       <div>
-        {/* <div class="sub-title">
-          Nuevo usuario
-        </div> */}
         <form id="userForm" >
           <TextField
             required
-            onChange={this.handleChange}
             name="code"
+            onChange={this.handleChange}
+            value={this.state.code}
             label="Código"
             margin="normal"
-            // value={this.data.code}
-            />
+          />
           <TextField
             required
-            onChange={this.handleChange}
-            name="name"
+            name="first_name"
             label="Nombre"
             margin="normal"
-            />
-          <TextField
             onChange={this.handleChange}
-            name="document"
+            value={this.state.first_name}
+          />
+          <TextField
+            name="identification_number"
             label="Documento"
             margin="normal"
-            />
+            onChange={this.handleChange}
+            value={this.state.identification_number}
+          />
           <TextField
             required
-            onChange={this.handleChange}
-            name="email"
+            name="username"
             label="Correo electrónico"
             margin="normal"
-            />
+            onChange={this.handleChange}
+            value={this.state.username}
+          />
           <TextField
             required
-            onChange={this.handleChange}
-            name="phone"
+            name="phone_number"
             label="Teléfono"
             margin="normal"
-            />
+            onChange={this.handleChange}
+            value={this.state.phone_number}
+          />
           <TextField
             required
             type="password"
-            onChange={this.handleChange}
             name="password1"
             label="Contraseña"
             margin="normal"
-            />
+            onChange={this.handleChange}
+            value={this.state.passwordConfirm}
+          />
           <FormControl>
             <TextField
               required
               type="password"
-              onChange={this.handleChange}
               name="password"
               label="Confirme contraseña"
               margin="normal"
-              />
+              onChange={this.handleChange}
+              value={this.state.password}
+            />
             {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
           </FormControl>
           <FormControl margin="normal">
-            <InputLabel id="group">Tipo usuario</InputLabel>
+            <InputLabel id="groups">Tipo usuario</InputLabel>
             <Select
-              labelId="group"
-              name="group"
+              labelId="groups"
+              name="groups"
               onChange={this.handleChange}
-              // onInput={this.handleChange}
-            >              
+            // value={this.props.selectUpdate ? this.props.selectUpdate.user.groups : null}
+            >
               {this.state.dataGroups.map(groups => (
-                <MenuItem value={groups.id}>{groups.name}</MenuItem>
-                ))}              
-            </Select> 
+                <MenuItem
+                  value={groups.id}
+                >{groups.name}</MenuItem>
+              ))}
+            </Select>
           </FormControl>
-          <br/><br/><br/>
-          <div class="text-center">
-            <Button variant="contained" color="primary" type="submit" onClick={this.save}>
-              Crear Usuario
+          <br /><br /><br />
+          <div className="text-center">
+            <Button variant="contained" color="primary" onClick={this.props.selectUpdate.user ? this.update : this.save}>
+              {this.props.selectUpdate.user ? 'Guardar' : 'Crear Usuario'}
             </Button>
           </div>
         </form>
