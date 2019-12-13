@@ -79,9 +79,9 @@ export const GeneratePDFHook = (props) => {
                 </section>
 
                 <section>
-                    {props.quotation.products.map(product => (
-                        ProductPDF(product)
-                    ))}
+                    {props.quotation.products.map(product =>
+                        <ProductPDF product={product} />
+                    )}
                 </section>
                 <hr />
                 <section className="floor-pdf">

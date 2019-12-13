@@ -254,14 +254,18 @@ export const FormQuotation = (props) => {
           <ProductForm units={units} addProduct={handleAddProduct} />
         </>
       }
-      <div className="col-12 px-0 d-flex justify-content-end">
-        <Grid item md={12}>
-          <Button className="button-accion" variant="contained" color="primary" type="submit" onClick={saveQuotation}>
-            Guardar cotización
+      <div className="col-12 px-0">
+        <Grid item md={12} className="d-flex justify-content-end">
+          <div className="button-action">
+            <Button variant="contained" color="primary" type="submit" onClick={saveQuotation}>
+              Guardar cotización
           </Button>
-          <Button className="button-accion" variant="contained" color="secondary" onClick={generatePDF}>
-            Generar PDF <PictureAsPdfIcon />
-          </Button>
+          </div>
+          <div className="button-action">
+            <Button variant="contained" color="secondary" onClick={generatePDF}>
+              Generar PDF <PictureAsPdfIcon />
+            </Button>
+          </div>
         </Grid>
       </div>
 

@@ -26,18 +26,17 @@ export const ProductForm = (props) => {
 
     const handleAddProduct = () => {
         const product = buildProduct()
-        console.log('product: ', product);
         // if (!validateProduct(product)) return
         setNewProduct(product => { return { ...product } })
         setProducts([...products, product])
-        console.log('product: ', product);
-        // props.handleAddProduct(product)
+        props.addProduct(product)
     }
 
     const buildProduct = () => {
         const product = {
             image: document.querySelector(`#image`).value,
             size: document.querySelector(`#size`).value,
+            colors: document.querySelector(`#colors`).value,
             name: document.querySelector(`#name`).value,
             cost: document.querySelector(`#cost`).value,
             prints: document.querySelector(`#prints`).value,

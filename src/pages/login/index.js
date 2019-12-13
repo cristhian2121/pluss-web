@@ -143,7 +143,7 @@ function IntegrationNotistack() {
       <Box mt={8}>
         <Copyright />
       </Box>
-      {loginRoot ?  <Redirect to='/'/> : ''}
+      {loginRoot ?  <Redirect to='/cotizaciones/crear'/> : ''}
     </Container>
   );
 }

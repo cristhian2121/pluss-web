@@ -20,7 +20,7 @@ function App() {
     <div className="App">
       <Router>
         <Route exact path="/cotizacion" component={GeneratePDF} />
-        <Route exact path="/login" component={Login} />
+        <Route exact path="/" component={Login} />
         <Menu>
           <Switch>
             <Route exact path="/cotizaciones" component={MakeRate} />
@@ -29,7 +29,7 @@ function App() {
             <Route exact path="/clientes" component={Clients} />
             <Route component={PageNotFound} />
           </Switch>
-      </Menu>
+        </Menu>
       </Router>
     </div>
   );
