@@ -7,44 +7,43 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Snackbar from '@material-ui/core/Snackbar';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 
 import conf from '../../config'
 
 export class Create extends Component {
   constructor(props) {
     super(props)
+    this.data = {}
     this.state = {
+      dataEdit: null,
+      showForm: true,
       dataGroups: [],
       passDiff: false,
       activeDialog: false,
       messageAlert: '',
-      code: props.selectUpdate ? props.selectUpdate.code : null,
-      first_name: props.selectUpdate.user ? props.selectUpdate.user.first_name : null,
-      identification_number: props.selectUpdate.identification_number,
-      username: props.selectUpdate.user ? props.selectUpdate.user.username : null,
-      phone_number: props.selectUpdate ? props.selectUpdate.phone_number : null,
-      password: props.selectUpdate.user ? props.selectUpdate.user.password : null,
-      passwordConfirm: props.selectUpdate.user ? props.selectUpdate.user.password : null,
-      groups: props.selectUpdate.user ? props.selectUpdate.user.groups : []
+      code: null,
+      first_name: null,
+      identification_number: null,
+      username: null,
+      phone_number: null,
+      password: null,
+      passwordConfirm: null,
+      groups: []
     }
-    // this.data = {
-    //   code: null,
-    //   first_name: null,
-    //   user: '',
-    //   type_identification: 'CC',
-    //   identification_number: null,
-    //   email: null,
-    //   username: null,
-    //   phone_number: null,
-    //   groups: [],
-    //   password: null
-    // }
-    // this.passwordConfirm = null
   }
+  showForm = () => {
+    if (this.state.showForm) { document.getElementById('userForm').style.display='block' }
+    else { document.getElementById('userForm').style.display='none' }
 
+    this.setState({ showForm: !this.state.showForm })
+    console.log('segundo', this.state.showForm)
+  }
   componentWillReceiveProps(nextProps) {
     this.setState({
-      code: nextProps.selectUpdate.code,
+      dataEdit: nextProps.selectUpdate.user ? nextProps.selectUpdate : null,
+      code: nextProps.selectUpdate.user ? nextProps.selectUpdate.code : null,
       first_name: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.first_name : null,
       identification_number: nextProps.selectUpdate.identification_number,
       username: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.username : null,
@@ -54,16 +53,14 @@ export class Create extends Component {
       groups: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.groups : []
     })
   }
-
   componentDidMount() {
     this.getGroups()
+    document.getElementById('userForm').style.display='none'
   }
   getGroups = async () => {
     try {
       let response = await fetch(`${conf.api_url}/group/`)
       let data = await response.json();
-      console.log('llego grupos', data)
-
       this.setState({
         dataGroups: data
       })
@@ -72,7 +69,6 @@ export class Create extends Component {
     }
   }
   handleChange = e => {
-    console.log('llego', e.target.value)
     this.render()
     switch (e.target.name) {
       case "code":
@@ -106,8 +102,10 @@ export class Create extends Component {
     }
   };
   clear = () => {
+    this.data = {}
     document.getElementById("userForm").reset()
     this.setState({
+      dataEdit: null,
       code: null,
       first_name: null,
       identification_number: null,
@@ -133,7 +131,6 @@ export class Create extends Component {
     }
     data.user = this.props.selectUpdate.user ? this.props.selectUpdate.user.id : ''
     data.type_identification = 'CC'
-    console.log('aa', data)
     return data
   }
   save = () => {
@@ -185,7 +182,7 @@ export class Create extends Component {
           })
             .then(async (response) => {
               let resp = await response.json()
-              if (response.status == 201 ) {
+              if (response.status == 200 ||  response.status == 201) {
                 this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
                 this.clear()
               }
@@ -213,7 +210,12 @@ export class Create extends Component {
   render() {
     return (
       <div>
-        <form id="userForm" >
+        <div className="sub-title">
+          <Button onClick={this.showForm}>
+            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {this.state.showForm ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
+          </Button>
+        </div>
+        <form id="userForm">
           <TextField
             required
             name="code"
@@ -291,8 +293,11 @@ export class Create extends Component {
           </FormControl>
           <br /><br /><br />
           <div className="text-center">
-            <Button variant="contained" color="primary" onClick={this.props.selectUpdate.user ? this.update : this.save}>
-              {this.props.selectUpdate.user ? 'Guardar' : 'Crear Usuario'}
+            <Button variant="contained" color="secondary" onClick={this.clear}>
+              Limpiar
+            </Button>
+            <Button variant="contained" color="primary" onClick={this.state.dataEdit ? this.update : this.save}>
+              {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'}
             </Button>
           </div>
         </form>
