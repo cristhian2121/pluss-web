@@ -48,8 +48,8 @@ export const GeneratePDFHook = (props) => {
             setUnitsCost(units);
         }
     }
-    const $navBar = document.querySelector('#nav-var-pluss')
-    $navBar.style.visibility = 'collapse'
+    // const $navBar = document.querySelector('#nav-var-pluss')
+    // $navBar.style.visibility = 'collapse'
     console.log('props: ', props);
     return (
         <div>
