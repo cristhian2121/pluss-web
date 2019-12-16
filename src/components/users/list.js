@@ -26,7 +26,6 @@ export class List extends Component {
     }
     getDataUsers = async () => {
         try {
-            console.log('api', conf.api_url)
             let response = await fetch(`${conf.api_url}/profile/`)
             let data = await response.json()
         
