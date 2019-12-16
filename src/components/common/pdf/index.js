@@ -48,8 +48,8 @@ export const GeneratePDFHook = (props) => {
             setUnitsCost(units);
         }
     }
-    const $navBar = document.querySelector('#nav-var-pluss')
-    $navBar.style.visibility = 'collapse'
+    // const $navBar = document.querySelector('#nav-var-pluss')
+    // $navBar.style.visibility = 'collapse'
     console.log('props: ', props);
     return (
         <div>
@@ -79,9 +79,9 @@ export const GeneratePDFHook = (props) => {
                 </section>
 
                 <section>
-                    {props.quotation.products.map(product => (
-                        ProductPDF(product)
-                    ))}
+                    {props.quotation.products.map(product =>
+                        <ProductPDF product={product} />
+                    )}
                 </section>
                 <hr />
                 <section className="floor-pdf">

@@ -133,7 +133,7 @@ export class Create extends Component {
     data.type_identification = 'CC'
     return data
   }
-  save = () => {
+  save = (evt) => {
     this.data = this.generateData()
     console.log('editando', this.data)
     fetch(`${conf.api_url}/profile/`, {
@@ -183,11 +183,11 @@ export class Create extends Component {
             .then(async (response) => {
               let resp = await response.json()
               if (response.status == 200 ||  response.status == 201) {
-                this.setState({ activeDialog: true,  messageAlert: resp['detail'] })
+                this.setState({ activeDialog: true,  messageAlert: 'El usuario se  actualizó correctamente' })
                 this.clear()
               }
               if (response.status == 400 ) {
-                this.setState({ activeDialog: true,  messageAlert: resp['error'] })
+                this.setState({ activeDialog: true,  messageAlert:'No se pudo actualizar el usuario, por favor vuelva a intentarlo.' })
               }
             })
             .catch(err => {
@@ -212,7 +212,7 @@ export class Create extends Component {
       <div>
         <div className="sub-title">
           <Button onClick={this.showForm}>
-            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {this.state.showForm ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
+            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
           </Button>
         </div>
         <form id="userForm">

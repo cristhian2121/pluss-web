@@ -37,10 +37,8 @@ export class User extends Component {
     render() {
         return (
           <div>
-            <Menu />
-          <div class="margin-page">
             <div className="title">
-                Administrador de usuarios
+               Usuarios
             </div>
             <br/><br/>
             {/* <div className="sub-title">
@@ -51,7 +49,6 @@ export class User extends Component {
             <Create selectUpdate={this.state.dataFormUpdate} />
             <br/><br/>
             <List selectUpdate={this.dataUpdate}/>
-          </div>
           </div>
         );
       }
