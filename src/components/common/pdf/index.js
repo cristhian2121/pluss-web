@@ -52,7 +52,9 @@ export const GeneratePDFHook = (props) => {
                     </div>
                     <div className="col-12 px-0 d-flex">
                         <div className="col-7 px-0 bar-head"></div>
-                        <div className="col-2 px-0">Cotización</div>
+                        <div className="col-2 px-0 d-flex justify-content-end">
+                            <div>Cotización</div>
+                        </div>
                         <div className="col-3 px-0 bar-head"></div>
 
                     </div>
@@ -83,8 +85,8 @@ export const GeneratePDFHook = (props) => {
                 </section>
                 <hr />
                 <section className="floor-pdf">
-                    <div className="row text-descripcion">
-                        <div className="column">
+                    <div className="col-12 px-0 d-flex text-descripcion">
+                        <div className="col-6 px-0">
                             <div className="sub-title-pdf">Terminos y condiciones</div>
                             <p>- Precios por unidad</p>
                             <p>- Sujeto a disponibilidad en el momento de enviar la orden de compra</p>
@@ -94,7 +96,7 @@ export const GeneratePDFHook = (props) => {
                             <p>- Tiempo de entrega: 8 a 15 días hábiles</p>
                             <p>- El Logo será suministrado por el cliente en COREL o ILLUSTRATOR convertido a curvas.</p>
                         </div>
-                        <div className="column">
+                        <div className="col-6 px-0">
                             <div className="sub-title-pdf">Información de contacto</div>
                             <p>Cristina Tobon</p>
                             <p>Ventas</p>
