@@ -18,6 +18,10 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 quotation: action.payload
             }
+        case 'get_quotation_active':
+            return {
+                ...state,
+            }
         default:
             return state;
     };

@@ -8,7 +8,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 export const UnitsCost = (props) => {
 
 
-    const [units, setUnits] = useState([])
+    const [units, setUnits] = useState(() => props.preUnits || [])
 
     const handleAddUnits = () => {
         const $unit = document.querySelector(`#unit`)

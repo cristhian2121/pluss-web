@@ -12,6 +12,7 @@ import { Menu } from '../../common/nav-bar'
 // redux
 import { connect } from 'react-redux'
 import * as quotationActions from '../../../actions/quotationActions'
+import { getQuotationActive } from '../../../actions/quotationActions'
 
 class CreateQuotationHook extends Component {
 
@@ -24,42 +25,47 @@ class CreateQuotationHook extends Component {
       preView: false
     }
     this.createQuotation = this.createQuotation.bind(this)
-    this.generatePDF = this.generatePDF.bind(this)
+    this.eventSavePDF = this.eventSavePDF.bind(this)
+    // this.generatePDF = this.generatePDF.bind(this)
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    const quotation = this.props.quotation;
+    console.log('quotation: ', quotation);
     // const $navBar = document.querySelector('#nav-var-pluss')
     // $navBar.style.visibility = 'visible'
   }
 
-  generatePDF(quotation) {
-    this.props.createQuotation(quotation);
-    this.setState({ preView: true })
-    this.preViewPDF = true
-    this.redirectToPDF()
-    const $link = document.querySelector('#new-tap');
+  eventSavePDF(quotation) {
+    console.log('quotation: ', quotation);
+    // this.props.createQuotation(quotation);
+    // this.setState({ preView: true })
+    // this.preViewPDF = true
+    // this.redirectToPDF()
+    // const $link = document.querySelector('#new-tap');
     // $link.print()
     // this.amor($link)
-    // window.open('/cotizacion', '_blank','',true)
+    window.open('/cotizacion', '_blank','',true)
   }
 
-  amor($link) {
-    let mywindow = window.open('', 'PRINT', 'height=400,width=600');
+  // amor($link) {
+  //   let mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-    mywindow.document.appendChild(
-      $link
-    )
+  //   mywindow.document.appendChild(
+  //     $link
+  //   )
 
-    mywindow.document.close(); // necessary for IE >= 10
-    mywindow.focus(); // necessary for IE >= 10*/
+  //   mywindow.document.close(); // necessary for IE >= 10
+  //   mywindow.focus(); // necessary for IE >= 10*/
 
-    mywindow.print();
-    mywindow.close();
-  }
+  //   mywindow.print();
+  //   mywindow.close();
+  // }
 
   redirectToPDF() {
     if (this.preViewPDF) {
       // return <Redirect to='/cotizacion' push={true} />
+      
       this.props.history.push('/cotizacion')
     }
   }
@@ -74,8 +80,9 @@ class CreateQuotationHook extends Component {
       <div>
         {/* <Menu /> */}
         <FormQuotation
-          eventGeneratePDF={this.generatePDF}
-          eventCreateQuotation={this.createQuotation} />
+          eventCreateQuotation={this.createQuotation}
+          preQuotation={this.props.quotation} eventSavePDF={this.eventSavePDF}/>
+          
         {/* {this.redirectToPDF()} */}
       </div>
     );
