@@ -125,14 +125,31 @@ export const FormQuotation = (props) => {
 
   const generatePDF = () => {
     const data = generateData()
-    props.eventGeneratePDF(data)
+    console.log('data: ', data);
+    fetch('http://192.168.1.202:8933/api/quotationtemp/', {
+      method: 'POST',
+      body: JSON.stringify({ data: data }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log('res: ', res);
+        props.eventSavePDF(res.data)
+      })
+      .catch(() => {
+        console.log('ERROR');
+      })
   }
 
   const generateData = () => {
     let elements = document.getElementById('quotationForm').elements;
     let obj = {};
     for (let item of elements) {
-      obj[item.name] = item.value;
+      if (item.name) {
+        obj[item.name] = item.value;
+      }
     }
     obj.products = products
     obj.units = units
@@ -241,7 +258,7 @@ export const FormQuotation = (props) => {
         </div>
 
       {/* Unidades */}
-      <UnitsCost handleAddUnit={handleAddUnit} />
+      <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units} />
 
       <br />
       <div className="sub-title">

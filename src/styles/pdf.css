@@ -31,11 +31,13 @@ p {
 
 .text-descripcion {
     margin-top: 0.5em;
+    font-weight: bold;
 }
 
 .text-descripcion p {
     font-weight: normal;
-    font-size: 0.85em;
+    font-size: 0.9em;
+    margin: 0.1em;
 }
 
 .text-descripcion span {

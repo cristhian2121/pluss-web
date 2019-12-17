@@ -14,3 +14,10 @@ export const createQuotation = (quotation) => (dispatch) => {
         payload: quotation
     })
 }
+
+export const getQuotationActive = (dispatch) => {
+    console.log('entre');
+    dispatch({
+        type: 'get_quotation_active'        
+    })
+}
