@@ -53,7 +53,6 @@ export class List extends Component {
                       icon: 'edit',
                       tooltip: 'Editar usuario',
                       onClick: (event, rowData) => {
-                        console.log('event que llega', event, rowData)
                         this.props.selectUpdate(rowData)
                       }
                     }

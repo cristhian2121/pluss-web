@@ -15,18 +15,11 @@ export class User extends Component {
     constructor() {
         super();
         this.state = {
-          // showForm: false,
           dataFormUpdate: {}
         }
     }
-    // showForm = () => {
-    //   this.setState({
-    //     showForm: !this.state.showForm
-    //   })
-    // }
 
     dataUpdate =  (data) => {
-      Alert('mensaje popo', true)
       if (data !== '' || data!== null) {
         this.setState({
           showForm: true, 
@@ -41,11 +34,6 @@ export class User extends Component {
                Usuarios
             </div>
             <br/><br/>
-            {/* <div className="sub-title">
-              <Button onClick={this.showForm}>
-                {this.state.dataFormUpdate.user ? 'Editar' : 'Crear'} Usuario {this.state.showForm ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
-              </Button>
-            </div> */}
             <Create selectUpdate={this.state.dataFormUpdate} />
             <br/><br/>
             <List selectUpdate={this.dataUpdate}/>
