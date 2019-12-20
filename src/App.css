@@ -66,6 +66,10 @@
   /* opacity: .6; */
 }
 
+.MuiDialog-paperWidthSm {
+  max-width: 1000px !important;
+}
+
 /************** Products ***********/
 
 .material-card {
@@ -103,4 +107,10 @@
     /* line-height: 52px; */
     text-decoration: none;
     top: 200px;
+  }
+
+  /*************** Detail Products ***********/
+
+  .text-detail span {
+    font-weight: bold;
   }

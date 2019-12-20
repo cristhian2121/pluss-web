@@ -37,9 +37,7 @@ export class Products extends Component {
     }
   }
   productDetail = (dataProduct) => {
-    console.log('dataProduct: ', dataProduct);
     if (dataProduct !== '' || dataProduct!== null) {
-      console.log('entro el popuelo: ', dataProduct);
       // this.open = true
 
       this.setState({
@@ -63,7 +61,8 @@ export class Products extends Component {
                   <Grid container md={3} className="material-card">
                     <img className="img-product" alt="complex" src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
                     <div>
-                      {obj.descripcion}
+                      {obj.descripcion}<br/>
+                      Ref. {obj.referencia} 
                       {/* <Divider orientation="vertical" /> */}
                       <a><VisibilityIcon onClick={() => {this.productDetail(obj)}}/></a>
                     </div>
@@ -72,9 +71,11 @@ export class Products extends Component {
               }, this)}
             </Grid>
           </form>
-          <Dialog open={this.state.open}>
+          <Dialog 
+          onClose={() => this.setState({open: false})}
+          open={this.state.open}
+          >
             <Detail selectDetail={this.state.detailProducts}/>
-
           </Dialog>
         </div>
       )
