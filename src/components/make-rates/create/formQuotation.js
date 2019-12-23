@@ -27,6 +27,7 @@ import { UnitsCost } from './unitsCost'
 import '../../../styles/commons.css';
 import { da } from "date-fns/locale";
 
+import conf from '../../../config'
 
 
 
@@ -126,7 +127,7 @@ export const FormQuotation = (props) => {
   const generatePDF = () => {
     const data = generateData()
     console.log('data: ', data);
-    fetch('http://192.168.1.202:8933/api/quotationtemp/', {
+    fetch(`${conf.api_url}/quotationtemp/`, {
       method: 'POST',
       body: JSON.stringify({ data: data }),
       headers: {
@@ -197,7 +198,7 @@ export const FormQuotation = (props) => {
               id="client"
               name="client"
               className=""
-              label="Nombre del cliente"
+              label="Nombre cliente"
               margin="normal"
             />
           </Grid>
@@ -206,7 +207,7 @@ export const FormQuotation = (props) => {
               id="clientPhone"
               name="clientPhone"
               className=""
-              label="Telefóno del cliente"
+              label="Teléfono cliente"
               margin="normal"
             />
           </Grid>
@@ -255,7 +256,7 @@ export const FormQuotation = (props) => {
       <br />
       <div className="sub-title">
         Agregar Unidades
-        </div>
+      </div>
 
       {/* Unidades */}
       <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units} />

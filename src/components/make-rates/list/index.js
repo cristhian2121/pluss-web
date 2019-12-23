@@ -4,7 +4,9 @@ export class MakeRate extends Component {
 
     render(){
         return(
-            <h3>Listado de cotizaciones</h3>
+          <div className="title">
+            Listado de cotizaciones
+          </div>
         )
     }
 }

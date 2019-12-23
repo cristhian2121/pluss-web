@@ -71,7 +71,7 @@ export const GeneratePDFHook = (props) => {
                                 <p>{quotation.clientPhone}</p>
                             </div>
                             <div className="col-6 px-0 text-descripcion">
-                                <p>No. Factura: <span>{quotation.consecutive}</span></p>
+                                <p>No. Cotización: <span>{quotation.consecutive}</span></p>
                                 <p>Fecha: <span>{quotation.quotationDate}</span></p>
                             </div>
                         </div>

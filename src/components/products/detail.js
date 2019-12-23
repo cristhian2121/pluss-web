@@ -63,10 +63,10 @@ export default function Detail(props) {
           <span>Ref. {data.referencia}</span>
           <br/>
           <div>            
-          <span>Color:</span> {data.color} <br/>
-          <span>Material:</span> {data.material} <br/>
-          <span>Medidas:</span> {data.medidas} <br/>
-          <span>Marcas:</span> {data.areaImpresion} <br/>
+            <span>Color:</span> {data.color} <br/>
+            <span>Material:</span> {data.material} <br/>
+            <span>Medidas:</span> {data.medidas} <br/>
+            <span>Marcas:</span> {data.areaImpresion} <br/>
           </div>
           <Divider />
           <br/>

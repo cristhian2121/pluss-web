@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Typography from '@material-ui/core/Typography';
 
 // Components
 import { ProductPDF } from '../../common/pdf/productPDF'
@@ -118,6 +119,10 @@ export const ProductForm = (props) => {
         }
     }
 
+    const clearForm = () => {
+        document.getElementById("userForm").reset()
+    }
+
     return (
         <Fragment>
             <Grid container spacing={1} >
@@ -153,7 +158,7 @@ export const ProductForm = (props) => {
                     <TextField
                         id='prints'
                         name='prints'
-                        label="tintas"
+                        label="Tintas"
                     />
                 </Grid>
                 <Grid item md={3} className="input-validation-description">
@@ -169,12 +174,15 @@ export const ProductForm = (props) => {
                     <TextField
                         id='cost'
                         name='cost'
-                        label="Precio en pagina"
+                        label="Precio en página"
                         onChange={event => handleChange(event, 0)}
                     />
                 </Grid>
-            </Grid>
-            <p>Valor por unidades</p>
+            </Grid><br/><br/>
+            <Typography variant="h5">
+              Valor por unidades
+            </Typography>
+            <br/>
             {props.units.map((unit, index) => (
                 <Grid container spacing={1} key={index}>
                     <span>{unit} Unidades</span>
@@ -182,7 +190,7 @@ export const ProductForm = (props) => {
                         <TextField
                             id={`discount${index}`}
                             name={`discount`}
-                            label="Descuento %"
+                            label="% Descuento"
                             onChange={event => handleChange(event, index)}
                         />
                     </Grid>
@@ -190,7 +198,7 @@ export const ProductForm = (props) => {
                         <TextField
                             id={`mark${index}`}
                             name={`mark`}
-                            label="Marcación"
+                            label="Precio de marcación"
                             onChange={event => handleChange(event, index)}
                         />
                     </Grid>
@@ -198,7 +206,7 @@ export const ProductForm = (props) => {
                         <TextField
                             id={`profitableness${index}`}
                             name={`profitableness`}
-                            label="Rentabilidad %"
+                            label="% Rentabilidad"
                             onChange={event => handleChange(event, index)}
                         />
                     </Grid>
@@ -219,6 +227,10 @@ export const ProductForm = (props) => {
                     />
                 </Grid>
             ))}
+            <br/><br/>
+            <Button color="secondary" onClick={clearForm}>
+                Limpiar
+            </Button>
             <Button color="primary" onClick={handleAddProduct}>
                 Agregar <AddCircleIcon />
             </Button>

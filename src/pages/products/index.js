@@ -62,7 +62,8 @@ export class Products extends Component {
                     <img className="img-product" alt="complex" src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
                     <div>
                       {obj.descripcion}<br/>
-                      Ref. {obj.referencia} 
+                      Ref. {obj.referencia} <br/>
+                      ${obj.vlrUnitario} c/u
                       {/* <Divider orientation="vertical" /> */}
                       <a><VisibilityIcon onClick={() => {this.productDetail(obj)}}/></a>
                     </div>
