@@ -119,10 +119,6 @@ export const ProductForm = (props) => {
         }
     }
 
-    const clearForm = () => {
-        document.getElementById("userForm").reset()
-    }
-
     return (
         <Fragment>
             <Grid container spacing={1} >
@@ -228,9 +224,6 @@ export const ProductForm = (props) => {
                 </Grid>
             ))}
             <br/><br/>
-            <Button color="secondary" onClick={clearForm}>
-                Limpiar
-            </Button>
             <Button color="primary" onClick={handleAddProduct}>
                 Agregar <AddCircleIcon />
             </Button>

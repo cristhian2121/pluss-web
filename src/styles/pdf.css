@@ -21,12 +21,13 @@ p {
 }
 
 .image-logo-pdf {
-    height: 100px;
-    width: 100px;
+    /* height: 100px; */
+    width: 65%;
 }
 
 .header-pdf {
     text-align: left;
+    padding: 1% !important;
 }
 
 .text-descripcion {
@@ -42,7 +43,7 @@ p {
 
 .text-descripcion span {
     font-weight: bold;
-    font-size: 0.85em;
+    /* font-size: 0.85em; */
 }
 
 .bar-head {
@@ -105,4 +106,13 @@ p {
     padding-left: 1em;
     margin-top: 0em;
     margin-bottom: 0em;
+}
+
+th.MuiTableCell-root {
+    text-align: center;
+}
+
+.MuiTable-root {
+    width: 65% !important;
+    margin: auto;
 }
