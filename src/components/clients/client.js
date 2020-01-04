@@ -19,7 +19,7 @@ export class Clients extends React.Component {
   }
 
   getClient() {
-    fetch('http://192.168.1.202:8933/api/client/')
+    fetch('http://174.138.41.183:8933/api/client/')
       .then(response => {
         console.log('Response: ', response)
         return response.json()

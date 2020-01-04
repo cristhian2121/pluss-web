@@ -17,3 +17,7 @@
 .button-action{
     margin: 0em 0.5em;
 }
+
+.MuiTable-root {
+    width: 98% !important;
+}

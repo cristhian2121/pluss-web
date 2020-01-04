@@ -43,7 +43,7 @@ export class CreateClient extends React.Component {
   }
 
   addClient(client){
-    fetch('http://192.168.1.202:8933/api/client/',{
+    fetch('http://174.138.41.183:8933/api/client/',{
       method: 'POST',
       body: JSON.stringify(client),
       headers:{
