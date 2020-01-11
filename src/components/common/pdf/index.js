@@ -29,47 +29,48 @@ const printPDF = () => {
     return true
 }
 
+const getQuotationSession = () => {
+    const dataString = sessionStorage.getItem('quotation');
+    return JSON.parse(dataString);
+}
+
 export const GeneratePDFHook = (props) => {
     const [unitsCost, setUnitsCost] = useState([])
     const [quotation, SetQuotation] = useState()
-    fetch(`${conf.api_url}/quotationtemp/`)
-        .then(res => res.json())
-        .then(res => {
-            console.log('res: ', res);
-            SetQuotation(res[0].data)
-            if (!unitsCost.length) {
-                const units = buildUnits(res[0].data)
-                if (units.length) {
-                    setUnitsCost(units);
-                }
-            }
-        })
+    const data = getQuotationSession()
+    !quotation && SetQuotation(data)
+    if (!unitsCost.length) {
+        const units = buildUnits(data)
+        if (units.length) {
+            setUnitsCost(units);
+        }
+    }
     return (
         <div>
             {quotation && <div className="container-pdf">
                 <section>
                     <div className="header-pdf col-12 d-flex">
                         <div className="col-6 text-descripcion">
-                            <p>Medellín, {quotation.quotationDate}</p><br/>
+                            <p>Medellín, {quotation.quotationDate}</p><br />
                             <p>Señores:</p>
                             <p><span>{quotation.client.charAt(0).toUpperCase() + quotation.client.slice(1).toLowerCase()}</span></p>
                             {/* <p>calle 37 a # 88 - 26</p> */}
                             <p>email. {quotation.clientPhone}</p>
                             <p>tel. {quotation.clientPhone}</p>
                             <p>{quotation.city}</p>
-                                                        
+
                         </div>
 
                         <div className="col-3 px-0 text-descripcion">
-                            <br/>
+                            <br />
                             <p><span>Cotización N° {quotation.consecutive}</span></p>
                         </div>
                         <div className="col-3 px-0">
-                            <img src={Logo} onClick={printPDF} className="image-logo-pdf" />  
+                            <img src={Logo} onClick={printPDF} className="image-logo-pdf" />
                         </div>
 
                     </div>
-                        
+
                     <div className="col-12 px-0 d-flex">
                         <div className="col-12 px-0 bar-head"></div>
                         {/* <div className="col-2 px-0 d-flex justify-content-end">
@@ -82,20 +83,20 @@ export const GeneratePDFHook = (props) => {
                         <div className="quotation-title">Cotización</div>
                     </div> */}
 
-                    
+
                 </section>
 
                 <section>
                     {quotation.products.map(product =>
                         <ProductPDF product={product} />
                     )}
-                </section><br/><br/>
+                </section><br /><br />
                 <hr />
                 <section className="floor-pdf">
                     <div className="col-12 px-0 d-flex text-descripcion">
                         <div className="col-1 px-0"></div>
                         <div className="col-5 px-0">
-                            <div className="sub-title-pdf text-center">Términos y condiciones</div><br/>
+                            <div className="sub-title-pdf text-center">Términos y condiciones</div><br />
                             <p>Precios por unidad</p>
                             <p>Sujeto a disponibilidad en el momento de enviar la orden de compra</p>
                             <p>Los precios no incluyen iva</p>
@@ -107,13 +108,13 @@ export const GeneratePDFHook = (props) => {
                         </div>
                         <div className="col-2 px-0"></div>
                         <div className="col-2 px-0">
-                            <div className="sub-title-pdf text-center">Información de contacto</div><br/>
+                            <div className="sub-title-pdf text-center">Información de contacto</div><br />
                             <p>Cristina Tobon</p>
                             <p>Ventas</p>
                             <p>PLUSS P.O.P S.A.S</p>
                             <p>Cel: 312 310 6719</p>
                         </div>
-                    </div><br/>
+                    </div><br />
                 </section>
             </div>}
         </div>

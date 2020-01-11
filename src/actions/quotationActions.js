@@ -16,7 +16,6 @@ export const createQuotation = (quotation) => (dispatch) => {
 }
 
 export const getQuotationActive = (dispatch) => {
-    console.log('entre');
     dispatch({
         type: 'get_quotation_active'        
     })

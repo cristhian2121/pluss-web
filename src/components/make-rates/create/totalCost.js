@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid';
 
 export const TotalCost = ({ transport, profitableness, mark, discount, cost }) => {
-  console.log('entre', transport);
   const [preCost, setPreCost] = useState(0)
   const [total, setTotal] = useState(0)
   const [profitable, setProfitable] = useState(0)

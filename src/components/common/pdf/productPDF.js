@@ -53,8 +53,8 @@ export const ProductPDF = ({ product }) => {
                 </div><br/>
                 <div className="col-12 text-center">
                     <p className="name-product">{product.name.charAt(0).toUpperCase() + product.name.slice(1).toLowerCase()}</p>
-                    <p >{product.description}</p>
-                    <div className="text-descriptionPDF">
+                    <p style={{textAlign: "justify"}}>{product.description}</p>
+                    <div className="text-descriptionPDF" style={{textAlign: "justify"}}>
                         <p><span>Material: </span>{product.size}</p>
                         <p><span>Medidas: </span>{product.size}</p>
                         <p><span>Colores: </span>{product.colors}</p>

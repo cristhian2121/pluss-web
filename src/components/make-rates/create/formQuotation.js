@@ -126,22 +126,24 @@ export const FormQuotation = (props) => {
 
   const generatePDF = () => {
     const data = generateData()
+    sessionStorage.setItem('quotation', JSON.stringify(data))
+    props.eventSavePDF(data)
     console.log('data: ', data);
-    fetch(`${conf.api_url}/quotationtemp/`, {
-      method: 'POST',
-      body: JSON.stringify({ data: data }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(res => {
-        console.log('res: ', res);
-        props.eventSavePDF(res.data)
-      })
-      .catch(() => {
-        console.log('ERROR');
-      })
+    // fetch(`${conf.api_url}/quotationtemp/`, {
+    //   method: 'POST',
+    //   body: JSON.stringify({ data: data }),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    //   .then(res => res.json())
+    //   .then(res => {
+    //     console.log('res: ', res);
+    //     props.eventSavePDF(res.data)
+    //   })
+    //   .catch(() => {
+    //     console.log('ERROR');
+    //   })
   }
 
   const generateData = () => {
