@@ -12,8 +12,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 // PDF
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
 
 
 // Icons
@@ -27,7 +27,7 @@ import { Link } from "react-router-dom"
 import { ProductForm } from './addProduct'
 
 // utils
-import { generateTemplatePDF } from '../../common/pdf/templatePDF'
+// import { generateTemplatePDF } from '../../common/pdf/templatePDF'
 
 
 import { UnitsCost } from './unitsCost'
@@ -47,7 +47,6 @@ export const FormQuotation = (props) => {
   const [costUnit, SetCostUnit] = useState({})
   const [units, SetUnits] = useState([])
   const [products, setProducts] = useState([])
-  pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -139,11 +138,6 @@ export const FormQuotation = (props) => {
     sessionStorage.setItem('quotation', JSON.stringify(data))
     props.eventSavePDF(data)
     console.log('data: ', data);
-<<<<<<< HEAD
-=======
-    const templatePdf = await generateTemplatePDF(data)
-    pdfMake.createPdf(templatePdf).open();
->>>>>>> 935b9cd75a7c27c006d7db08f850a89322e29e0d
     // fetch(`${conf.api_url}/quotationtemp/`, {
     //   method: 'POST',
     //   body: JSON.stringify({ data: data }),
