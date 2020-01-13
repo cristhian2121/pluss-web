@@ -10,10 +10,14 @@ import {
 } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 // PDF
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
 
 
 // Icons
@@ -27,7 +31,7 @@ import { Link } from "react-router-dom"
 import { ProductForm } from './addProduct'
 
 // utils
-import { generateTemplatePDF } from '../../common/pdf/templatePDF'
+// import { generateTemplatePDF } from '../../common/pdf/templatePDF'
 
 
 import { UnitsCost } from './unitsCost'
@@ -47,7 +51,8 @@ export const FormQuotation = (props) => {
   const [costUnit, SetCostUnit] = useState({})
   const [units, SetUnits] = useState([])
   const [products, setProducts] = useState([])
-  pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  const [dataclients, setDataclients] = useState([])
+  // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -139,11 +144,9 @@ export const FormQuotation = (props) => {
     sessionStorage.setItem('quotation', JSON.stringify(data))
     props.eventSavePDF(data)
     console.log('data: ', data);
-<<<<<<< HEAD
-=======
-    const templatePdf = await generateTemplatePDF(data)
-    pdfMake.createPdf(templatePdf).open();
->>>>>>> 935b9cd75a7c27c006d7db08f850a89322e29e0d
+    // const templatePdf = await generateTemplatePDF(data)
+    // pdfMake.createPdf(templatePdf).open();
+
     // fetch(`${conf.api_url}/quotationtemp/`, {
     //   method: 'POST',
     //   body: JSON.stringify({ data: data }),
@@ -175,6 +178,18 @@ export const FormQuotation = (props) => {
     return obj
   }
 
+  const getClients = async () => {
+    try {
+      let response = await fetch(`${conf.api_url}/client/`)
+      let data = await response.json();
+      console.log('setDataclients: ', data);
+
+      setDataclients(data)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   return (
     <div>
       <div className="title">
@@ -183,18 +198,19 @@ export const FormQuotation = (props) => {
       <br />
       <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
         <Grid container spacing={3}>
-          <Grid item md={3}>
+          {/* <Grid item md={3}>
             <TextField
               id="consecutive"
               name="consecutive"
               className=""
               label="Cosecutivo"
               margin="normal"
-            />
-          </Grid>
+            /> 
+          </Grid> */}
           <Grid item md={3}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                disabled
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
@@ -211,13 +227,27 @@ export const FormQuotation = (props) => {
             </MuiPickersUtilsProvider>
           </Grid>
           <Grid item md={3}>
-            <TextField
+            <FormControl margin="normal">
+              <InputLabel id="groups">Cliente</InputLabel>
+              <Select
+                labelId="clients"
+                name="clients"
+                onChange={getClients}
+              >
+                {dataclients.map(clients => (
+                  <MenuItem
+                    value={clients.id}
+                  >{clients.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* <TextField
               id="client"
               name="client"
               className=""
               label="Nombre cliente"
               margin="normal"
-            />
+            /> */}
           </Grid>
           <Grid item md={3}>
             <TextField
@@ -263,7 +293,7 @@ export const FormQuotation = (props) => {
               id="payTime"
               name="payTime"
               className=""
-              label="Formato de pago"
+              label="Forma de pago"
               margin="normal"
             />
           </Grid>

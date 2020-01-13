@@ -6,6 +6,7 @@ import conf from '../../config'
 export class List extends Component {
 
     constructor(props){
+        console.log('props list: ', props);
         super(props)
     }
 

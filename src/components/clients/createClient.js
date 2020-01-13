@@ -17,7 +17,8 @@ export class CreateClient extends React.Component {
     let phone = document.getElementById('phone').value
     let agent = document.getElementById('agent').value
     let city = document.getElementById('city').value
-    const validate = this.validator(name, phone, agent, city)
+    let address = document.getElementById('address').value
+    const validate = this.validator(name, phone, agent, city, address)
     if(validate){
       const client = {
         name: name,
@@ -25,7 +26,8 @@ export class CreateClient extends React.Component {
         agent :{
          name: agent 
         },
-        city : city
+        city : city,
+        address: address
       }
       console.log("ok")
       this.addClient(client)
@@ -34,7 +36,7 @@ export class CreateClient extends React.Component {
     }
   }
 
-  validator(name, phone, agent, city){
+  validator(name, phone, agent, city, address){
      if(name != "" && phone != "" && agent != "" && city != ""){
       return true
      }else{
@@ -60,17 +62,32 @@ export class CreateClient extends React.Component {
   render() {
     return (
       <>
-        <p>Crear cliente {this.props.paola}</p>
+        <div className="sub-title">
+          <Button onClick={this.showForm}>
+            Crear Cliente
+          </Button>
+        </div>
         <form noValidate autoComplete="off">
-          <TextField id="name" label="Nombre" />
-          <TextField id="phone" label="Teléfono" />
+          <TextField id="name" label="Nombre empresa" />
           <TextField id="agent" label="Asesor de venta" />
           <TextField id="city" label="Ciudad" />
-          <Button variant="contained" color="primary" type="submit" onClick={this.saveClient}>
+          <TextField id="address" label="Dirección" />
+          <TextField id="email" label="Correo electrónico" />
+          <TextField id="phone" label="Teléfono" />
+          <TextField id="phone" label="Teléfono alternativo" />
+          {/* <Button variant="contained" color="primary" type="submit" onClick={this.saveClient}>
             Guardar
-          </Button>
+          </Button> */}
+          <div className="text-center">
+            <br/>
+            <Button variant="contained" color="secondary" onClick={this.clear}>
+              Limpiar
+            </Button>
+            <Button variant="contained" color="primary" onClick={this.saveClient}>
+              Guardar
+            </Button>
+          </div>
         </form>
-        <hr></hr>
         
       </>
     )

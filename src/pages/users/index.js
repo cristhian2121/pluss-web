@@ -33,9 +33,9 @@ export class User extends Component {
             <div className="title">
                Usuarios
             </div>
-            <br/><br/>
+            <br/>
             <Create selectUpdate={this.state.dataFormUpdate} />
-            <br/><br/>
+            <br/>
             <List selectUpdate={this.dataUpdate}/>
           </div>
         );

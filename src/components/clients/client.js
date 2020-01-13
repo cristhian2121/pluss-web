@@ -47,8 +47,12 @@ export class Clients extends React.Component {
 
     return (
       <>
-        <p>Clientes</p>
-        <CreateClient paola="hola" addClientToList={this.insertClient} />
+        <div className="title">
+          Clientes
+        </div>
+        <br/>
+        <CreateClient addClientToList={this.insertClient} />
+        <br/><br/>
         <ClientList clientList={this.state.clients}/>
       </>
     )

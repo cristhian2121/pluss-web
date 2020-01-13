@@ -143,6 +143,20 @@ export const ProductForm = (props) => {
                         label="Medidas"
                     />
                 </Grid>
+                <Grid item md={3} className="input-validation-material">
+                    <TextField
+                        id='material'
+                        name='material'
+                        label="Material"
+                    />
+                </Grid>
+                <Grid item md={3} className="input-validation-inventory">
+                    <TextField
+                        id='inventory'
+                        name='inventory'
+                        label="Inventario"
+                    />
+                </Grid>
                 <Grid item md={3} className="input-validation-colors">
                     <TextField
                         id='colors'
