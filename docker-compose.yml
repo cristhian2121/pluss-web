@@ -1,0 +1,22 @@
+version: '3.7'
+services: 
+  www: 
+    image: nginx
+    container_name: www
+    restart: always
+    volumes: 
+      # - /pluss_web/build:share-volumen-pluss-web
+      - share-volumen-pluss-web:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+    depends_on: 
+      - pluss-web
+  # expose: 
+  pluss-web:
+    build: .
+    container_name: web
+    volumes:      
+      - share-volumen-pluss-web:/pluss_web/build 
+
+volumes: 
+  share-volumen-pluss-web:

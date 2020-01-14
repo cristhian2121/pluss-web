@@ -144,8 +144,8 @@ export const FormQuotation = (props) => {
     sessionStorage.setItem('quotation', JSON.stringify(data))
     props.eventSavePDF(data)
     console.log('data: ', data);
-    // const templatePdf = await generateTemplatePDF(data)
-    // pdfMake.createPdf(templatePdf).open();
+    const templatePdf = await generateTemplatePDF(data)
+    pdfMake.createPdf(templatePdf).open();
 
     // fetch(`${conf.api_url}/quotationtemp/`, {
     //   method: 'POST',
