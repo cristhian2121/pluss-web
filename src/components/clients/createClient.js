@@ -69,12 +69,12 @@ export class CreateClient extends React.Component {
         </div>
         <form noValidate autoComplete="off">
           <TextField id="name" label="Nombre empresa" />
-          <TextField id="agent" label="Asesor de venta" />
           <TextField id="city" label="Ciudad" />
           <TextField id="address" label="Dirección" />
+          <TextField id="agent" label="Nombre representante" />
           <TextField id="email" label="Correo electrónico" />
           <TextField id="phone" label="Teléfono" />
-          <TextField id="phone" label="Teléfono alternativo" />
+          <TextField id="phone_two" label="Teléfono alternativo" />
           {/* <Button variant="contained" color="primary" type="submit" onClick={this.saveClient}>
             Guardar
           </Button> */}

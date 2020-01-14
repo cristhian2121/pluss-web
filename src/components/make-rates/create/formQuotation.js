@@ -54,6 +54,8 @@ export const FormQuotation = (props) => {
   const [dataclients, setDataclients] = useState([])
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+  useEffect(() => { getClients() }, []);
+
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
   const handleDateChange = date => {
@@ -141,11 +143,18 @@ export const FormQuotation = (props) => {
 
   const generatePDF = async () => {
     const data = generateData()
+    let itemClient = data.client
+
+    for (let i = 0; i < dataclients.length; i++){
+      if (dataclients[i].id == itemClient) {
+        data.client = dataclients[i]
+      }
+    }
+
     sessionStorage.setItem('quotation', JSON.stringify(data))
     props.eventSavePDF(data)
-    console.log('data: ', data);
-    const templatePdf = await generateTemplatePDF(data)
-    pdfMake.createPdf(templatePdf).open();
+    // const templatePdf = await generateTemplatePDF(data)
+    // pdfMake.createPdf(templatePdf).open();
 
     // fetch(`${conf.api_url}/quotationtemp/`, {
     //   method: 'POST',
@@ -230,9 +239,10 @@ export const FormQuotation = (props) => {
             <FormControl margin="normal">
               <InputLabel id="groups">Cliente</InputLabel>
               <Select
-                labelId="clients"
-                name="clients"
+                labelId="client"
+                name="client"
                 onChange={getClients}
+                label="Fecha de cotización"
               >
                 {dataclients.map(clients => (
                   <MenuItem
@@ -249,7 +259,7 @@ export const FormQuotation = (props) => {
               margin="normal"
             /> */}
           </Grid>
-          <Grid item md={3}>
+          {/* <Grid item md={3}>
             <TextField
               id="clientPhone"
               name="clientPhone"
@@ -257,7 +267,7 @@ export const FormQuotation = (props) => {
               label="Teléfono cliente"
               margin="normal"
             />
-          </Grid>
+          </Grid> */}
 
           {/* segunda fila  */}
 
@@ -270,7 +280,7 @@ export const FormQuotation = (props) => {
               margin="normal"
             />
           </Grid>
-          <Grid item md={3}>
+          {/* <Grid item md={3}>
             <TextField
               id="city"
               name="city"
@@ -278,7 +288,7 @@ export const FormQuotation = (props) => {
               label="Ciudad"
               margin="normal"
             />
-          </Grid>
+          </Grid> */}
           <Grid item md={3}>
             <TextField
               id="deliveryTime"
@@ -304,6 +314,7 @@ export const FormQuotation = (props) => {
       <div className="sub-title">
         Agregar Unidades
       </div>
+      <br />
 
       {/* Unidades */}
       <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units} />
