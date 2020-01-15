@@ -42,6 +42,8 @@ export const ProductForm = (props) => {
             cost: document.querySelector(`#cost`).value,
             prints: document.querySelector(`#prints`).value,
             description: document.querySelector(`#description`).value,
+            material: document.querySelector(`#material`).value,
+            inventory: document.querySelector(`#inventory`).value
         }
         product.costs = []
         product.prices = []

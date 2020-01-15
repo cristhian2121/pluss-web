@@ -51,10 +51,14 @@ export const FormQuotation = (props) => {
   const [costUnit, SetCostUnit] = useState({})
   const [units, SetUnits] = useState([])
   const [products, setProducts] = useState([])
-  const [dataclients, setDataclients] = useState([])
+  const [dataClients, setDataClients] = useState([])
+  const [dataUsers, setDataUsers] = useState([])
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-  useEffect(() => { getClients() }, []);
+  useEffect(() => { 
+    getClients()
+    getUsers()
+  }, []);
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -79,7 +83,7 @@ export const FormQuotation = (props) => {
     SetUnits(units => [..._units])
   }
 
-  const handleAddProduct = (_product) => {
+  const handleAddProduct = (_product) => { 
     console.log('_product: ', _product);
     setProducts(products => [...products, _product])
   }
@@ -141,15 +145,27 @@ export const FormQuotation = (props) => {
     //   console.log('FECHA', da.localize);
     //   props.eventCreateQuotation(data)
     // }
+    fetch(`${conf.api_url}/quotation/`,{
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .catch(error => console.log('Error: ', error))
+    .then(response => {
+      console.log('Success: ', response)
+      // this.props.addClientToList(response)
+    })
   }
 
   const generatePDF = async () => {
     const data = generateData()
     let itemClient = data.client
 
-    for (let i = 0; i < dataclients.length; i++){
-      if (dataclients[i].id == itemClient) {
-        data.client = dataclients[i]
+    for (let i = 0; i < dataClients.length; i++){
+      if (dataClients[i].id == itemClient) {
+        data.client = dataClients[i]
       }
     }
 
@@ -193,8 +209,23 @@ export const FormQuotation = (props) => {
     try {
       let response = await fetch(`${conf.api_url}/client/`)
       let data = await response.json();
+      console.log('data clients: ', data);
 
-      setDataclients(data)
+      setDataClients(data)
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const getUsers = async () => {
+    try {
+      let response = await fetch(`${conf.api_url}/user/`)
+      let data = await response.json();
+      console.log('data users: ', data);
+
+      setDataUsers(data)
+
     } catch (error) {
       console.log('error', error)
     }
@@ -238,14 +269,13 @@ export const FormQuotation = (props) => {
           </Grid>
           <Grid item md={3}>
             <FormControl margin="normal">
-              <InputLabel id="groups">Cliente</InputLabel>
+              <InputLabel id="clients">Cliente</InputLabel>
               <Select
                 labelId="client"
                 name="client"
                 onChange={getClients}
-                label="Fecha de cotización"
               >
-                {dataclients.map(clients => (
+                {dataClients.map(clients => (
                   <MenuItem
                     value={clients.id}
                   >{clients.name}</MenuItem>
@@ -273,13 +303,27 @@ export const FormQuotation = (props) => {
           {/* segunda fila  */}
 
           <Grid item md={3}>
-            <TextField
+          <FormControl margin="normal">
+              <InputLabel id="users">Ejecutivo de ventas</InputLabel>
+              <Select
+                labelId="user"
+                name="user"
+                onChange={getUsers}
+              >
+                {dataUsers.map(users => (
+                  <MenuItem
+                    value={users.id}
+                  >{users.first_name} {users.last_name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* <TextField
               id="user"
               name="user"
               className=""
               label="Ejecutivo de ventas"
               margin="normal"
-            />
+            /> */}
           </Grid>
           {/* <Grid item md={3}>
             <TextField

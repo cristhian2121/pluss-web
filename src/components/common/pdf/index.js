@@ -54,8 +54,8 @@ export const GeneratePDFHook = (props) => {
                             <p>Medellín, {quotation.quotationDate}</p><br />
                             <p>Señores:</p>
                             <p><span>{quotation.client.name.charAt(0).toUpperCase() + quotation.client.name.slice(1).toLowerCase()}</span></p>
-                            <p>calle 37 a # 88 - 26</p>
-                            <p>email. {quotation.client.phone}</p>
+                            <p>{quotation.client.address}</p>
+                            <p>email. {quotation.client.email}</p>
                             <p>tel. {quotation.client.phone}</p>
                             <p>{quotation.city}</p>
 
