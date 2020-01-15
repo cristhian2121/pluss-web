@@ -133,6 +133,8 @@ export const FormQuotation = (props) => {
   // }
 
   const saveQuotation = event => {
+    const data = generateData()
+    console.log('data sabequotation: ', data);
     // if (event) {
     //   event.preventDefault();
     //   const data = generateData()
@@ -191,7 +193,6 @@ export const FormQuotation = (props) => {
     try {
       let response = await fetch(`${conf.api_url}/client/`)
       let data = await response.json();
-      console.log('setDataclients: ', data);
 
       setDataclients(data)
     } catch (error) {
@@ -291,8 +292,8 @@ export const FormQuotation = (props) => {
           </Grid> */}
           <Grid item md={3}>
             <TextField
-              id="deliveryTime"
-              name="deliveryTime"
+              id="delivery_time"
+              name="delivery_time"
               className=""
               label="Tiempo de entrega"
               margin="normal"
@@ -300,8 +301,8 @@ export const FormQuotation = (props) => {
           </Grid>
           <Grid item md={3}>
             <TextField
-              id="payTime"
-              name="payTime"
+              id="pay_format"
+              name="pay_format"
               className=""
               label="Forma de pago"
               margin="normal"
