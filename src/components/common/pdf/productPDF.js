@@ -8,6 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 export const ProductPDF = ({ product }) => {
+
+    const formatCurrency = new Intl.NumberFormat('es-Co', {//"de-DE"
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    })
+
     return (
         <><br/><div className="product-section-pdf col-12 px-0">
             <div className="col-4 product-pdf">
@@ -28,7 +35,8 @@ export const ProductPDF = ({ product }) => {
                             <TableRow key=''>
                             {product.units.map((unit, index) => (
                                 <TableCell component="th" scope="row">
-                                $ {product.prices[index]}
+                                  {formatCurrency.format(product.prices[index])}
+                                {/* $ {product.prices[index]} */}
                                 </TableCell>
                             ))}
                             </TableRow>

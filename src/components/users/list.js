@@ -22,33 +22,34 @@ export class List extends Component {
         dataUser: []
     };
 
-    componentDidMount () {
-        this.getDataUsers()
-    }
-    getDataUsers = async () => {
-        try {
-            let response = await fetch(`${conf.api_url}/profile/`)
-            let data = await response.json()
+    // componentDidMount () {
+    //     // this.getDataUsers()
+    // }
+    // getDataUsers = async () => {
+    //     try {
+    //         let response = await fetch(`${conf.api_url}/profile/`)
+    //         let data = await response.json()
         
-            this.setState({
-                dataUser: data
-            })
-        } catch (error) {
-            console.log('error', error)
-        }    
-    }
+    //         this.setState({
+    //             dataUser: data
+    //         })
+    //     } catch (error) {
+    //         console.log('error', error)
+    //     }    
+    // }
 
     render () {
       return (
         <div>
             
             <br/>
+            {console.log('el amor', this.props.userList)}
             <MaterialTable
                 title={<div className="sub-title">
                 Lista de usuarios
                 </div>}
                 columns={this.state.columns}
-                data={this.state.dataUser}
+                data={this.props.userList}
                 actions={[
                     {
                       icon: 'edit',

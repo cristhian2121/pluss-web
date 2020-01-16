@@ -9,14 +9,22 @@ import Button from '@material-ui/core/Button';
 import {Alert} from '../../components/common/alerts'
 
 import { Menu } from '../../components/common/nav-bar'
+
+import conf from '../../config'
  
 
 export class User extends Component {
     constructor() {
         super();
         this.state = {
-          dataFormUpdate: {}
+          dataFormUpdate: {},
+          dataUser: []
         }
+        this.insertUser = this.insertUser.bind(this)
+    }
+
+    componentDidMount () {
+      this.getDataUsers()
     }
 
     dataUpdate =  (data) => {
@@ -27,6 +35,29 @@ export class User extends Component {
         })
       }
     }
+
+    getDataUsers = async () => {
+      try {
+          let response = await fetch(`${conf.api_url}/profile/`)
+          let data = await response.json()
+      
+          this.setState({
+              dataUser: data
+          })
+      } catch (error) {
+          console.log('error', error)
+      }    
+    }
+
+    insertUser(user) {
+      console.log('useruseruser: ', user);
+      // this.getDataUsers()
+      this.setState({
+        dataUser: [...this.state.dataUser, user]
+      })
+  
+    }
+
     render() {
         return (
           <div>
@@ -34,9 +65,9 @@ export class User extends Component {
                Usuarios
             </div>
             <br/>
-            <Create selectUpdate={this.state.dataFormUpdate} />
+            <Create addUserList={this.insertUser} selectUpdate={this.state.dataFormUpdate} />
             <br/>
-            <List selectUpdate={this.dataUpdate}/>
+            <List userList={this.state.dataUser} selectUpdate={this.dataUpdate}/>
           </div>
         );
       }

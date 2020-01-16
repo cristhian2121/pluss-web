@@ -29,6 +29,8 @@ export class MakeRate extends Component {
         try {
             let response = await fetch(`${conf.api_url}/quotation/`)
             let data = await response.json()
+            console.log('data quotation: ', data);
+
         
             this.setState({
               dataQuotations: data
@@ -51,11 +53,12 @@ export class MakeRate extends Component {
                 data={this.state.dataQuotations}
                 actions={[
                     {
-                      icon: 'edit',
-                      tooltip: 'Editar usuario',
+                      icon: 'visibility',
+                      tooltip: 'Ver cotización',
                       onClick: (event, rowData) => {
-                        // this.props.selectUpdate(rowData)
-                        console.log('rowData', rowData)
+                        console.log('rowData: ', rowData);
+                        sessionStorage.setItem('quotation', JSON.stringify(rowData))
+                        window.open('/cotizacion', '_blank','',true)
                       }
                     }
                   ]}

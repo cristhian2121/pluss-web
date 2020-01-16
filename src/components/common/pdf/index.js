@@ -63,7 +63,7 @@ export const GeneratePDFHook = (props) => {
 
                         <div className="col-3 px-0 text-descripcion">
                             <br />
-                            <p><span>Cotización N° {quotation.consecutive}</span></p>
+                            <p><span>Cotización N° {quotation.id}</span></p>
                         </div>
                         <div className="col-3 px-0">
                             <img src={Logo} onClick={printPDF} className="image-logo-pdf" />
@@ -82,7 +82,6 @@ export const GeneratePDFHook = (props) => {
                     {/* <div className="bar-head" style={{ backgroundColor: "#ff0000" }}>
                         <div className="quotation-title">Cotización</div>
                     </div> */}
-
 
                 </section>
 

@@ -145,8 +145,10 @@ export class Create extends Component {
     })
       .then(async (response) => {
         let resp = await response.json()
+        console.log('respresprespresp: ', resp);
         if (response.status == 201) {
           this.setState({ activeDialog: true, messageAlert: resp['detail'] })
+          this.props.addUserList(this.data)
           this.clear()
         }
         if (response.status == 400) {
@@ -162,26 +164,25 @@ export class Create extends Component {
     this.data = this.generateData()
     this.data.groups = this.data.groups.split(',')
     console.log('entro por el editar casi ue no', this.data, this.props.selectUpdate.id)
+
     fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
       method: 'PUT',
       body: JSON.stringify(this.data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' }
     })
       .then(async (response) => {
         let resp1 = await response.json()
         console.log('response', resp1, response.status)
+
         if (response.status == 200 ||  response.status == 201) {
           fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
             method: 'PUT',
             body: JSON.stringify(this.data),
-            headers: {
-              'Content-Type': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json' }
           })
             .then(async (response) => {
               let resp = await response.json()
+              console.log('resp 2: ', resp);
               if (response.status == 200 ||  response.status == 201) {
                 this.setState({ activeDialog: true,  messageAlert: 'El usuario se  actualizó correctamente' })
                 this.clear()
@@ -192,11 +193,9 @@ export class Create extends Component {
             })
             .catch(err => {
               console.log(err);
-              // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
             });
         }
         if (response.status == 400 ) {
-          console.log(resp1)
           this.setState({ activeDialog: true,  messageAlert: resp1['error'] })
         }
       })
@@ -303,10 +302,8 @@ export class Create extends Component {
         </form>
 
         <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
+          root
+          anchorOriginBottomCenter
           open={this.state.activeDialog}
           autoHideDuration={3000}
           color="secondary"
