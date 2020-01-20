@@ -3,43 +3,35 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Alert from '@material-ui/lab/Alert';
 
-export const Alert = (message, open) => {
-    console.log('message', message, open)
 
-    // const handleClose = (event, reason) => {
-    //     if (reason === 'clickaway') {
-    //       return;
-    //     }
-    //     setOpen(false);
-    // };
+export const Aler = (open) => {
+    console.log('messagessssssssssss', open)
+    // const [open, setOpen] = React.useState(true);
+    let show = false;
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        open = false
+    }
+
     return (
         <div>
+            {console.log('eeeeeeeeeeeeeeeeeeeee', open)}
             <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
+                anchorOrigin= {{ vertical: 'bottom', horizontal: 'left' }}
                 open={open}
-                autoHideDuration={3000}
-                // onClose={handleClose}
+                autoHideDuration={4000}
+                onClose={handleClose}
                 ContentProps={{
                     'aria-describedby': 'message-id',
                 }}
-                // variant="success"
-                message={message}
-                // action={[
-                //     <Button key="undo" color="secondary" size="small" onClick={handleClose}></Button>,
-                //     <IconButton
-                //         key="close"
-                //         aria-label="close"
-                //         color="inherit"
-                //         onClick={handleClose}
-                //     >
-                //     <CloseIcon />
-                //     </IconButton>,
-                // ]}
-            />
+            >
+                <Alert onClose={handleClose} severity="success">aaaaaaaaayyyyyyyyyyyaaaaaaaaaa</Alert>
+            </Snackbar>
+        
         </div>
     )
 }

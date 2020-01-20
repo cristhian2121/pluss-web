@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 
 import MaterialTable from 'material-table';
+import {Aler} from '../common/alerts'
+
 import conf from '../../config'
 
 export class List extends Component {
@@ -55,11 +57,15 @@ export class List extends Component {
                       icon: 'edit',
                       tooltip: 'Editar usuario',
                       onClick: (event, rowData) => {
+                        // Aler(true)
                         this.props.selectUpdate(rowData)
+                        return (<Aler open={true}/>);
                       }
                     }
                   ]}
-                /> 
+            />
+            
+            {/* <Alert/> */}
         </div>
       );
     }

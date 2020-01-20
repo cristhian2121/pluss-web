@@ -9,20 +9,29 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Snackbar from '@material-ui/core/Snackbar';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
+import Alert from '@material-ui/lab/Alert';
 
 import conf from '../../config'
+
+// function Alert(props) {
+//   return <MuiAlert elevation={6} variant="filled" {...props} />;
+// }
 
 export class Create extends Component {
   constructor(props) {
     super(props)
     this.data = {}
     this.state = {
+      alert: {
+        open: false,
+        message: '',
+      },
+      messageAlert: '',
+      activeDialog: false,
       dataEdit: null,
       showForm: true,
       dataGroups: [],
       passDiff: false,
-      activeDialog: false,
-      messageAlert: '',
       code: null,
       first_name: null,
       identification_number: null,
@@ -120,7 +129,7 @@ export class Create extends Component {
     if (reason === 'clickaway') {
       return;
     }
-    this.setState({ activeDialog: false })
+    this.setState({ alert: {open: true} })
   }
   generateData = () => {
     let elements = document.getElementById('userForm').elements;
@@ -136,29 +145,30 @@ export class Create extends Component {
   save = (evt) => {
     this.data = this.generateData()
     console.log('editando', this.data)
-    fetch(`${conf.api_url}/profile/`, {
-      method: 'POST',
-      body: JSON.stringify(this.data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(async (response) => {
-        let resp = await response.json()
-        console.log('respresprespresp: ', resp);
-        if (response.status == 201) {
-          this.setState({ activeDialog: true, messageAlert: resp['detail'] })
-          this.props.addUserList(this.data)
-          this.clear()
-        }
-        if (response.status == 400) {
-          this.setState({ activeDialog: true, messageAlert: resp['error'] })
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ activeDialog: true, messageAlert: 'Por favor valide los campos obligatorios' })
-      });
+    this.setState({ alert: {open: true, message: 'aaaaaaaaaaaaa'}})
+    // fetch(`${conf.api_url}/profile/`, {
+    //   method: 'POST',
+    //   body: JSON.stringify(this.data),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    //   .then(async (response) => {
+    //     let resp = await response.json()
+    //     console.log('respresprespresp: ', resp);
+    //     if (response.status == 201) {
+    //       this.setState({ open: true, message: resp['detail'] })
+    //       this.props.addUserList(this.data)
+    //       this.clear()
+    //     }
+    //     if (response.status == 400) {
+    //       this.setState({ open: true, message: resp['error'] })
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     this.setState({ open: true, message: 'Por favor valide los campos obligatorios' })
+    //   });
   };
   update = () => {
     this.data = this.generateData()
@@ -184,11 +194,11 @@ export class Create extends Component {
               let resp = await response.json()
               console.log('resp 2: ', resp);
               if (response.status == 200 ||  response.status == 201) {
-                this.setState({ activeDialog: true,  messageAlert: 'El usuario se  actualizó correctamente' })
+                this.setState({ open: true,  message: 'El usuario se  actualizó correctamente' })
                 this.clear()
               }
               if (response.status == 400 ) {
-                this.setState({ activeDialog: true,  messageAlert:'No se pudo actualizar el usuario, por favor vuelva a intentarlo.' })
+                this.setState({ open: true,  message:'No se pudo actualizar el usuario, por favor vuelva a intentarlo.' })
               }
             })
             .catch(err => {
@@ -196,12 +206,12 @@ export class Create extends Component {
             });
         }
         if (response.status == 400 ) {
-          this.setState({ activeDialog: true,  messageAlert: resp1['error'] })
+          this.setState({ open: true,  message: resp1['error'] })
         }
       })
       .catch(err => {
         console.log(err);
-        this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+        this.setState({ open: true,  message: 'Por favor valide los campos obligatorios' })
       });
 
   };
@@ -302,17 +312,17 @@ export class Create extends Component {
         </form>
 
         <Snackbar
-          root
-          anchorOriginBottomCenter
-          open={this.state.activeDialog}
+          anchorOrigin= {{ vertical: 'bottom', horizontal: 'left' }}
+          open={this.state.alert.open}
           autoHideDuration={3000}
-          color="secondary"
           onClose={this.handleClose}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">{this.state.messageAlert}</span>}
-        />
+        >
+          <Alert severity="success">{this.state.alert.message}</Alert>
+        </Snackbar>
+        
       </div>
     );
   }
