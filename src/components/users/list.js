@@ -13,10 +13,13 @@ export class List extends Component {
     }
 
     state = {
+        alert: {
+            open: false
+        },
         columns: [
             { title: 'codigo', field: 'code' },
             { title: 'Nombre', field: 'user.first_name' },
-            { title: 'Correo electrónico', field: 'user.email' },
+            { title: 'Correo electrónico', field: 'user.username' },
             { title: 'Documento', field: 'identification_number' },
             { title: 'Teléfono', field: 'phone_number'},
             { title: 'Estado', field: 'user.is_active'}
@@ -57,15 +60,17 @@ export class List extends Component {
                       icon: 'edit',
                       tooltip: 'Editar usuario',
                       onClick: (event, rowData) => {
+                        Aler({open:true});
                         // Aler(true)
+                        // this.setState({alert:{open:true}})
                         this.props.selectUpdate(rowData)
-                        return (<Aler open={true}/>);
+                        // return <Aler />
                       }
                     }
                   ]}
             />
-            
-            {/* <Alert/> */}
+            {/* <Aler /> */}
+            {/* {this.open ? <Aler/> : ''} */}
         </div>
       );
     }

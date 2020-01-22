@@ -54,6 +54,9 @@ export const FormQuotation = (props) => {
   const [dataClients, setDataClients] = useState([])
   const [dataUsers, setDataUsers] = useState([])
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  const [openAlert, setOpenAlert] = useState(false)
+  const [messageAlert, setMessageAlert] = useState('')
+  const [typeAlert, setTypeAlert] = useState('')
 
   useEffect(() => { 
     getClients()

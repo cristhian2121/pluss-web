@@ -1,14 +1,10 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
-
 
 export const Aler = (open) => {
     console.log('messagessssssssssss', open)
-    // const [open, setOpen] = React.useState(true);
+    // const [opens, setOpen] = React.useState(false);
     let show = false;
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -19,10 +15,10 @@ export const Aler = (open) => {
 
     return (
         <div>
-            {console.log('eeeeeeeeeeeeeeeeeeeee', open)}
+            {console.log('eeeeeeeeeeeeeeeeeeeee', open.open)}
             <Snackbar
                 anchorOrigin= {{ vertical: 'bottom', horizontal: 'left' }}
-                open={open}
+                open={open.open}
                 autoHideDuration={4000}
                 onClose={handleClose}
                 ContentProps={{
