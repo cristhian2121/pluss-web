@@ -14,16 +14,18 @@ export class CreateClient extends React.Component {
   saveClient(event) {
     event.preventDefault()
     let name = document.getElementById('name').value
+    let nit = document.getElementById('nit').value
     let phone = document.getElementById('phone').value
     let agent = document.getElementById('agent').value
     let city = document.getElementById('city').value
     let address = document.getElementById('address').value
     let email = document.getElementById('email').value
     let phone_two = document.getElementById('phone_two').value
-    const validate = this.validator(name, phone, agent, city, address)
+    const validate = this.validator(name, nit, phone, agent, city, address)
     if(validate){
       const client = {
         name: name,
+        nit: nit,
         phone: phone,
         agent :{
          name: agent 
@@ -73,8 +75,14 @@ export class CreateClient extends React.Component {
     .then(response => {
       console.log('Success: ', response)
       this.props.addClientToList(response)
+      this.clearForm()
     })
   }
+
+  clearForm = () => {
+    this.client = {}
+    document.getElementById("clientForm").reset()
+  };
 
   render() {
     return (
@@ -86,6 +94,7 @@ export class CreateClient extends React.Component {
         </div>
         <form noValidate autoComplete="off" id="clientForm">
           <TextField id="name" label="Nombre empresa" />
+          <TextField id="nit" label="Nit" />
           <TextField id="city" label="Ciudad" />
           <TextField id="address" label="Dirección" />
           <TextField id="agent" label="Nombre representante" />
@@ -97,7 +106,7 @@ export class CreateClient extends React.Component {
           </Button> */}
           <div className="text-center">
             <br/>
-            <Button variant="contained" color="secondary" onClick={this.clear}>
+            <Button variant="contained" color="secondary" onClick={this.clearForm}>
               Limpiar
             </Button>
             <Button variant="contained" color="primary" onClick={this.saveClient}>

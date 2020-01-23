@@ -265,7 +265,6 @@ export class Create extends Component {
         </div>
         <form id="userForm">
           <TextField
-            error
             required
             name="code"
             onChange={this.handleChange}
@@ -345,7 +344,7 @@ export class Create extends Component {
             <Button variant="contained" color="secondary" onClick={this.clear}>
               Limpiar
             </Button>
-            <Button variant="contained" type="submit" color="primary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
+            <Button variant="contained" color="primary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
               {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'}
             </Button>
           </div>
