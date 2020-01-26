@@ -9,6 +9,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Snackbar from '@material-ui/core/Snackbar';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
+import Alert from '@material-ui/lab/Alert';
 
 import conf from '../../config'
 
@@ -17,12 +18,15 @@ export class Create extends Component {
     super(props)
     this.data = {}
     this.state = {
+      alert: {
+        open: false,
+        message: '',
+        type: '',
+      },
       dataEdit: null,
       showForm: true,
       dataGroups: [],
       passDiff: false,
-      activeDialog: false,
-      messageAlert: '',
       code: null,
       first_name: null,
       identification_number: null,
@@ -116,12 +120,14 @@ export class Create extends Component {
       groups: []
     })
   };
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    this.setState({ activeDialog: false })
-  }
+  // handleClose = (event, reason) => {
+  //   console.log('reason: ', reason);
+
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
+  //   this.setState({ alert: {open: false} })
+  // }
   generateData = () => {
     let elements = document.getElementById('userForm').elements;
     let data = {};
@@ -133,7 +139,7 @@ export class Create extends Component {
     data.type_identification = 'CC'
     return data
   }
-  save = (evt) => {
+  saveUser = (evt) => {
     this.data = this.generateData()
     console.log('editando', this.data)
     fetch(`${conf.api_url}/profile/`, {
@@ -145,64 +151,106 @@ export class Create extends Component {
     })
       .then(async (response) => {
         let resp = await response.json()
+        console.log('respresprespresp: ', resp);
         if (response.status == 201) {
-          this.setState({ activeDialog: true, messageAlert: resp['detail'] })
+          this.setState({ 
+            alert: {
+              open: true,
+              message: resp['detail'],
+              type:'success'
+            }
+          })
+
+          this.props.addUserList(this.data)
           this.clear()
         }
         if (response.status == 400) {
-          this.setState({ activeDialog: true, messageAlert: resp['error'] })
+          this.setState({ 
+            alert: {
+              open: true,
+              message: resp['error'],
+              type:'error'
+            }
+          })
         }
       })
       .catch(err => {
         console.log(err);
-        this.setState({ activeDialog: true, messageAlert: 'Por favor valide los campos obligatorios' })
+        this.setState({ 
+          alert: {
+            open: true,
+            message: 'Por favor valide los campos obligatorios',
+            type:'warning'
+          }
+        })
       });
   };
-  update = () => {
+  updateUser = () => {
     this.data = this.generateData()
     this.data.groups = this.data.groups.split(',')
     console.log('entro por el editar casi ue no', this.data, this.props.selectUpdate.id)
+
     fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
       method: 'PUT',
       body: JSON.stringify(this.data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' }
     })
       .then(async (response) => {
         let resp1 = await response.json()
         console.log('response', resp1, response.status)
+
         if (response.status == 200 ||  response.status == 201) {
           fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
             method: 'PUT',
             body: JSON.stringify(this.data),
-            headers: {
-              'Content-Type': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json' }
           })
             .then(async (response) => {
               let resp = await response.json()
+              console.log('resp 2: ', resp);
               if (response.status == 200 ||  response.status == 201) {
-                this.setState({ activeDialog: true,  messageAlert: 'El usuario se  actualizó correctamente' })
+                this.setState({ 
+                  alert: {
+                    open: true,
+                    message: 'El usuario se  actualizó correctamente',
+                    type:'success'
+                  }
+                })
                 this.clear()
               }
               if (response.status == 400 ) {
-                this.setState({ activeDialog: true,  messageAlert:'No se pudo actualizar el usuario, por favor vuelva a intentarlo.' })
+                this.setState({ 
+                  alert: {
+                    open: true,
+                    message: 'No se pudo actualizar el usuario, por favor vuelva a intentarlo.',
+                    type:'error'
+                  }
+                })
               }
             })
             .catch(err => {
               console.log(err);
-              // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
             });
         }
         if (response.status == 400 ) {
-          console.log(resp1)
-          this.setState({ activeDialog: true,  messageAlert: resp1['error'] })
+          this.setState({ 
+            alert: {
+              open: true,
+              message: resp1['error'],
+              type:'error'
+            }
+          })
         }
       })
       .catch(err => {
         console.log(err);
-        this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
+        this.setState({ 
+          alert: {
+            open: true,
+            message: 'Por favor valide los campos obligatorios',
+            type:'warning'
+          }
+        })
       });
 
   };
@@ -296,26 +344,29 @@ export class Create extends Component {
             <Button variant="contained" color="secondary" onClick={this.clear}>
               Limpiar
             </Button>
-            <Button variant="contained" color="primary" onClick={this.state.dataEdit ? this.update : this.save}>
+            <Button variant="contained" color="primary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
               {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'}
             </Button>
           </div>
         </form>
 
         <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          open={this.state.activeDialog}
-          autoHideDuration={3000}
-          color="secondary"
-          onClose={this.handleClose}
+          open={this.state.alert.open}
+          autoHideDuration={4000}
+          onClose={() => 
+            this.setState({alert: {open: false}})
+          }
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">{this.state.messageAlert}</span>}
-        />
+          anchorOrigin= {{ 
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+        >
+          <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+        </Snackbar>
+        
       </div>
     );
   }

@@ -10,6 +10,10 @@ import {
 } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 // PDF
 // import pdfMake from "pdfmake/build/pdfmake";
@@ -47,6 +51,17 @@ export const FormQuotation = (props) => {
   const [costUnit, SetCostUnit] = useState({})
   const [units, SetUnits] = useState([])
   const [products, setProducts] = useState([])
+  const [dataClients, setDataClients] = useState([])
+  const [dataUsers, setDataUsers] = useState([])
+  // pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  const [openAlert, setOpenAlert] = useState(false)
+  const [messageAlert, setMessageAlert] = useState('')
+  const [typeAlert, setTypeAlert] = useState('')
+
+  useEffect(() => { 
+    getClients()
+    getUsers()
+  }, []);
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -71,7 +86,7 @@ export const FormQuotation = (props) => {
     SetUnits(units => [..._units])
   }
 
-  const handleAddProduct = (_product) => {
+  const handleAddProduct = (_product) => { 
     console.log('_product: ', _product);
     setProducts(products => [...products, _product])
   }
@@ -125,19 +140,43 @@ export const FormQuotation = (props) => {
   // }
 
   const saveQuotation = event => {
+    const data = generateData()
+    console.log('data sabequotation: ', data);
     // if (event) {
     //   event.preventDefault();
     //   const data = generateData()
     //   console.log('FECHA', da.localize);
     //   props.eventCreateQuotation(data)
     // }
+    fetch(`${conf.api_url}/quotation/`,{
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .catch(error => console.log('Error: ', error))
+    .then(response => {
+      console.log('Success: ', response)
+      // this.props.addClientToList(response)
+    })
   }
 
   const generatePDF = async () => {
     const data = generateData()
+    let itemClient = data.client
+
+    for (let i = 0; i < dataClients.length; i++){
+      if (dataClients[i].id == itemClient) {
+        data.client = dataClients[i]
+      }
+    }
+
     sessionStorage.setItem('quotation', JSON.stringify(data))
     props.eventSavePDF(data)
-    console.log('data: ', data);
+    // const templatePdf = await generateTemplatePDF(data)
+    // pdfMake.createPdf(templatePdf).open();
+
     // fetch(`${conf.api_url}/quotationtemp/`, {
     //   method: 'POST',
     //   body: JSON.stringify({ data: data }),
@@ -169,6 +208,32 @@ export const FormQuotation = (props) => {
     return obj
   }
 
+  const getClients = async () => {
+    try {
+      let response = await fetch(`${conf.api_url}/client/`)
+      let data = await response.json();
+      console.log('data clients: ', data);
+
+      setDataClients(data)
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const getUsers = async () => {
+    try {
+      let response = await fetch(`${conf.api_url}/user/`)
+      let data = await response.json();
+      console.log('data users: ', data);
+
+      setDataUsers(data)
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   return (
     <div>
       <div className="title">
@@ -177,18 +242,19 @@ export const FormQuotation = (props) => {
       <br />
       <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
         <Grid container spacing={3}>
-          <Grid item md={3}>
+          {/* <Grid item md={3}>
             <TextField
               id="consecutive"
               name="consecutive"
               className=""
               label="Cosecutivo"
               margin="normal"
-            />
-          </Grid>
+            /> 
+          </Grid> */}
           <Grid item md={3}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                disabled
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
@@ -205,15 +271,29 @@ export const FormQuotation = (props) => {
             </MuiPickersUtilsProvider>
           </Grid>
           <Grid item md={3}>
-            <TextField
+            <FormControl margin="normal">
+              <InputLabel id="clients">Cliente</InputLabel>
+              <Select
+                labelId="client"
+                name="client"
+                onChange={getClients}
+              >
+                {dataClients.map(clients => (
+                  <MenuItem
+                    value={clients.id}
+                  >{clients.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* <TextField
               id="client"
               name="client"
               className=""
               label="Nombre cliente"
               margin="normal"
-            />
+            /> */}
           </Grid>
-          <Grid item md={3}>
+          {/* <Grid item md={3}>
             <TextField
               id="clientPhone"
               name="clientPhone"
@@ -221,20 +301,34 @@ export const FormQuotation = (props) => {
               label="Teléfono cliente"
               margin="normal"
             />
-          </Grid>
+          </Grid> */}
 
           {/* segunda fila  */}
 
           <Grid item md={3}>
-            <TextField
+          <FormControl margin="normal">
+              <InputLabel id="users">Ejecutivo de ventas</InputLabel>
+              <Select
+                labelId="user"
+                name="user"
+                onChange={getUsers}
+              >
+                {dataUsers.map(users => (
+                  <MenuItem
+                    value={users.id}
+                  >{users.first_name} {users.last_name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* <TextField
               id="user"
               name="user"
               className=""
               label="Ejecutivo de ventas"
               margin="normal"
-            />
+            /> */}
           </Grid>
-          <Grid item md={3}>
+          {/* <Grid item md={3}>
             <TextField
               id="city"
               name="city"
@@ -242,11 +336,11 @@ export const FormQuotation = (props) => {
               label="Ciudad"
               margin="normal"
             />
-          </Grid>
+          </Grid> */}
           <Grid item md={3}>
             <TextField
-              id="deliveryTime"
-              name="deliveryTime"
+              id="delivery_time"
+              name="delivery_time"
               className=""
               label="Tiempo de entrega"
               margin="normal"
@@ -254,10 +348,10 @@ export const FormQuotation = (props) => {
           </Grid>
           <Grid item md={3}>
             <TextField
-              id="payTime"
-              name="payTime"
+              id="pay_format"
+              name="pay_format"
               className=""
-              label="Formato de pago"
+              label="Forma de pago"
               margin="normal"
             />
           </Grid>
@@ -268,6 +362,7 @@ export const FormQuotation = (props) => {
       <div className="sub-title">
         Agregar Unidades
       </div>
+      <br />
 
       {/* Unidades */}
       <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units} />

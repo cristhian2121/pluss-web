@@ -30,9 +30,9 @@ export class ClientList extends React.Component {
                                     <TableCell component="th" scope="row">
                                         {client.name}
                                     </TableCell>
-                                    <TableCell align="right">{client.phone}</TableCell>
-                                    <TableCell align="right">{client.agent.name}</TableCell>
-                                    <TableCell align="right">{client.city}</TableCell>
+                                    <TableCell align="center">{client.phone}</TableCell>
+                                    <TableCell align="center">{client.agent.name}</TableCell>
+                                    <TableCell align="center">{client.city}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

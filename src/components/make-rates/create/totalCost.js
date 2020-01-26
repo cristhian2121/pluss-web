@@ -14,7 +14,7 @@ export const TotalCost = ({ transport, profitableness, mark, discount, cost }) =
   })
 
   return (
-    <Grid class="text-detail" item md={2}>
+    <Grid className="text-detail" item md={2}>
       <span>Costo producto:</span> {preCost} <br/>
       <span>Precio de venta:</span> {total} <br/>
       {/* <span>Ganancia:</span> {profitable} */}

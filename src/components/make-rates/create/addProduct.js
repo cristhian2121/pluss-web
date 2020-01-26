@@ -42,6 +42,8 @@ export const ProductForm = (props) => {
             cost: document.querySelector(`#cost`).value,
             prints: document.querySelector(`#prints`).value,
             description: document.querySelector(`#description`).value,
+            material: document.querySelector(`#material`).value,
+            inventory: document.querySelector(`#inventory`).value
         }
         product.costs = []
         product.prices = []
@@ -141,6 +143,20 @@ export const ProductForm = (props) => {
                         id='size'
                         name='size'
                         label="Medidas"
+                    />
+                </Grid>
+                <Grid item md={3} className="input-validation-material">
+                    <TextField
+                        id='material'
+                        name='material'
+                        label="Material"
+                    />
+                </Grid>
+                <Grid item md={3} className="input-validation-inventory">
+                    <TextField
+                        id='inventory'
+                        name='inventory'
+                        label="Inventario"
                     />
                 </Grid>
                 <Grid item md={3} className="input-validation-colors">

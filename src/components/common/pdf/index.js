@@ -53,17 +53,17 @@ export const GeneratePDFHook = (props) => {
                         <div className="col-6 text-descripcion">
                             <p>Medellín, {quotation.quotationDate}</p><br />
                             <p>Señores:</p>
-                            <p><span>{quotation.client.charAt(0).toUpperCase() + quotation.client.slice(1).toLowerCase()}</span></p>
-                            {/* <p>calle 37 a # 88 - 26</p> */}
-                            <p>email. {quotation.clientPhone}</p>
-                            <p>tel. {quotation.clientPhone}</p>
+                            <p><span>{quotation.client.name.charAt(0).toUpperCase() + quotation.client.name.slice(1).toLowerCase()}</span></p>
+                            <p>{quotation.client.address}</p>
+                            <p>email. {quotation.client.email}</p>
+                            <p>tel. {quotation.client.phone}</p>
                             <p>{quotation.city}</p>
 
                         </div>
 
                         <div className="col-3 px-0 text-descripcion">
                             <br />
-                            <p><span>Cotización N° {quotation.consecutive}</span></p>
+                            <p><span>Cotización N° {quotation.id}</span></p>
                         </div>
                         <div className="col-3 px-0">
                             <img src={Logo} onClick={printPDF} className="image-logo-pdf" />
@@ -82,7 +82,6 @@ export const GeneratePDFHook = (props) => {
                     {/* <div className="bar-head" style={{ backgroundColor: "#ff0000" }}>
                         <div className="quotation-title">Cotización</div>
                     </div> */}
-
 
                 </section>
 
