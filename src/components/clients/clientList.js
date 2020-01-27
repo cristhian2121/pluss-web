@@ -1,13 +1,5 @@
 import React from 'react'
 import MaterialTable from 'material-table';
-// import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
-// import TableCell from '@material-ui/core/TableCell';
-// import TableHead from '@material-ui/core/TableHead';
-// import TableRow from '@material-ui/core/TableRow';
-// import Paper from '@material-ui/core/Paper';
-
-import config from '../../config'
 
 export class ClientList extends React.Component {
     constructor(props){
@@ -28,26 +20,6 @@ export class ClientList extends React.Component {
         dataUser: []
     };
 
-    deleteClient (client) {
-      console.log('clientclientclient: ', client);
-      this.props.clientDelete(client)
-      // fetch(`${config.api_url}/client/${client.id}` , {method: 'DELETE'})
-      // .then(response => {        
-      //   if (response.status === 204) {
-      //     this.props.clientDelet(client)
-      //     // for (let item of this.props.clientList ) {
-      //     //   if (item.id === client.id) {
-      //     //     this.props.clientList = this.props.clientList.splice(item, 1)
-      //     //     return
-      //     //   }
-      //     // }
-      //   }
-      // })
-      // .then(res => { console.log('reseeeeeeeeeeeeeeee: ', res) })
-      // .catch(e => { console.log('Erroraaaaaa: ', e) })
-
-    }
-
     render () {
       return (
         <div>            
@@ -63,16 +35,15 @@ export class ClientList extends React.Component {
                       icon: 'edit',
                       tooltip: 'Editar cliente',
                       onClick: (event, rowData) => {
+                        this.props.selectUpdate(rowData)
                           console.log('rowData: ', rowData);
-                        // this.props.selectUpdate(rowData)
                       }
                     },
                     {
                         icon: 'delete',
                         tooltip: 'Eliminar cliente',
                         onClick: (event, rowData) => {
-                            // this.deleteClient(rowData)
-                            this.props.selectDelet(rowData)
+                            this.props.selectDelete(rowData)
                         }
                     }
                   ]}
