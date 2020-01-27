@@ -214,7 +214,7 @@ export const FormQuotation = (props) => {
       let data = await response.json();
       console.log('data clients: ', data);
 
-      setDataClients(data)
+      setDataClients(data.results)
 
     } catch (error) {
       console.log('error', error)
@@ -227,7 +227,7 @@ export const FormQuotation = (props) => {
       let data = await response.json();
       console.log('data users: ', data);
 
-      setDataUsers(data)
+      setDataUsers(data.results)
 
     } catch (error) {
       console.log('error', error)

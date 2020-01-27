@@ -65,8 +65,9 @@ export class Create extends Component {
     try {
       let response = await fetch(`${conf.api_url}/group/`)
       let data = await response.json();
+      console.log('datadddddd: ', data.results);
       this.setState({
-        dataGroups: data
+        dataGroups: data.results
       })
     } catch (error) {
       console.log('error', error)
