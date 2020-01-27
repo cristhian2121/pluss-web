@@ -33,7 +33,7 @@ export class MakeRate extends Component {
 
         
             this.setState({
-              dataQuotations: data
+              dataQuotations: data.results
             })
         } catch (error) {
             console.log('error', error)
