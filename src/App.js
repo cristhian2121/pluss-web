@@ -10,7 +10,7 @@ import { CreateQuotation } from './components/make-rates/create/'
 import PageNotFound from './components/common/page-not-found'
 import { Menu } from './components/common/nav-bar'
 import { Clients } from './components/clients/client'
-import { Products } from './pages/products'
+import { ProductComponent } from './pages/products'
 
 import "./App.css";
 
@@ -22,7 +22,7 @@ function App() {
         <Route exact path="/usuarios" component={User} />
         <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
         <Route exact path="/clientes" component={Clients} />
-        <Route exact path="/productos" component={Products} />
+        <Route exact path="/productos" component={ProductComponent} />
         <Route component={PageNotFound} />
       </Switch>
     </Menu>

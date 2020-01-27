@@ -1,0 +1,8 @@
+.icon-active :hover {
+ font-size: 1.7em !important;
+ color: chartreuse;
+}
+
+.icon-active {
+    font-size: 1.5em !important;
+}
