@@ -119,52 +119,47 @@ export class Clients extends React.Component {
     })
   }
 
-  clientDelete = (client) => {
-    console.log('clientclientclient: ', client);
-    const clients = this.state.clients.filter(item => item.id != client.id)
-    console.log('clients: ', clients);
-    this.setState({
-      clients: clients
-    })
-    // for (let [item, index] of this.state.clients.entries()) {
-    //   console.log('item: ', inde);
-    //   if (item.id === client.id) {
-    //     const clientsAux = [...this.state.clients]
-    //     console.log('clientsAux: ', clientsAux[0]);
-    //     const newClient = clientsAux.splice(index, 1)
-    //     console.log('newClient: ', newClient);
-        
-    //     console.log('clients: ', this.state.clients);
-    //   }
-    // }
-    // fetch(`${config.api_url}/client/${client.id}` , {method: 'DELETE'})
-    // .then(response => {        
-    //   if (response.status === 204) {
-    //     this.props.clientDelet(client)
-    //     // for (let item of this.props.clientList ) {
-    //     //   if (item.id === client.id) {
-    //     //     this.props.clientList = this.props.clientList.splice(item, 1)
-    //     //     return
-    //     //   }
-    //     // }
-    //   }
-    // })
-    // .then(res => { console.log('reseeeeeeeeeeeeeeee: ', res) })
-    // .catch(e => { console.log('Erroraaaaaa: ', e) })
-
-  }
-  // clientDelete(client) {
-  //   console.log('client: ', this.state.clients);
-  //   for (let item of this.state.clients ) {
-  //     console.log('item: ', item);
-  //     if (item.id === client.id) {
-  //       this.setState({
-  //         clients: this.clients.splice(item, 1)
-  //       })
-  //       return
+  // insertClient = (client) => {
+  //   this.setState({
+  //     clients: [...this.state.clients, client],
+  //     alert: {
+  //       open: true,
+  //       message: 'El usuario se agrego',
+  //       type:'success'
   //     }
-  //   }
+  //   })
   // }
+
+
+  clientDelete = (client) => {
+    fetch(`${config.api_url}/client/${client.id}` , {method: 'DELETE'})
+    .then(response => {        
+      if (response.status === 204) {
+        let clients = this.state.clients.filter(item => item.id != client.id)
+        this.setState({ 
+          clients: clients,
+          alert: {
+            open: true,
+            message: 'El cliente se elimino.',
+            type:'success'
+          }
+        })
+      }
+    })
+    .then(res => { console.log('res: ', res) })
+    .catch(e => { console.log('Error: ', e) })
+  }
+
+  clearForm () {
+    document.getElementById("clientForm").reset()
+  }
+
+  selectUpdate = (client) => {
+    console.log('client: ', client);
+    this.setState({
+      updateClient: client
+    })
+  }
 
   render() {
 
