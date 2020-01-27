@@ -28,7 +28,7 @@ export class Clients extends React.Component {
       .then(res => {
         console.log('res: ', res);
         this.setState({
-          clients: res
+          clients: res.results
         })
       })
       .catch(e => {

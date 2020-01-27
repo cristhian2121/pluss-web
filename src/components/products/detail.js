@@ -47,7 +47,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Detail(props) {
-  console.log('props: ', props.selectDetail);
   const classes = useStyles();
   const data = props.selectDetail;
 

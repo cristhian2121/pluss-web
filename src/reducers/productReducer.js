@@ -9,7 +9,7 @@ const INITIAL_STATE = {
     loader: false
 }
 
-export const productsReducer = (INITIAL_STATE, action) => {
+export const productReducer = (INITIAL_STATE, action) => {
     switch (action.type) {
         case REMOVE_PRODUCT:
             INITIAL_STATE.products.filter(_ => _.productId !== action.productId)
@@ -17,6 +17,8 @@ export const productsReducer = (INITIAL_STATE, action) => {
         case ADD_PRODUCT:
             INITIAL_STATE.push(action.entity)
             return INITIAL_STATE;
-        default: return INITIAL_STATE
+        default: return null
     }
 }
+
+export default productReducer
