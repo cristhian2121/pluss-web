@@ -268,7 +268,11 @@ export const ProductForm = (props) => {
                 </Grid>
             ))}
             <br/><br/>
+<<<<<<< HEAD
             <Button color="secondary" onClick={clearForm}>
+=======
+            <Button color="secondary" onClick={handleAddProduct}>
+>>>>>>> fix: se cambian nombres de campos en productos
                 Limpiar
             </Button>
             <Button color="primary" onClick={handleAddProduct}>
