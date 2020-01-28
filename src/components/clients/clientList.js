@@ -32,12 +32,11 @@ export class ClientList extends React.Component {
                 data={this.props.clientList}
                 actions={[
                     {
-                      icon: 'edit',
-                      tooltip: 'Editar cliente',
-                      onClick: (event, rowData) => {
-                        this.props.selectUpdate(rowData)
-                          console.log('rowData: ', rowData);
-                      }
+                        icon: 'edit',
+                        tooltip: 'Editar cliente',
+                        onClick: (event, rowData) => {
+                            this.props.selectUpdate(rowData)
+                        }
                     },
                     {
                         icon: 'delete',
@@ -46,39 +45,8 @@ export class ClientList extends React.Component {
                             this.props.selectDelete(rowData)
                         }
                     }
-                  ]}
-            />
+                  ]}/>
         </div>
       );
     }
-
-    // render() {
-    //     return (
-    //             <Paper>
-    //                 <Table aria-label="simple table">
-    //                     <TableHead>
-    //                         <TableRow>
-    //                             <TableCell align="right">Nombre</TableCell>
-    //                             <TableCell align="right"></TableCell>
-    //                             <TableCell align="right"></TableCell>
-    //                             <TableCell align="right"></TableCell>
-    //                         </TableRow>
-    //                     </TableHead>
-    //                     <TableBody>
-    //                         {(client => (
-    //                             <TableRow key={client.id}>
-    //                                 <TableCell component="th" scope="row">
-    //                                     {client.name}
-    //                                 </TableCell>
-    //                                 <TableCell align="center">{client.phone}</TableCell>
-    //                                 <TableCell align="center">{client.agent.name}</TableCell>
-    //                                 <TableCell align="center">{client.city}</TableCell>
-    //                             </TableRow>
-    //                         ))}
-    //                     </TableBody>
-    //                 </Table>
-    //             </Paper>
-    //     )
-    // }
-
 }

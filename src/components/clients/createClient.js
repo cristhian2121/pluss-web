@@ -10,15 +10,13 @@ export class CreateClient extends React.Component {
     console.log('props: ', props);
     super(props)
     this.state = {
-      dataEdit: false
+      dataEdit: null
     }
-    // this.client = this.client.bind(this)
   }
 
   componentWillReceiveProps = (nextProps)=>{
-    console.log('nextProps: ', nextProps);
     this.setState({
-      dataEdit: true,
+      dataEdit: nextProps.clientUpdate ? nextProps.clientUpdate.name : null,
       name: nextProps.clientUpdate ? nextProps.clientUpdate.name : null,
       nit: nextProps.clientUpdate ? nextProps.clientUpdate.nit : null,
       phone: nextProps.clientUpdate ? nextProps.clientUpdate.phone : null,
@@ -41,7 +39,6 @@ export class CreateClient extends React.Component {
     let email = document.getElementById('email').value
     let phone_two = document.getElementById('phone_two').value
     // let data = this.generateData()
-    // console.log('aa: ', data);
     const validate = this.validator(name, nit)
     if(validate){
       const client = {
@@ -56,9 +53,8 @@ export class CreateClient extends React.Component {
         email: email,
         phone_two: phone_two,
       }
-      console.log("ok", client)
-      this.props.saveClient(client)
-      // this.addClient(client)
+      console.log("ok", this.state.dataEdit)
+      this.state.dataEdit ? this.props.updateClient(client) : this.props.saveClient(client)
     }else{
       console.log('faltan datos')
     }
@@ -89,6 +85,7 @@ export class CreateClient extends React.Component {
     this.client = {}
     document.getElementById("clientForm").reset()
     this.setState({
+      dataEdit: null,
       name: null,
       nit: null,
       city: null,
@@ -147,9 +144,6 @@ export class CreateClient extends React.Component {
           <TextField id="email" name="email" label="Correo electrónico" value={this.state.email} onChange={this.handleChange}/>
           <TextField id="phone" name="phone" label="Teléfono" value={this.state.phone} onChange={this.handleChange}/>
           <TextField id="phone_two" name="phone_two" label="Teléfono alternativo" value={this.state.phone_two} onChange={this.handleChange}/>
-          {/* <Button variant="contained" color="primary" type="submit" onClick={this.saveClient}>
-            Guardar
-          </Button> */}
           <div className="text-center">
             <br/>
             <Button variant="contained" onClick={this.clearForm}>
@@ -160,7 +154,6 @@ export class CreateClient extends React.Component {
             </Button>
           </div>
         </form>
-        
       </>
     )
   }
