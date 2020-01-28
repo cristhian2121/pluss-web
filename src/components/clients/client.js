@@ -19,7 +19,6 @@ export class Clients extends React.Component {
         type: '',
       }
     }
-    // this.insertClient = this.insertClient.bind(this)
     this.clientDelete = this.clientDelete.bind(this)
   }
 
@@ -30,7 +29,6 @@ export class Clients extends React.Component {
   getClient() {
     fetch(`${config.api_url}/client`)
       .then(response => {
-        console.log('Response: ', response)
         return response.json()
       })
       .then(res => {
@@ -39,13 +37,12 @@ export class Clients extends React.Component {
         })
       })
       .catch(e => {
-        console.log('Error: ', e)
+        console.log('Error getClient: ', e)
       })
   }
 
   saveClient = (client) => {
-    console.log('client: ', client);
-    fetch(`${config.api_url}/client/`,
+    fetch(`${config.api_url}/client/${client.id}/`,
       {
       method: 'POST',
       body: JSON.stringify(client),
@@ -53,7 +50,7 @@ export class Clients extends React.Component {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-    .catch(error => console.log('Error: ', error))
+    .catch(error => console.log('Error saveClient: ', error))
     .then(response => {
       this.setState({
         clients: [...this.state.clients, client],
@@ -65,20 +62,33 @@ export class Clients extends React.Component {
       })
       this.clearForm()
     })
-
   }
 
-  // insertClient = (client) => {
-  //   this.setState({
-  //     clients: [...this.state.clients, client],
-  //     alert: {
-  //       open: true,
-  //       message: 'El usuario se agrego',
-  //       type:'success'
-  //     }
-  //   })
-  // }
-
+  updateClient = (client) => {
+    let idClient = this.state.updateClient.id
+    fetch(`${config.api_url}/client/${idClient}/`,
+      {
+      method: 'PUT',
+      body: JSON.stringify(client),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .catch(error => console.log('Error: ', error))
+    .then(response => {
+      let clients = this.state.clients.filter(item => item.id != response.id)
+      this.setState({
+        clients: [...clients, response],
+        updateClient: [],
+        alert: {
+          open: true,
+          message: 'El cliente se modifico.',
+          type:'success'
+        }
+      })
+      this.clearForm()
+    })
+  }
 
   clientDelete = (client) => {
     fetch(`${config.api_url}/client/${client.id}` , {method: 'DELETE'})
@@ -95,8 +105,8 @@ export class Clients extends React.Component {
         })
       }
     })
-    .then(res => { console.log('res: ', res) })
-    .catch(e => { console.log('Error: ', e) })
+    .then(res => { console.log('res clientDelete: ', res) })
+    .catch(e => { console.log('Error clientDelete: ', e) })
   }
 
   clearForm () {
@@ -104,7 +114,6 @@ export class Clients extends React.Component {
   }
 
   selectUpdate = (client) => {
-    console.log('client: ', client);
     this.setState({
       updateClient: client
     })
@@ -118,7 +127,7 @@ export class Clients extends React.Component {
           Clientes
         </div>
         <br />
-        <CreateClient saveClient={this.saveClient} clientUpdate={this.state.updateClient} />
+        <CreateClient saveClient={this.saveClient} clientUpdate={this.state.updateClient} updateClient={this.updateClient} />
         <br /><br />
         <ClientList selectDelete={this.clientDelete} selectUpdate={this.selectUpdate} clientList={this.state.clients} />
 
