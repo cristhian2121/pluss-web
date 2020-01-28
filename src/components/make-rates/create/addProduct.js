@@ -190,6 +190,15 @@ export const ProductForm = (props) => {
                         onChange={event => handleChange(event, 0)}
                     />
                 </Grid>
+                <Grid item md={3} className="input-validation-description">
+                    <TextField
+                        id='description'
+                        name='description'
+                        multiline
+                        rowsMax="4"
+                        label="Descripción"
+                    />
+                </Grid>
             </Grid><br/><br/>
             <Typography variant="h5">
               Valor por unidades
@@ -210,7 +219,7 @@ export const ProductForm = (props) => {
                         <TextField
                             id={`mark${index}`}
                             name={`mark`}
-                            label="Precio de marcación"
+                            label="Precio de marcación (Unidad)"
                             onChange={event => handleChange(event, index)}
                         />
                     </Grid>
@@ -226,7 +235,7 @@ export const ProductForm = (props) => {
                         <TextField
                             id={`transport${index}`}
                             name={`transport`}
-                            label="Transporte"
+                            label="Transporte unitario"
                             onChange={event => handleChange(event, index)}
                         />
                     </Grid>
@@ -240,6 +249,9 @@ export const ProductForm = (props) => {
                 </Grid>
             ))}
             <br/><br/>
+            <Button color="secondary" onClick={handleAddProduct}>
+                Limpiar
+            </Button>
             <Button color="primary" onClick={handleAddProduct}>
                 Agregar <AddCircleIcon />
             </Button>

@@ -242,15 +242,6 @@ export const FormQuotation = (props) => {
       <br />
       <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
         <Grid container spacing={3}>
-          {/* <Grid item md={3}>
-            <TextField
-              id="consecutive"
-              name="consecutive"
-              className=""
-              label="Cosecutivo"
-              margin="normal"
-            /> 
-          </Grid> */}
           <Grid item md={3}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
@@ -281,7 +272,7 @@ export const FormQuotation = (props) => {
                 {dataClients.map(clients => (
                   <MenuItem
                     value={clients.id}
-                  >{clients.name}</MenuItem>
+                  >{clients.nit} | {clients.name} | {clients.agent.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -342,7 +333,7 @@ export const FormQuotation = (props) => {
               id="delivery_time"
               name="delivery_time"
               className=""
-              label="Tiempo de entrega"
+              label="Tiempo de entrega (Días)"
               margin="normal"
             />
           </Grid>
@@ -351,7 +342,7 @@ export const FormQuotation = (props) => {
               id="pay_format"
               name="pay_format"
               className=""
-              label="Forma de pago"
+              label="Formato de pago"
               margin="normal"
             />
           </Grid>
