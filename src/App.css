@@ -25,7 +25,7 @@
 
 /*  Base plantilla inicial  */
 .title {
-  border-left: 5px solid #db2929;
+  border-left: 5px solid #DB2929;/*#db2929;*/
   padding: 10px;
   font-size: 22px;
   font-weight: 500;
@@ -35,7 +35,8 @@
 
 .sub-title {
   padding-left: 7px;
-  border-left: 5px solid black;
+  /* border-left: 6px groove #000000; */
+  border-left: 6px groove #e0e0e0;
   /* border-left: 4px solid #97b10c; */
   font-size: 18px;
   font-weight: 400;
