@@ -5,6 +5,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import Dialog from '@material-ui/core/Dialog';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
 
 import { connect } from 'react-redux'
 
@@ -34,8 +35,7 @@ class Products extends Component {
   componentDidMount() {
     const productsSelect = this.getProducts()
     console.log('this.props: ', this.props);
-    console.log('productsSelect: ', productsSelect);
-    
+    console.log('productsSelect: ', productsSelect);    
   }
 
   getProducts = async () => {
@@ -72,6 +72,9 @@ class Products extends Component {
       <div>
         <div className="title">
           Productos {this.props.products.length}
+          <div>
+            <LocalGroceryStoreIcon />
+          </div>
         </div>
         <br /><br />
 
