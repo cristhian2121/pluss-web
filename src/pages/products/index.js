@@ -20,24 +20,29 @@ import '../../styles/product.css'
 import * as productActions from '../../actions/productActions';
 
 class Products extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       dataProducts: [],
       detailProducts: {},
       open: false,
-      count: 0
+      count: 0,
+      productSelect: []
     }
   }
 
   componentDidMount() {
-    this.getProducts()
+    const productsSelect = this.getProducts()
+    console.log('this.props: ', this.props);
+    console.log('productsSelect: ', productsSelect);
+    
   }
 
   getProducts = async () => {
     try {
       let response = await fetch(`${conf.api_url}/product/`)
       const data = await response.json();
+      console.log('data: ', data);
       this.setState({
         dataProducts: data.results,
         count: data.count
@@ -58,14 +63,15 @@ class Products extends Component {
   }
 
   addProduct = (dataProduct) => {
-
+    console.log('dataProduct: ', dataProduct);
+    this.props.addProduct(dataProduct)
   }
 
   render() {
     return (
       <div>
         <div className="title">
-          Productos
+          Productos {this.props.products.length}
         </div>
         <br /><br />
 
@@ -110,7 +116,7 @@ const mapStateToProps = (reducers) => {
 }
 
 const ProductComponent = connect(mapStateToProps, productActions)(Products)
-  
+
 export {
   ProductComponent
 }
