@@ -35,7 +35,7 @@ class Products extends Component {
   componentDidMount() {
     const productsSelect = this.getProducts()
     console.log('this.props: ', this.props);
-    console.log('productsSelect: ', productsSelect);    
+    console.log('productsSelect: ', productsSelect);
   }
 
   getProducts = async () => {
@@ -71,9 +71,14 @@ class Products extends Component {
     return (
       <div>
         <div className="title">
-          Productos {this.props.products.length}
-          <div>
-            <LocalGroceryStoreIcon />
+          <div className="col-12 px-0 d-flex">
+            <div className="col-8 px-0">
+              Productos
+            </div>
+            <div className="col-4 px-0 d-flex flex-row-reverse">
+              {this.props.products.length}
+              <LocalGroceryStoreIcon />
+            </div>
           </div>
         </div>
         <br /><br />
@@ -85,16 +90,30 @@ class Products extends Component {
                 <Grid container md={3} className="material-card">
                   <img className="img-product" alt="complex" src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
                   <div>
-                    {obj.descripcion}<br />
-                    Ref. {obj.referencia} <br />
-                    ${obj.vlrUnitario} c/u
+                    <p>
+                      {obj.descripcion}
+                    </p>
+                    <p>
+                      Ref. {obj.referencia}
+                    </p>
+                    <div className="col-12 px-0 d-flex">
+                      <div className="col-8 px-0">
+                        ${obj.vlrUnitario} c/u
+                      </div>
                       {/* <Divider orientation="vertical" /> */}
-                    <Tooltip title="Ver detalle" arrow>
-                      <VisibilityIcon className="icon-active" onClick={() => { this.productDetail(obj) }} />
-                    </Tooltip>
-                    <Tooltip title="Agregar producto" arrow>
-                      <AddCircleIcon className="icon-active" onClick={() => { this.addProduct(obj) }} />
-                    </Tooltip>
+                      <div className="d-flex col-4 px-0">
+                        <div className="icon-active d-flex justify-content-center align-items-center">
+                          <Tooltip title="Ver detalle" arrow>
+                            <VisibilityIcon onClick={() => { this.productDetail(obj) }} />
+                          </Tooltip>
+                        </div>
+                        <div className="icon-active d-flex justify-content-center align-items-center">
+                          <Tooltip title="Agregar producto" arrow>
+                            <AddCircleIcon onClick={() => { this.addProduct(obj) }} />
+                          </Tooltip>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </Grid>
               )
