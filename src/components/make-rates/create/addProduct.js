@@ -31,6 +31,18 @@ export const ProductForm = (props) => {
         setNewProduct(product => { return { ...product } })
         setProducts([...products, product])
         props.addProduct(product)
+
+        clearForm()
+    }
+
+    const clearForm = () => {
+        document.getElementById("addProductForm").reset()
+        // TotalCost([],[],[],[],[])
+        setMarkValue([])
+        setDiscountValue([])
+        setProfitablenessValue([])
+        setTransportValue([])
+        setCostValue([])
     }
 
     const buildProduct = () => {
@@ -123,6 +135,7 @@ export const ProductForm = (props) => {
 
     return (
         <Fragment>
+          <form noValidate autoComplete="off" id="addProductForm">
             <Grid container spacing={1} >
                 <Grid item md={3} className="input-validation-image">
                     <TextField
@@ -249,12 +262,13 @@ export const ProductForm = (props) => {
                 </Grid>
             ))}
             <br/><br/>
-            <Button color="secondary" onClick={handleAddProduct}>
+            <Button color="secondary" onClick={clearForm}>
                 Limpiar
             </Button>
             <Button color="primary" onClick={handleAddProduct}>
                 Agregar <AddCircleIcon />
             </Button>
+          </form>
 
             {/* Ver productos */}
             <div>{products.map((product, index) => (
@@ -263,7 +277,6 @@ export const ProductForm = (props) => {
                 </div>
                 // <Product key={product} number={product} />
             ))}</div>
-
 
         </Fragment>
     )
