@@ -136,7 +136,11 @@ export const ProductForm = (props) => {
     const handleRemoveProduct = (product) => {
         let productss = products.filter(item => item != product)
         setProducts(productss)
+<<<<<<< HEAD
         props.removeProduct(product)
+=======
+        props.removeProduct(product)  
+>>>>>>> Modify: Opción de eliminar producto de cotización
     }
 
     return (
