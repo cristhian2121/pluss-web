@@ -91,6 +91,13 @@ export const FormQuotation = (props) => {
     setProducts(products => [...products, _product])
   }
 
+  const handleRemoveProduct = (_product) => { 
+    console.log('_product remove: ', _product);
+    let productss = products.filter(item => item != _product)
+    console.log('productss: ', productss);
+    setProducts(productss)
+  }
+
   const validateProduct = products => {
     const properties = Object.values(products);
     const keys = Object.keys(products);
@@ -366,7 +373,7 @@ export const FormQuotation = (props) => {
       {
         showproductForm &&
         <>
-          <ProductForm units={units} addProduct={handleAddProduct} />
+          <ProductForm units={units} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
         </>
       }
       <div className="col-12 px-0">
