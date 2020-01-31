@@ -133,6 +133,12 @@ export const ProductForm = (props) => {
         }
     }
 
+    const handleRemoveProduct = (product) => {
+        let productss = products.filter(item => item != product)
+        setProducts(productss)
+        props.removeProduct(product)  
+    }
+
     return (
         <Fragment>
           <form noValidate autoComplete="off" id="addProductForm">
@@ -272,8 +278,8 @@ export const ProductForm = (props) => {
 
             {/* Ver productos */}
             <div>{products.map((product, index) => (
-                <div key={index}>
-                    {<ProductPDF product={product} />}
+                <div className="add-product" key={index}>
+                    {<ProductPDF product={product} removeProduct={handleRemoveProduct}/>}
                 </div>
                 // <Product key={product} number={product} />
             ))}</div>
