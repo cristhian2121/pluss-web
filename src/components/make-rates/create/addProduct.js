@@ -55,7 +55,8 @@ export const ProductForm = (props) => {
             prints: document.querySelector(`#prints`).value,
             description: document.querySelector(`#description`).value,
             material: document.querySelector(`#material`).value,
-            inventory: document.querySelector(`#inventory`).value
+            inventory: document.querySelector(`#inventory`).value,
+            observation: document.querySelector(`#observation`).value
         }
         product.costs = []
         product.prices = []
@@ -141,131 +142,127 @@ export const ProductForm = (props) => {
 
     return (
         <Fragment>
-          <form noValidate autoComplete="off" id="addProductForm">
-            <Grid container spacing={1} >
-                <Grid item md={3} className="input-validation-image">
-                    <TextField
-                        id='image'
-                        name='image'
-                        label="Url imagen"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-name">
-                    <TextField
-                        id='name'
-                        name='name'
-                        label="Nombre"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-size">
-                    <TextField
-                        id='size'
-                        name='size'
-                        label="Medidas"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-material">
-                    <TextField
-                        id='material'
-                        name='material'
-                        label="Material"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-inventory">
-                    <TextField
-                        id='inventory'
-                        name='inventory'
-                        label="Inventario"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-colors">
-                    <TextField
-                        id='colors'
-                        name='colors'
-                        label="Colores disponibles"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-prints">
-                    <TextField
-                        id='prints'
-                        name='prints'
-                        label="Tintas"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-description">
-                    <TextField
-                        id='description'
-                        name='description'
-                        multiline
-                        rowsMax="4"
-                        label="Descripción"
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-cost">
-                    <TextField
-                        id='cost'
-                        name='cost'
-                        label="Precio en página"
-                        onChange={event => handleChange(event, 0)}
-                    />
-                </Grid>
-                <Grid item md={3} className="input-validation-description">
-                    <TextField
-                        id='description'
-                        name='description'
-                        multiline
-                        rowsMax="4"
-                        label="Descripción"
-                    />
-                </Grid>
-            </Grid><br/><br/>
-            <Typography variant="h5">
-              Valor por unidades
-            </Typography>
-            <br/>
+          <form noValidate autoComplete="off" id="addProductForm" className="">
+            <TextField
+                id='image'
+                name='image'
+                label="Url imagen"
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='name'
+                name='name'
+                label="Nombre"
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='size'
+                name='size'
+                label="Medidas"
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='material'
+                name='material'
+                label="Material"
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='inventory'
+                name='inventory'
+                label="Inventario"
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='colors'
+                name='colors'
+                label="Colores disponibles"
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='prints'
+                name='prints'
+                label="Tintas"
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='cost'
+                name='cost'
+                label="Precio en página"
+                onChange={event => handleChange(event, 0)}
+                className="col-md-3 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='description'
+                name='description'
+                multiline
+                rowsMax="4"
+                label="Descripción"
+                className="col-md-6 col-xs-12"
+                margin="normal"
+            />
+            <TextField
+                id='observation'
+                name='observation'
+                multiline
+                rowsMax="4"
+                label="Observaciones"
+                className="col-md-6 col-xs-12"
+                margin="normal"
+            />
+
+            <div className="sub-title-2">
+                <span className="text-2">Valor por unidades</span> 
+            </div>
+
             {props.units.map((unit, index) => (
-                <Grid container spacing={1} key={index}>
-                    <span>{unit} Unidades</span>
-                    <Grid item className="input-validation-discount">
-                        <TextField
-                            id={`discount${index}`}
-                            name={`discount`}
-                            label="% Descuento"
-                            onChange={event => handleChange(event, index)}
-                        />
-                    </Grid>
-                    <Grid item className="input-validation-mark">
-                        <TextField
-                            id={`mark${index}`}
-                            name={`mark`}
-                            label="Precio de marcación (Unidad)"
-                            onChange={event => handleChange(event, index)}
-                        />
-                    </Grid>
-                    <Grid item className="input-validation-profitableness">
-                        <TextField
-                            id={`profitableness${index}`}
-                            name={`profitableness`}
-                            label="% Rentabilidad"
-                            onChange={event => handleChange(event, index)}
-                        />
-                    </Grid>
-                    <Grid item md={2} className="input-validation-transport">
-                        <TextField
-                            id={`transport${index}`}
-                            name={`transport`}
-                            label="Transporte unitario"
-                            onChange={event => handleChange(event, index)}
-                        />
-                    </Grid>
+                <div key={index} className="row margin-component">
+                    <span className="col-md-2 col-xs-12" ><b>{unit} Unidades</b></span>
+                    <TextField
+                        id={`discount${index}`}
+                        name={`discount`}
+                        label="% Descuento"
+                        onChange={event => handleChange(event, index)}
+                        className="col-md-1 col-xs-12"
+                    />
+                    <TextField
+                        id={`mark${index}`}
+                        name={`mark`}
+                        label="Precio de marcación (Unidad)"
+                        onChange={event => handleChange(event, index)}
+                        className="col-md-3 col-xs-12"
+                    />
+                    <TextField
+                        id={`profitableness${index}`}
+                        name={`profitableness`}
+                        label="% Rentabilidad"
+                        onChange={event => handleChange(event, index)}
+                        className="col-md-2 col-xs-12"
+                    />
+                    <TextField
+                        id={`transport${index}`}
+                        name={`transport`}
+                        label="Transporte unitario"
+                        onChange={event => handleChange(event, index)}
+                        className="col-md-2 col-xs-12"
+                    />
                     <TotalCost
+                        className="col-md-3 col-xs-12"
                         transport={transportValue[index]}
                         profitableness={profitablenessValue[index]}
                         mark={markValue[index]}
                         discount={discountValue[index]}
                         cost={costValue}
                     />
-                </Grid>
+                </div>
             ))}
             <br/><br/>
             <Button color="secondary" onClick={clearForm}>

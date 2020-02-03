@@ -10,6 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import Alert from '@material-ui/lab/Alert';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import conf from '../../config'
 
@@ -123,14 +124,6 @@ export class Create extends Component {
       groups: []
     })
   };
-  // handleClose = (event, reason) => {
-  //   console.log('reason: ', reason);
-
-  //   if (reason === 'clickaway') {
-  //     return;
-  //   }
-  //   this.setState({ alert: {open: false} })
-  // }
   generateData = () => {
     let elements = document.getElementById('userForm').elements;
     let data = {};
@@ -262,10 +255,12 @@ export class Create extends Component {
     return (
       <div>
         <div className="sub-title">
-          <Button onClick={this.showForm}>
-            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
-          </Button>
+          <span className="text" onClick={this.showForm}>
+            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {/*this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> */}
+          </span>
+          <Button className="button-more" onClick={this.showForm}> <AddCircleIcon/>  </Button>
         </div>
+
         <form id="userForm">
           <TextField
             required
@@ -342,8 +337,7 @@ export class Create extends Component {
               ))}
             </Select>
           </FormControl>
-          <br /><br /><br />
-          <div className="text-center">
+          <div className="text-center container-button">
             <Button variant="contained" color="secondary" onClick={this.clear}>
               Limpiar
             </Button>

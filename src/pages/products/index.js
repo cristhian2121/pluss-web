@@ -52,7 +52,6 @@ export class Products extends Component {
           <div className="title">
               Productos
           </div>
-          <br/><br/>
 
           <form id="productsForm" >
             <Grid container spacing={12}>

@@ -246,152 +246,98 @@ export const FormQuotation = (props) => {
       <div className="title">
         Crear cotización
       </div>
-      <br />
+
       <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
-        <Grid container spacing={3}>
-          <Grid item md={3}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                disabled
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                name="quotationDate"
-                label="Fecha de cotización"
-                value={selectedDate}
-                onChange={handleDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-            </MuiPickersUtilsProvider>
-          </Grid>
-          <Grid item md={3}>
-            <FormControl margin="normal">
-              <InputLabel id="clients">Cliente</InputLabel>
-              <Select
-                labelId="client"
-                name="client"
-                onChange={getClients}
-              >
-                {dataClients.map(clients => (
-                  <MenuItem
-                    value={clients.id}
-                  >{clients.nit} | {clients.name} | {clients.agent.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {/* <TextField
-              id="client"
-              name="client"
-              className=""
-              label="Nombre cliente"
+          <MuiPickersUtilsProvider className="col-md-3 col-xs-12" utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disabled
+              disableToolbar
+              variant="inline"
+              format="MM/dd/yyyy"
               margin="normal"
-            /> */}
-          </Grid>
-          {/* <Grid item md={3}>
-            <TextField
-              id="clientPhone"
-              name="clientPhone"
-              className=""
-              label="Teléfono cliente"
-              margin="normal"
+              id="date-picker-inline"
+              name="quotationDate"
+              label="Fecha de cotización"
+              value={selectedDate}
+              onChange={handleDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
             />
-          </Grid> */}
+          </MuiPickersUtilsProvider>
+          <FormControl className="col-md-3 col-xs-12" margin="normal">
+            <InputLabel id="clients">Cliente</InputLabel>
+            <Select
+              labelId="client"
+              name="client"
+              onChange={getClients}
+            >
+              {dataClients.map(clients => (
+                <MenuItem
+                  value={clients.id}
+                >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           {/* segunda fila  */}
 
-          <Grid item md={3}>
-          <FormControl margin="normal">
-              <InputLabel id="users">Ejecutivo de ventas</InputLabel>
-              <Select
-                labelId="user"
-                name="user"
-                onChange={getUsers}
-              >
-                {dataUsers.map(users => (
-                  <MenuItem
-                    value={users.id}
-                  >{users.first_name} {users.last_name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {/* <TextField
-              id="user"
+          <FormControl className="col-md-3 col-xs-12" margin="normal">
+            <InputLabel id="users">Ejecutivo de ventas</InputLabel>
+            <Select
+              labelId="user"
               name="user"
-              className=""
-              label="Ejecutivo de ventas"
-              margin="normal"
-            /> */}
-          </Grid>
-          {/* <Grid item md={3}>
-            <TextField
-              id="city"
-              name="city"
-              className=""
-              label="Ciudad"
-              margin="normal"
-            />
-          </Grid> */}
-          <Grid item md={3}>
-            <TextField
-              id="delivery_time"
-              name="delivery_time"
-              className=""
-              label="Tiempo de entrega (Días)"
-              margin="normal"
-            />
-          </Grid>
-          <Grid item md={3}>
-            <TextField
-              id="pay_format"
-              name="pay_format"
-              className=""
-              label="Formato de pago"
-              margin="normal"
-            />
-          </Grid>
-          {/* fila 3 */}
-        </Grid>
+              onChange={getUsers}
+            >
+              {dataUsers.map(users => (
+                <MenuItem
+                  value={users.id}
+                >{users.first_name} {users.last_name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            id="delivery_time"
+            name="delivery_time"
+            className="col-md-3 col-xs-12"
+            label="Tiempo de entrega (Días)"
+            margin="normal"
+          />
+          <TextField
+            id="pay_format"
+            name="pay_format"
+            className="col-md-3 col-xs-12"
+            label="Formato de pago"
+            margin="normal"
+          />
       </form>
-      <br />
+
       <div className="sub-title">
-        Agregar Unidades
+        <span className="text">Agregar Unidades</span> 
       </div>
-      <br />
 
       {/* Unidades */}
-      <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units} />
+      <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units}/>
 
-      <br />
       <div className="sub-title">
-        <Button onClick={() => setShowproductForm(!showproductForm)}>Agregar productos </Button>
+        <span className="text">Agregar productos</span> <Button className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
       </div>
+
       {/* Anadir producto */}
-      {
-        showproductForm &&
-        <>
-          <ProductForm units={units} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
-        </>
+      { showproductForm &&
+          <>
+              <ProductForm units={units} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
+          </>
       }
-      <div className="col-12 px-0">
-        <Grid item md={12} className="d-flex justify-content-end">
-          <div className="button-action">
-            <Button variant="contained" color="primary" type="submit" onClick={saveQuotation}>
-              Guardar cotización
-          </Button>
-          </div>
-          <div className="button-action">
-            <Button variant="contained" color="secondary" onClick={generatePDF}>
-              Generar PDF <PictureAsPdfIcon />
-            </Button>
-          </div>
-        </Grid>
+
+      <div className="col-12 px-0 d-flex justify-content-end container-button">
+        <Button variant="contained" color="secondary" type="submit" onClick={saveQuotation}>
+            Guardar cotización
+        </Button>
+        <Button variant="contained" onClick={generatePDF}>
+            Vista previa PDF <PictureAsPdfIcon />
+        </Button>
       </div>
-
-
     </div>
   );
 }

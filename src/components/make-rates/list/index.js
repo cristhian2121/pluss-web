@@ -45,7 +45,7 @@ export class MakeRate extends Component {
           <>
           <div className="title">
             Listado de cotizaciones
-          </div><br/>
+          </div>
           
             <MaterialTable
                 title=''

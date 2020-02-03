@@ -58,32 +58,20 @@ export const ProductPDF = ({ product, removeProduct }) => {
                             </TableRow>
                         </TableBody>
                     </Table>
-
-                    {/* <div className="col-12 px-0">
-                        <div className="sub-title-pdf">Unidades y Precio</div>
-                    </div>
-                    {product.units.map((unit, index) => (
-                        <div className="col-12 px-0" key={index}>
-                            <p><span>{unit}</span> - ${product.prices[index]} /U</p>
-                        </div>
-                    ))} */}
-                    {/* <div className="col-12 px-0">
-                        <div className="sub-title-pdf">Personalizaciòn</div>
-                    </div>
-                    <div className="col-12 px-0">
-                        <p>{product.prints}</p>
-                    </div> */}
-
                 </div><br/>
                 <div className="col-12 text-center">
                     <p className="name-product">{product.name.charAt(0).toUpperCase() + product.name.slice(1).toLowerCase()}</p>
                     <p style={{textAlign: "justify"}}>{product.description}</p>
                     <div className="text-descriptionPDF" style={{textAlign: "justify"}}>
-                        <p><span>Material: </span>{product.material}</p>
+                        <p><b>Material: </b>{product.material}</p>
                         <p><span>Medidas: </span>{product.size}</p>
                         <p><span>Colores: </span>{product.colors}</p>
                         <p><span>Perzonalización: </span>{product.prints}</p>
                         <p><span>Inventario: </span>{product.inventory}</p>
+                    </div>
+
+                    <div className="text-descriptionPDF" style={{textAlign: "justify"}}>
+                        <p><b><span>Observaciones: </span></b><br/>{product.observation}</p>
                     </div>
                 </div>
             </div>
