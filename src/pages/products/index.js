@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
 import Grid from '@material-ui/core/Grid';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -9,18 +9,27 @@ import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
 
 import { connect } from 'react-redux'
 
+// services
+import { ProductsService } from '../../services/products';
+
 
 import Button from '@material-ui/core/Button';
 
 
 import Detail from '../../components/products/detail'
+
+// common
 import conf from '../../config'
+import Loader from '../../components/common/loader';
 
 import '../../styles/product.css'
 
 import * as productActions from '../../actions/productActions';
 
-class Products extends Component {
+class Products extends PureComponent {
+
+  productsService = new ProductsService()
+
   constructor(props) {
     super(props)
     this.state = {
@@ -28,7 +37,8 @@ class Products extends Component {
       detailProducts: {},
       open: false,
       count: 0,
-      productSelect: []
+      productSelect: [],
+      loader: true
     }
   }
 
@@ -39,18 +49,17 @@ class Products extends Component {
   }
 
   getProducts = async () => {
-    try {
-      let response = await fetch(`${conf.api_url}/product/`)
-      const data = await response.json();
-      console.log('data: ', data);
+    this.setState({ loader: true })
+    const res = await this.productsService.getProducts();
+    console.log('data: ', res.data);
+    if (res.state) {
       this.setState({
-        dataProducts: data.results,
-        count: data.count
+        dataProducts: res.data.results,
+        count: res.data.count,
+        loader: false
       })
-      console.log('data', this.state.dataProducts);
-    } catch (error) {
-      console.log('error', error)
     }
+    console.log('data', this.state.dataProducts);
   }
 
   productDetail = (dataProduct) => {
@@ -66,6 +75,46 @@ class Products extends Component {
     console.log('dataProduct: ', dataProduct);
     this.props.addProduct(dataProduct)
   }
+
+  htmlProduct = () => (
+    <form id="productsForm" >
+      <Grid container spacing={12}>
+        {this.state.dataProducts.map(function (obj) {
+          return (
+            <Grid container md={3} className="material-card">
+              <img className="img-product" alt="complex" src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
+              <div>
+                <p>
+                  {obj.descripcion}
+                </p>
+                <p>
+                  Ref. {obj.referencia}
+                </p>
+                <div className="col-12 px-0 d-flex">
+                  <div className="col-8 px-0">
+                    ${obj.vlrUnitario} c/u
+                      </div>
+                  {/* <Divider orientation="vertical" /> */}
+                  <div className="d-flex col-4 px-0">
+                    <div className="icon-active d-flex justify-content-center align-items-center">
+                      <Tooltip title="Ver detalle" arrow>
+                        <VisibilityIcon onClick={() => { this.productDetail(obj) }} />
+                      </Tooltip>
+                    </div>
+                    <div className="icon-active d-flex justify-content-center align-items-center">
+                      <Tooltip title="Agregar producto" arrow>
+                        <AddCircleIcon onClick={() => { this.addProduct(obj) }} />
+                      </Tooltip>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Grid>
+          )
+        }, this)}
+      </Grid>
+    </form>
+  )
 
   render() {
     return (
@@ -83,43 +132,19 @@ class Products extends Component {
         </div>
         <br /><br />
 
-        <form id="productsForm" >
-          <Grid container spacing={12}>
-            {this.state.dataProducts.map(function (obj) {
-              return (
-                <Grid container md={3} className="material-card">
-                  <img className="img-product" alt="complex" src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
-                  <div>
-                    <p>
-                      {obj.descripcion}
-                    </p>
-                    <p>
-                      Ref. {obj.referencia}
-                    </p>
-                    <div className="col-12 px-0 d-flex">
-                      <div className="col-8 px-0">
-                        ${obj.vlrUnitario} c/u
-                      </div>
-                      {/* <Divider orientation="vertical" /> */}
-                      <div className="d-flex col-4 px-0">
-                        <div className="icon-active d-flex justify-content-center align-items-center">
-                          <Tooltip title="Ver detalle" arrow>
-                            <VisibilityIcon onClick={() => { this.productDetail(obj) }} />
-                          </Tooltip>
-                        </div>
-                        <div className="icon-active d-flex justify-content-center align-items-center">
-                          <Tooltip title="Agregar producto" arrow>
-                            <AddCircleIcon onClick={() => { this.addProduct(obj) }} />
-                          </Tooltip>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Grid>
+        <div className="col-12 px-0 d-flex">
+          {
+            this.state.loader ?
+              (
+                <div className="d-flex align-items-center justify-content-center" style={{ height: '50vh', width: '100%' }}>
+                  <Loader size={70} />
+                </div>
               )
-            }, this)}
-          </Grid>
-        </form>
+              : this.htmlProduct()
+          }
+        </div>
+
+
         <Dialog
           onClose={() => this.setState({ open: false })}
           open={this.state.open}
