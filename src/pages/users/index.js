@@ -42,7 +42,7 @@ export class User extends Component {
           let data = await response.json()
       
           this.setState({
-              dataUser: data
+              dataUser: data.results
           })
       } catch (error) {
           console.log('error', error)

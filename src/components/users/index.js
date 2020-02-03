@@ -23,20 +23,21 @@ export class Create extends Component {
         message: '',
         type: '',
       },
-      dataEdit: null,
-      showForm: true,
       dataGroups: [],
-      passDiff: false,
-      code: null,
-      first_name: null,
-      identification_number: null,
-      username: null,
-      phone_number: null,
-      password: null,
-      passwordConfirm: null,
-      groups: []
+      showForm: true,
+      // dataEdit: null,
+      // passDiff: false,
+      // code: null,
+      // first_name: null,
+      // identification_number: null,
+      // username: null,
+      // phone_number: null,
+      // password: null,
+      // passwordConfirm: null,
+      // groups: []
     }
   }
+  
   showForm = () => {
     if (this.state.showForm) { document.getElementById('userForm').style.display='block' }
     else { document.getElementById('userForm').style.display='none' }
@@ -44,6 +45,7 @@ export class Create extends Component {
     this.setState({ showForm: !this.state.showForm })
     console.log('segundo', this.state.showForm)
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       dataEdit: nextProps.selectUpdate.user ? nextProps.selectUpdate : null,
@@ -65,8 +67,9 @@ export class Create extends Component {
     try {
       let response = await fetch(`${conf.api_url}/group/`)
       let data = await response.json();
+      console.log('datadddddd: ', data.results);
       this.setState({
-        dataGroups: data
+        dataGroups: data.results
       })
     } catch (error) {
       console.log('error', error)

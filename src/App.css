@@ -1,3 +1,46 @@
+.action-add-product {
+  background: #0000004f;
+  position: absolute;
+  height: 100%;
+  z-index: 100;
+  width: 100%;
+  display: none;
+  border-radius: 5px;
+  box-shadow: 0 0 20px -8px inset;
+  padding: 10px;
+  /* -webkit-animation-name: fade-options; 
+  -webkit-animation-duration: 1s;
+  animation-name: fade-options;
+  animation-duration: 1s; */
+}
+
+/* Safari 4.0 - 8.0 */
+/* @-webkit-keyframes fade-options {
+  0%   {opacity: 0; width: 0%;}
+  100% {opacity: 1; width: 100%;}
+} */
+
+/* Standard syntax */
+/* @keyframes fade-options {
+  0%   {opacity: 0; width: 0%;}
+  100% {opacity: 1; width: 100%;}
+} */
+
+.add-product:hover .action-add-product {
+  display: block;
+}
+
+.add-product:hover .action-add-product .delete-product{
+  display: flex;
+}
+
+.add-product:hover .action-add-product .delete-product {
+  display: flex;
+  height: inherit;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .App {
   /* text-align: center; */
@@ -25,7 +68,7 @@
 
 /*  Base plantilla inicial  */
 .title {
-  border-left: 5px solid #db2929;
+  border-left: 5px solid #DB2929;/*#db2929;*/
   padding: 10px;
   font-size: 22px;
   font-weight: 500;
@@ -35,7 +78,8 @@
 
 .sub-title {
   padding-left: 7px;
-  border-left: 5px solid black;
+  /* border-left: 6px groove #000000; */
+  border-left: 6px groove #e0e0e0;
   /* border-left: 4px solid #97b10c; */
   font-size: 18px;
   font-weight: 400;

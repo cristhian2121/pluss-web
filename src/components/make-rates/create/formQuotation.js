@@ -91,6 +91,13 @@ export const FormQuotation = (props) => {
     setProducts(products => [...products, _product])
   }
 
+  const handleRemoveProduct = (_product) => { 
+    console.log('_product remove: ', _product);
+    let productss = products.filter(item => item != _product)
+    console.log('productss: ', productss);
+    setProducts(productss)
+  }
+
   const validateProduct = products => {
     const properties = Object.values(products);
     const keys = Object.keys(products);
@@ -214,7 +221,7 @@ export const FormQuotation = (props) => {
       let data = await response.json();
       console.log('data clients: ', data);
 
-      setDataClients(data)
+      setDataClients(data.results)
 
     } catch (error) {
       console.log('error', error)
@@ -227,7 +234,7 @@ export const FormQuotation = (props) => {
       let data = await response.json();
       console.log('data users: ', data);
 
-      setDataUsers(data)
+      setDataUsers(data.results)
 
     } catch (error) {
       console.log('error', error)
@@ -242,15 +249,6 @@ export const FormQuotation = (props) => {
       <br />
       <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
         <Grid container spacing={3}>
-          {/* <Grid item md={3}>
-            <TextField
-              id="consecutive"
-              name="consecutive"
-              className=""
-              label="Cosecutivo"
-              margin="normal"
-            /> 
-          </Grid> */}
           <Grid item md={3}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
@@ -281,7 +279,7 @@ export const FormQuotation = (props) => {
                 {dataClients.map(clients => (
                   <MenuItem
                     value={clients.id}
-                  >{clients.name}</MenuItem>
+                  >{clients.nit} | {clients.name} | {clients.agent.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -342,7 +340,7 @@ export const FormQuotation = (props) => {
               id="delivery_time"
               name="delivery_time"
               className=""
-              label="Tiempo de entrega"
+              label="Tiempo de entrega (Días)"
               margin="normal"
             />
           </Grid>
@@ -351,7 +349,7 @@ export const FormQuotation = (props) => {
               id="pay_format"
               name="pay_format"
               className=""
-              label="Forma de pago"
+              label="Formato de pago"
               margin="normal"
             />
           </Grid>
@@ -375,7 +373,7 @@ export const FormQuotation = (props) => {
       {
         showproductForm &&
         <>
-          <ProductForm units={units} addProduct={handleAddProduct} />
+          <ProductForm units={units} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
         </>
       }
       <div className="col-12 px-0">
