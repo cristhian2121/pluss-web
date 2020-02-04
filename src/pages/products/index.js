@@ -51,7 +51,6 @@ class Products extends PureComponent {
   getProducts = async () => {
     this.setState({ loader: true })
     const res = await this.productsService.getProducts();
-    console.log('data: ', res.data);
     if (res.state) {
       this.setState({
         dataProducts: res.data.results,
@@ -77,25 +76,25 @@ class Products extends PureComponent {
   }
 
   htmlProduct = () => (
-    <form id="productsForm" >
-      <Grid container spacing={12}>
-        {this.state.dataProducts.map(function (obj) {
-          return (
-            <Grid container md={3} className="material-card">
-              <img className="img-product" alt="complex" src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
-              <div>
-                <p>
-                  {obj.descripcion}
-                </p>
-                <p>
-                  Ref. {obj.referencia}
-                </p>
-                <div className="col-12 px-0 d-flex">
-                  <div className="col-8 px-0">
-                    ${obj.vlrUnitario} c/u
+    <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
+      {this.state.dataProducts.map(function (obj) {
+        return (
+          <div className="pl-1 pr-1 pb-3">
+            <div class="card" style={{ width: '16.5rem', height: '30rem' }}>
+              <img className="img-product" alt={obj.bame} src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
+              <div class="card-body">
+                <div className="px-0">
+                  {obj.detail}
+                </div>
+                <div className="py-0 px-0">
+                  Ref. {obj.referency_id}
+                </div>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <div className="col-12 px-0 py-0 d-flex">
+                  <div className="col-8 d-flex d-flex align-items-center px-0 py-0">
+                    ${obj.more_info.vlrUnitario} c/u
                       </div>
-                  {/* <Divider orientation="vertical" /> */}
-                  <div className="d-flex col-4 px-0">
+                  <div className="d-flex col-4 px-0 py-0">
                     <div className="icon-active d-flex justify-content-center align-items-center">
                       <Tooltip title="Ver detalle" arrow>
                         <VisibilityIcon onClick={() => { this.productDetail(obj) }} />
@@ -109,11 +108,11 @@ class Products extends PureComponent {
                   </div>
                 </div>
               </div>
-            </Grid>
-          )
-        }, this)}
-      </Grid>
-    </form>
+            </div>
+          </div>
+        )
+      }, this)}
+    </div>
   )
 
   render() {
@@ -132,7 +131,7 @@ class Products extends PureComponent {
         </div>
         <br /><br />
 
-        <div className="col-12 px-0 d-flex">
+        <div className="col-12 px-0">
           {
             this.state.loader ?
               (
