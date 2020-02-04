@@ -269,6 +269,7 @@ export class Create extends Component {
             value={this.state.code}
             label="Código"
             margin="normal"
+            className="col-md-2 col-xs-4"
           />
           <TextField
             required
@@ -277,6 +278,7 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.first_name}
+            className="col-md-3 col-xs-8"
           />
           <TextField
             name="identification_number"
@@ -284,6 +286,7 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.identification_number}
+            className="col-md-2 col-xs-4"
           />
           <TextField
             required
@@ -292,6 +295,7 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.username}
+            className="col-md-3 col-xs-8"
           />
           <TextField
             required
@@ -300,29 +304,9 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.phone_number}
+            className="col-md-2 col-xs-6"
           />
-          <TextField
-            required
-            type="password"
-            name="password1"
-            label="Contraseña"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.passwordConfirm}
-          />
-          <FormControl>
-            <TextField
-              required
-              type="password"
-              name="password"
-              label="Confirme contraseña"
-              margin="normal"
-              onChange={this.handleChange}
-              value={this.state.password}
-            />
-            {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
-          </FormControl>
-          <FormControl margin="normal">
+          <FormControl margin="normal" className="col-md-3 col-xs-6">
             <InputLabel id="groups">Tipo usuario</InputLabel>
             <Select
               labelId="groups"
@@ -337,12 +321,37 @@ export class Create extends Component {
               ))}
             </Select>
           </FormControl>
+
+          <TextField
+            required
+            type="password"
+            name="password1"
+            label="Contraseña"
+            margin="normal"
+            onChange={this.handleChange}
+            value={this.state.passwordConfirm}
+            className="col-md-2 col-xs-6"
+          />
+          <FormControl className="col-md-2 col-xs-6">
+            <TextField
+              required
+              type="password"
+              name="password"
+              label="Confirme contraseña"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.password}
+              
+            />
+            {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
+          </FormControl>
           <div className="text-center container-button">
-            <Button variant="contained" color="secondary" onClick={this.clear}>
+            <Button variant="contained" onClick={this.clear}>
               Limpiar
             </Button>
-            <Button variant="contained" color="primary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
-              {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'}
+            <Button variant="contained" color="secondary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
+              {/* {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'} */}
+              Guardar
             </Button>
           </div>
         </form>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Grid from '@material-ui/core/Grid';
 
 export const TotalCost = ({ transport, profitableness, mark, discount, cost }) => {
   const [preCost, setPreCost] = useState(0)
@@ -14,10 +13,10 @@ export const TotalCost = ({ transport, profitableness, mark, discount, cost }) =
   })
 
   return (
-    <Grid className="text-detail" item md={2}>
-      Costo producto:  $ {preCost} <br/>
-      <span>Precio de venta:</span>  $ {total} <br/>
+    <div className="text-detail flex">
+      Costo producto:  $ {parseInt(preCost)} <br/>
+      <b>Precio de venta:  $ {parseInt(total)}</b>
       {/* <span>Ganancia:</span> {profitable} */}
-    </Grid>
+    </div>
   )
 }

@@ -22,8 +22,8 @@
     margin-top: 1em;
 }
 
-.margin-component span {
-    margin: auto;
+.margin-component .text-center {
+    padding: 10px 0;
 }
 
 .container-button {

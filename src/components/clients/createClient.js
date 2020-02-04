@@ -99,7 +99,6 @@ export class CreateClient extends React.Component {
   };
 
   handleChange = e => {
-    this.render()
     switch (e.target.name) {
       case "name":
         this.setState({ name: e.target.value })
@@ -140,15 +139,15 @@ export class CreateClient extends React.Component {
           </span>
         </div>
         <form noValidate id="clientForm">
-          <TextField id="name" name="name" label="Nombre empresa" value={this.state.name} onChange={this.handleChange}/>
-          <TextField id="nit" name="nit" label="Nit" value={this.state.nit} onChange={this.handleChange}/>
-          <TextField id="city" name="city" label="Ciudad" value={this.state.city} onChange={this.handleChange}/>
-          <TextField id="address" name="address" label="Dirección" value={this.state.address} onChange={this.handleChange}/>
-          <TextField id="agent" name="agent" label="Nombre representante" value={this.state.agent} onChange={this.handleChange}/>
-          <TextField id="dependece" name="dependece" label="Area a la que pertenece" value={this.state.dependece} onChange={this.handleChange}/>
-          <TextField id="email" name="email" label="Correo electrónico" value={this.state.email} onChange={this.handleChange}/>
-          <TextField id="phone" name="phone" label="Teléfono" value={this.state.phone} onChange={this.handleChange}/>
-          <TextField id="phone_two" name="phone_two" label="Teléfono alternativo" value={this.state.phone_two} onChange={this.handleChange}/>
+          <TextField id="name" name="name" label="Nombre empresa" value={this.state.name} onChange={this.handleChange} className="col-md-3 col-xs-12" margin="normal"/>
+          <TextField id="nit" name="nit" label="Nit" value={this.state.nit} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
+          <TextField id="agent" name="agent" label="Nombre representante" value={this.state.agent} onChange={this.handleChange} className="col-md-3 col-xs-12" margin="normal"/>
+          <TextField id="dependece" name="dependece" label="Area a la que pertenece" value={this.state.dependece} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
+          <TextField id="email" name="email" label="Correo electrónico" value={this.state.email} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
+          <TextField id="phone" name="phone" label="Teléfono" value={this.state.phone} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
+          <TextField id="phone_two" name="phone_two" label="Teléfono alternativo" value={this.state.phone_two} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
+          <TextField id="city" name="city" label="Ciudad" value={this.state.city} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
+          <TextField id="address" name="address" label="Dirección" value={this.state.address} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
 
           <div className="text-center container-button">
             <Button variant="contained" onClick={this.clearForm}>

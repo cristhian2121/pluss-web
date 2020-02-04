@@ -1,10 +1,8 @@
 import React, { useState, Fragment } from 'react';
-import Grid from '@material-ui/core/Grid';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Typography from '@material-ui/core/Typography';
 
 // Components
 import { ProductPDF } from '../../common/pdf/productPDF'
@@ -12,8 +10,9 @@ import { TotalCost } from './totalCost'
 
 
 export const ProductForm = (props) => {
+    console.log('props aaaaaaa: ', props);
 
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState(props.productsE ? props.productsE : [])
     const [newProduct, setNewProduct] = useState({})
     const [transportValue, setTransportValue] = useState([])
     const [profitablenessValue, setProfitablenessValue] = useState([])
@@ -225,7 +224,7 @@ export const ProductForm = (props) => {
 
             {props.units.map((unit, index) => (
                 <div key={index} className="row margin-component">
-                    <span className="col-md-2 col-xs-12" ><b>{unit} Unidades</b></span>
+                    <div className="col-md-2 col-xs-12 text-center"><b>{unit} Unidades</b></div>
                     <TextField
                         id={`discount${index}`}
                         name={`discount`}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 
 // Material
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -45,14 +44,20 @@ import conf from '../../../config'
 
 
 export const FormQuotation = (props) => {
+  console.log('props hhhhhhhhhhhhhhhhhhh: ', props);
   //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
   const [costUnit, SetCostUnit] = useState({})
-  const [units, SetUnits] = useState([])
-  const [products, setProducts] = useState([])
+  const [units, SetUnits] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.units : [])
+  const [products, setProducts] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.products : [])
   const [dataClients, setDataClients] = useState([])
   const [dataUsers, setDataUsers] = useState([])
+  const [status, setStatus] = useState("En progreso")
+  const [selectUpdate, setSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate : null)
+  const [clientSelectUpdate, setCientSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.client : null)
+  const [userSelectUpdate, setUserSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.user : null)
+  const [idSelectUpdate, setIdSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.id : null)
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const [openAlert, setOpenAlert] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
@@ -125,29 +130,10 @@ export const FormQuotation = (props) => {
     return validate
   }
 
-
-  // const UnitCost = () => {
-  //   return (
-  //     <Grid container spacing={3} >
-  //       <Grid item md={2} className="unit">
-  //         <TextField
-  //           id={'unit'}
-  //           name={'unit'}
-  //           className=""
-  //           label="Unidades"
-  //         />
-  //       </Grid>
-  //       <Grid item md={2}>
-  //         <Button color="primary" onClick={handleAddUnits}>
-  //           Agregar <AddCircleIcon />
-  //         </Button>
-  //       </Grid>
-  //     </Grid>
-  //   )
-  // }
-
   const saveQuotation = event => {
     const data = generateData()
+    data.status = status
+
     console.log('data sabequotation: ', data);
     // if (event) {
     //   event.preventDefault();
@@ -157,6 +143,29 @@ export const FormQuotation = (props) => {
     // }
     fetch(`${conf.api_url}/quotation/`,{
       method: 'POST',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .catch(error => console.log('Error: ', error))
+    .then(response => {
+      console.log('Success: ', response)
+      // this.props.addClientToList(response)
+    })
+  }
+
+  const updateQuotation = event => {
+    // let idQuotation = selectUpdate.id
+    console.log('selectUpdate: ', selectUpdate);
+    // console.log('idQuotation: ', idQuotation);
+    const data = generateData()
+    data.status = status
+
+    console.log('data updatequotation: ', data);
+
+    fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`,{
+      method: 'PUT',
       body: JSON.stringify(data),
       headers:{
         'Content-Type': 'application/json'
@@ -241,6 +250,26 @@ export const FormQuotation = (props) => {
     }
   }
 
+  const handleChange = e => {
+    console.log('e: ', e.target.name, e.target.value);
+    console.log('product', selectUpdate)
+    // render()
+    switch (e.target.name) {
+      case "client":
+        setCientSelectUpdate(e.target.value)
+        break
+      case "user":
+        setUserSelectUpdate( e.target.value )
+        break
+      case "pay_format":
+        setSelectUpdate({ pay_format: e.target.value })
+        break
+      case "delivery_time":
+        setSelectUpdate({ delivery_time: e.target.value })
+        break
+    }
+  }
+
   return (
     <div>
       <div className="title">
@@ -248,9 +277,10 @@ export const FormQuotation = (props) => {
       </div>
 
       <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
-          <MuiPickersUtilsProvider className="col-md-3 col-xs-12" utils={DateFnsUtils}>
+          <MuiPickersUtilsProvider  utils={DateFnsUtils}>
             <KeyboardDatePicker
               disabled
+              className="col-md-3 col-xs-12"
               disableToolbar
               variant="inline"
               format="MM/dd/yyyy"
@@ -258,7 +288,7 @@ export const FormQuotation = (props) => {
               id="date-picker-inline"
               name="quotationDate"
               label="Fecha de cotización"
-              value={selectedDate}
+              value={selectUpdate ? selectUpdate.date_created: selectedDate}
               onChange={handleDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
@@ -271,6 +301,7 @@ export const FormQuotation = (props) => {
               labelId="client"
               name="client"
               onChange={getClients}
+              defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
             >
               {dataClients.map(clients => (
                 <MenuItem
@@ -288,6 +319,7 @@ export const FormQuotation = (props) => {
               labelId="user"
               name="user"
               onChange={getUsers}
+              defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
             >
               {dataUsers.map(users => (
                 <MenuItem
@@ -297,18 +329,22 @@ export const FormQuotation = (props) => {
             </Select>
           </FormControl>
           <TextField
-            id="delivery_time"
-            name="delivery_time"
-            className="col-md-3 col-xs-12"
-            label="Tiempo de entrega (Días)"
-            margin="normal"
-          />
-          <TextField
             id="pay_format"
             name="pay_format"
             className="col-md-3 col-xs-12"
             label="Formato de pago"
             margin="normal"
+            value={selectUpdate ? selectUpdate.pay_format : null}
+            onChange={handleChange}
+          />
+          <TextField
+            id="delivery_time"
+            name="delivery_time"
+            className="col-md-2 col-xs-12"
+            label="Tiempo de entrega (Días)"
+            margin="normal"
+            value={selectUpdate ? selectUpdate.delivery_time : null}
+            onChange={handleChange}
           />
       </form>
 
@@ -317,7 +353,7 @@ export const FormQuotation = (props) => {
       </div>
 
       {/* Unidades */}
-      <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units}/>
+      <UnitsCost handleAddUnit={handleAddUnit} preUnits={selectUpdate ? selectUpdate.units : props.preQuotation.units}/>
 
       <div className="sub-title">
         <span className="text">Agregar productos</span> <Button className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
@@ -326,12 +362,12 @@ export const FormQuotation = (props) => {
       {/* Anadir producto */}
       { showproductForm &&
           <>
-              <ProductForm units={units} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
+              <ProductForm units={units} productsE={products} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
           </>
       }
 
       <div className="col-12 px-0 d-flex justify-content-end container-button">
-        <Button variant="contained" color="secondary" type="submit" onClick={saveQuotation}>
+        <Button variant="contained" color="secondary" type="submit" onClick={selectUpdate ? updateQuotation : saveQuotation}>
             Guardar cotización
         </Button>
         <Button variant="contained" onClick={generatePDF}>

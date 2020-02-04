@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import MaterialTable from 'material-table';
+import {Redirect} from "react-router-dom";
 
 import conf from '../../../config'
 
@@ -16,9 +17,10 @@ export class MakeRate extends Component {
             { title: 'Cliente', field: 'client.name' },
             { title: 'Creado por', field: 'user.first_name' },
             // { title: 'Teléfono', field: 'phone_number'},
-            // { title: 'Estado', field: 'user.is_active'}
+            { title: 'Estado', field: 'status'}
         ],
-        dataQuotations: []
+        dataQuotations: [],
+        redirectFormQuotation: false,
     };
 
     componentDidMount () {
@@ -56,9 +58,22 @@ export class MakeRate extends Component {
                       icon: 'visibility',
                       tooltip: 'Ver cotización',
                       onClick: (event, rowData) => {
-                        console.log('rowData: ', rowData);
                         sessionStorage.setItem('quotation', JSON.stringify(rowData))
                         window.open('/cotizacion', '_blank','',true)
+                      }
+                    },
+                    {
+                      icon: 'edit',
+                      tooltip: 'Editar cotización',
+                      onClick: (event, rowData) => {
+                        console.log('rowData: ', rowData);
+                        // props.selectEdit(rowData)
+                        this.props.history.push({
+                          pathname: '/cotizaciones/crear',
+                          state: {
+                            selectUpdate: rowData
+                          }  
+                        })
                       }
                     }
                   ]}
