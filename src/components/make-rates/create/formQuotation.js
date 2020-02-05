@@ -147,10 +147,22 @@ export const FormQuotation = (props) => {
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
+    }).then(async (response) => {
+      let resp = await response.json()
+      if (response.status === 200 ||  response.status == 201){
+        props.history.push({
+          pathname: '/cotizaciones',
+          state: {
+            open: true,
+            message: 'La cotización se creo correctamente.',
+            type:'success'
+          }
+        })
+      }
+    
+    })
     .catch(error => console.log('Error: ', error))
     .then(response => {
-      console.log('Success: ', response)
       // this.props.addClientToList(response)
     })
   }
@@ -288,7 +300,7 @@ export const FormQuotation = (props) => {
               id="date-picker-inline"
               name="quotationDate"
               label="Fecha de cotización"
-              value={selectUpdate ? selectUpdate.date_created: selectedDate}
+              value={idSelectUpdate ? selectUpdate.date_created: selectedDate}
               onChange={handleDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
@@ -334,7 +346,7 @@ export const FormQuotation = (props) => {
             className="col-md-3 col-xs-12"
             label="Formato de pago"
             margin="normal"
-            value={selectUpdate ? selectUpdate.pay_format : null}
+            value={idSelectUpdate ? selectUpdate.pay_format : null}
             onChange={handleChange}
           />
           <TextField
@@ -343,7 +355,7 @@ export const FormQuotation = (props) => {
             className="col-md-2 col-xs-12"
             label="Tiempo de entrega (Días)"
             margin="normal"
-            value={selectUpdate ? selectUpdate.delivery_time : null}
+            value={idSelectUpdate ? selectUpdate.delivery_time : null}
             onChange={handleChange}
           />
       </form>
@@ -353,7 +365,7 @@ export const FormQuotation = (props) => {
       </div>
 
       {/* Unidades */}
-      <UnitsCost handleAddUnit={handleAddUnit} preUnits={selectUpdate ? selectUpdate.units : props.preQuotation.units}/>
+      <UnitsCost handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
 
       <div className="sub-title">
         <span className="text">Agregar productos</span> <Button className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
@@ -367,7 +379,7 @@ export const FormQuotation = (props) => {
       }
 
       <div className="col-12 px-0 d-flex justify-content-end container-button">
-        <Button variant="contained" color="secondary" type="submit" onClick={selectUpdate ? updateQuotation : saveQuotation}>
+        <Button variant="contained" color="secondary" type="submit" onClick={idSelectUpdate ? updateQuotation : saveQuotation}>
             Guardar cotización
         </Button>
         <Button variant="contained" onClick={generatePDF}>
