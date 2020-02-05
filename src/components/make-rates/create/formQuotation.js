@@ -373,6 +373,9 @@ export const FormQuotation = (props) => {
         <Button variant="contained" onClick={generatePDF}>
             Vista previa PDF <PictureAsPdfIcon />
         </Button>
+        <Button variant="contained" type="submit" onClick={selectUpdate ? updateQuotation : saveQuotation}>
+            Finalizar
+        </Button>
       </div>
     </div>
   );
