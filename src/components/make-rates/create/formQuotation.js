@@ -1,4 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
+import {Redirect} from "react-router-dom";
+
 
 // Material
 import Paper from '@material-ui/core/Paper';
@@ -59,6 +61,7 @@ export const FormQuotation = (props) => {
   const [userSelectUpdate, setUserSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.user : null)
   const [idSelectUpdate, setIdSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.id : null)
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  const [redirectList, setRedirectList] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
@@ -150,16 +153,8 @@ export const FormQuotation = (props) => {
     }).then(async (response) => {
       let resp = await response.json()
       if (response.status === 200 ||  response.status == 201){
-        props.history.push({
-          pathname: '/cotizaciones',
-          state: {
-            open: true,
-            message: 'La cotización se creo correctamente.',
-            type:'success'
-          }
-        })
+        setRedirectList(true)
       }
-    
     })
     .catch(error => console.log('Error: ', error))
     .then(response => {
@@ -182,10 +177,18 @@ export const FormQuotation = (props) => {
       headers:{
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
+    }).then(async (response) => {
+      console.log('response: ', response);
+      let resp = await response.json()
+      console.log('resp: ', resp);
+      if (response.status === 200 ||  response.status == 201){
+        setRedirectList(true)
+      }
+    })
     .catch(error => console.log('Error: ', error))
     .then(response => {
       console.log('Success: ', response)
+      setRedirectList(true)
       // this.props.addClientToList(response)
     })
   }
@@ -386,6 +389,7 @@ export const FormQuotation = (props) => {
             Vista previa PDF <PictureAsPdfIcon />
         </Button>
       </div>
+      {redirectList && <Redirect to='/cotizaciones'/>}
     </div>
   );
 }
