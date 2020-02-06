@@ -147,10 +147,6 @@
     display: block;
   }
 
-  .add-product:hover .action-add-product .delete-product{
-    display: flex;
-  }
-
   .add-product:hover .action-add-product .delete-product {
     display: flex;
     height: inherit;

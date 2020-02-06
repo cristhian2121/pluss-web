@@ -30,6 +30,7 @@ import { Link } from "react-router-dom"
 
 // component
 import { ProductForm } from './addProduct'
+import { SendEmail } from './sendEmail'
 
 // utils
 // import { generateTemplatePDF } from '../../common/pdf/templatePDF'
@@ -63,6 +64,7 @@ export const FormQuotation = (props) => {
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const [redirectList, setRedirectList] = useState(false)
   const [openAlert, setOpenAlert] = useState({})
+  const [openEmail, setOpenEmail] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
 
@@ -174,7 +176,7 @@ export const FormQuotation = (props) => {
     console.log('selectUpdate: ', selectUpdate);
     // console.log('idQuotation: ', idQuotation);
     const data = generateData()
-    data.status = status
+    data.status = event
 
     console.log('data updatequotation: ', data);
 
@@ -298,8 +300,14 @@ export const FormQuotation = (props) => {
     }
   }
 
+  const cancelEmail = e => {
+    setOpenEmail(e)
+  }
+
   return (
-    <div>
+    <div >
+      { openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={updateQuotation}/> }
+      <>
       <div className="title">
         Crear cotización
       </div>
@@ -395,13 +403,17 @@ export const FormQuotation = (props) => {
       }
 
       <div className="col-12 px-0 d-flex justify-content-end container-button">
-        <Button variant="contained" color="secondary" type="submit" onClick={idSelectUpdate ? updateQuotation : saveQuotation}>
+        <Button variant="contained" color="secondary" type="submit" onClick={() => idSelectUpdate ? updateQuotation("En progreso") : saveQuotation("En progreso")}>
             Guardar cotización
         </Button>
         <Button variant="contained" onClick={generatePDF}>
             Vista previa PDF <PictureAsPdfIcon />
         </Button>
+        <Button variant="contained" type="submit" onClick={() => setOpenEmail(true)}>
+            Finalizar
+        </Button>
       </div>
+      </>
       {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert}}/>}
     </div>
   );

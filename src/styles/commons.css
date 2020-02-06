@@ -33,3 +33,24 @@
 .container-button button {
     margin: 0em 0.5em !important;
 }
+
+/***** envio de emails ***********/
+.send-email {
+    display: flex;
+    justify-content: center;
+}
+
+
+.send-email-form {
+    background: #ffffffff;
+    display: block;
+    height: 60%;
+    min-width: 50%;
+    z-index: 100;
+    position: absolute ;
+    box-shadow: 0 0 12px -5px inset;
+}
+
+.send-email-form form {
+    margin: 10%;
+}
