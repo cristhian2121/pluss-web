@@ -30,6 +30,7 @@ import { Link } from "react-router-dom"
 
 // component
 import { ProductForm } from './addProduct'
+import { SendEmail } from './sendEmail'
 
 // utils
 // import { generateTemplatePDF } from '../../common/pdf/templatePDF'
@@ -63,6 +64,7 @@ export const FormQuotation = (props) => {
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const [redirectList, setRedirectList] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
+  const [openEmail, setOpenEmail] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
 
@@ -286,7 +288,9 @@ export const FormQuotation = (props) => {
   }
 
   return (
-    <div>
+    <div >
+      { openEmail && <SendEmail /> }
+      <>
       <div className="title">
         Crear cotización
       </div>
@@ -388,11 +392,12 @@ export const FormQuotation = (props) => {
         <Button variant="contained" onClick={generatePDF}>
             Vista previa PDF <PictureAsPdfIcon />
         </Button>
-        <Button variant="contained" type="submit" onClick={selectUpdate ? updateQuotation : saveQuotation}>
+        <Button variant="contained" type="submit" onClick={() => setOpenEmail(true)}>
             Finalizar
         </Button>
       </div>
-      {redirectList && <Redirect to='/cotizaciones'/>}
+      { redirectList && <Redirect to='/cotizaciones'/> }
+      </>
     </div>
   );
 }
