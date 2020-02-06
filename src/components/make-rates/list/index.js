@@ -16,7 +16,6 @@ export class MakeRate extends Component {
               { title: 'Fecha creación', field: 'date_created' },
               { title: 'Cliente', field: 'client.name' },
               { title: 'Creado por', field: 'user.first_name' },
-              // { title: 'Teléfono', field: 'phone_number'},
               { title: 'Estado', field: 'status'}
           ],
           dataQuotations: [],
@@ -49,6 +48,37 @@ export class MakeRate extends Component {
         }    
     }
 
+    duplicateQuotation = quotation => {
+      console.log('quotation: ', quotation);
+      const data = quotation
+      data.status = "En progreso"
+      data.client = quotation.client.id
+      data.user = quotation.user.id
+  
+      fetch(`${conf.api_url}/quotation/`,{
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      }).then(async (response) => {
+        console.log('response: ', response);
+        let resp = await response.json()
+        console.log('resp: ', resp);
+        if (response.status === 200 ||  response.status == 201){
+          // this.setState({
+          //   // dataQuotations: [...this.state.dataQuotations, resp],
+          //   alert: {
+          //     open: true,
+          //     message: 'La cotización se duplicao correctamente.',
+          //     type:'success'
+          //   }
+          // })
+        }
+      })
+      .catch(error => console.log('Error: ', error))
+    }
+
     render(){
         return(
           <>
@@ -69,20 +99,27 @@ export class MakeRate extends Component {
                         window.open('/cotizacion', '_blank','',true)
                       }
                     },
-                    {
+                    rowData => ({
                       icon: 'edit',
                       tooltip: 'Editar cotización',
                       onClick: (event, rowData) => {
-                        console.log('rowData: ', rowData);
-                        // props.selectEdit(rowData)
                         this.props.history.push({
                           pathname: '/cotizaciones/crear',
                           state: {
                             selectUpdate: rowData
                           }  
                         })
-                      }
-                    }
+                      },
+                      hidden: rowData.status == 'Finalizado'
+                    }),
+                    rowData => ({
+                      icon: 'file_copy',
+                      tooltip: 'Duplicar cotización',
+                      onClick: (event, rowData) => {
+                        this.duplicateQuotation(rowData)
+                      },
+                      hidden: rowData.status == 'En progreso'
+                    })
                   ]}
                 /> 
             

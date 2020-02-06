@@ -47,8 +47,6 @@ import conf from '../../../config'
 
 
 export const FormQuotation = (props) => {
-  console.log('props hhhhhhhhhhhhhhhhhhh: ', props);
-  //   constructor() {}
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
   const [costUnit, SetCostUnit] = useState({})
@@ -87,26 +85,21 @@ export const FormQuotation = (props) => {
 
   // const calculateValue = (event) => {
   //   const eventAux = { ...event }
-  //   console.log(eventAux.target.value);
   //   SetCostUnit(costUnit => {
   //     return { ...costUnit, discount: eventAux.target.value }
   //   })
   // }
 
   const handleAddUnit = (_units) => {
-    console.log('_units: ', _units);
     SetUnits(units => [..._units])
   }
 
   const handleAddProduct = (_product) => { 
-    console.log('_product: ', _product);
     setProducts(products => [...products, _product])
   }
 
   const handleRemoveProduct = (_product) => { 
-    console.log('_product remove: ', _product);
     let productss = products.filter(item => item != _product)
-    console.log('productss: ', productss);
     setProducts(productss)
   }
 
@@ -145,7 +138,6 @@ export const FormQuotation = (props) => {
     // if (event) {
     //   event.preventDefault();
     //   const data = generateData()
-    //   console.log('FECHA', da.localize);
     //   props.eventCreateQuotation(data)
     // }
     fetch(`${conf.api_url}/quotation/`,{
@@ -172,12 +164,8 @@ export const FormQuotation = (props) => {
   }
 
   const updateQuotation = event => {
-    // let idQuotation = selectUpdate.id
-    console.log('selectUpdate: ', selectUpdate);
-    // console.log('idQuotation: ', idQuotation);
     const data = generateData()
     data.status = event
-
     console.log('data updatequotation: ', data);
 
     fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`,{
@@ -187,11 +175,9 @@ export const FormQuotation = (props) => {
         'Content-Type': 'application/json'
       }
     }).then(async (response) => {
-      console.log('response: ', response);
       let resp = await response.json()
-      console.log('resp: ', resp);
+
       if (response.status === 200 ||  response.status == 201){
-        console.log('eopeeeeeeee', openAlert)
         setOpenAlert({
           open: true,
           message: 'La cotización se guardo correctamente.',
@@ -201,11 +187,6 @@ export const FormQuotation = (props) => {
       }
     })
     .catch(error => console.log('Error: ', error))
-    .then(response => {
-      console.log('Success: ', response)
-      setRedirectList(true)
-      // this.props.addClientToList(response)
-    })
   }
 
   const generatePDF = async () => {
@@ -232,7 +213,6 @@ export const FormQuotation = (props) => {
     // })
     //   .then(res => res.json())
     //   .then(res => {
-    //     console.log('res: ', res);
     //     props.eventSavePDF(res.data)
     //   })
     //   .catch(() => {
@@ -258,7 +238,6 @@ export const FormQuotation = (props) => {
     try {
       let response = await fetch(`${conf.api_url}/client/`)
       let data = await response.json();
-      console.log('data clients: ', data);
 
       setDataClients(data.results)
 
@@ -271,7 +250,6 @@ export const FormQuotation = (props) => {
     try {
       let response = await fetch(`${conf.api_url}/user/`)
       let data = await response.json();
-      console.log('data users: ', data);
 
       setDataUsers(data.results)
 
@@ -281,9 +259,6 @@ export const FormQuotation = (props) => {
   }
 
   const handleChange = e => {
-    console.log('e: ', e.target.name, e.target.value);
-    console.log('product', selectUpdate)
-    // render()
     switch (e.target.name) {
       case "client":
         setCientSelectUpdate(e.target.value)
