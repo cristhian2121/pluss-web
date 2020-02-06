@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import MaterialTable from 'material-table';
-import {Redirect} from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import conf from '../../../config'
 
@@ -8,20 +9,26 @@ export class MakeRate extends Component {
 
     constructor(props){
       super(props)
+      console.log('props list cotización: ', props);
+      this.state = {
+          columns: [
+              { title: 'Id', field: 'id' },
+              { title: 'Fecha creación', field: 'date_created' },
+              { title: 'Cliente', field: 'client.name' },
+              { title: 'Creado por', field: 'user.first_name' },
+              // { title: 'Teléfono', field: 'phone_number'},
+              { title: 'Estado', field: 'status'}
+          ],
+          dataQuotations: [],
+          redirectFormQuotation: false,
+          alert: {
+            open: props.location.state ? props.location.state.open : false,
+            message: props.location.state ? props.location.state.message : '',
+            type: props.location.state ? props.location.state.type : '',
+          }
+      };
     }
 
-    state = {
-        columns: [
-            { title: 'Id', field: 'id' },
-            { title: 'Fecha creación', field: 'date_created' },
-            { title: 'Cliente', field: 'client.name' },
-            { title: 'Creado por', field: 'user.first_name' },
-            // { title: 'Teléfono', field: 'phone_number'},
-            { title: 'Estado', field: 'status'}
-        ],
-        dataQuotations: [],
-        redirectFormQuotation: false,
-    };
 
     componentDidMount () {
       this.getDataQuotations()
@@ -45,9 +52,9 @@ export class MakeRate extends Component {
     render(){
         return(
           <>
-          <div className="title">
-            Listado de cotizaciones
-          </div>
+            <div className="title">
+              Listado de cotizaciones
+            </div>
           
             <MaterialTable
                 title=''
@@ -78,6 +85,19 @@ export class MakeRate extends Component {
                     }
                   ]}
                 /> 
+            
+            <Snackbar
+              open={this.state.alert.open}
+              autoHideDuration={4000}
+              onClose={() => 
+                this.setState({alert: {open: false}})
+              }
+              anchorOrigin= {{ 
+                vertical: 'bottom',
+                horizontal: 'left'
+              }}>
+              <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+            </Snackbar>
           </>
         )
     }

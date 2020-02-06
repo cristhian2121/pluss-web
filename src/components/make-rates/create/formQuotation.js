@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import {Redirect} from "react-router-dom";
-
+import { createHashHistory } from 'history'
 
 // Material
 import Paper from '@material-ui/core/Paper';
@@ -62,7 +62,7 @@ export const FormQuotation = (props) => {
   const [idSelectUpdate, setIdSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.id : null)
   // pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const [redirectList, setRedirectList] = useState(false)
-  const [openAlert, setOpenAlert] = useState(false)
+  const [openAlert, setOpenAlert] = useState({})
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
 
@@ -70,6 +70,8 @@ export const FormQuotation = (props) => {
     getClients()
     getUsers()
   }, []);
+
+  const history = createHashHistory()
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -153,6 +155,11 @@ export const FormQuotation = (props) => {
     }).then(async (response) => {
       let resp = await response.json()
       if (response.status === 200 ||  response.status == 201){
+        setOpenAlert({
+          open: true,
+          message: 'La cotización se creo correctamente.',
+          type:'success'
+        })
         setRedirectList(true)
       }
     })
@@ -182,7 +189,13 @@ export const FormQuotation = (props) => {
       let resp = await response.json()
       console.log('resp: ', resp);
       if (response.status === 200 ||  response.status == 201){
-        setRedirectList(true)
+        console.log('eopeeeeeeee', openAlert)
+        setOpenAlert({
+          open: true,
+          message: 'La cotización se guardo correctamente.',
+          type:'success'
+        })
+        setRedirectList(true)  
       }
     })
     .catch(error => console.log('Error: ', error))
@@ -389,7 +402,7 @@ export const FormQuotation = (props) => {
             Vista previa PDF <PictureAsPdfIcon />
         </Button>
       </div>
-      {redirectList && <Redirect to='/cotizaciones'/>}
+      {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert}}/>}
     </div>
   );
 }
