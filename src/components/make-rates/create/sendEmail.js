@@ -1,13 +1,18 @@
 import React from 'react';
 
+// Material
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
-export const SendEmail = () => {
+export const SendEmail = (props) => {
 
     return (
         <div className="send-email">
             <div className="send-email-form">
                 <form className="">
+                    <div className="title">
+                        Enviar cotización
+                    </div>
                     <TextField
                         id="subject"
                         name="subject"
@@ -31,6 +36,14 @@ export const SendEmail = () => {
                         className="col-md-12 col-xs-12"
                         margin="normal"
                     />
+                    <div className="col-12 px-0 d-flex justify-content-end container-button">
+                        <Button variant="contained" onClick={() => props.cancelEmail(false)}>
+                            Cancelar
+                        </Button>
+                        <Button variant="contained" color="secondary" onClick={() => props.sendEmail("Finalizado")} >
+                            Enviar cotización
+                        </Button>
+                    </div>
                 </form>
             </div>
         </div>

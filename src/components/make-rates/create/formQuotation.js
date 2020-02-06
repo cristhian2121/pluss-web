@@ -169,7 +169,7 @@ export const FormQuotation = (props) => {
     console.log('selectUpdate: ', selectUpdate);
     // console.log('idQuotation: ', idQuotation);
     const data = generateData()
-    data.status = status
+    data.status = event
 
     console.log('data updatequotation: ', data);
 
@@ -287,9 +287,19 @@ export const FormQuotation = (props) => {
     }
   }
 
+  const cancelEmail = e => {
+    setOpenEmail(e)
+  }
+
+  const sendEmail = e => {
+    console.log('estatus: ', e);
+    setStatus(e)
+    updateQuotation(e)
+  }
+
   return (
     <div >
-      { openEmail && <SendEmail /> }
+      { openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={sendEmail}/> }
       <>
       <div className="title">
         Crear cotización

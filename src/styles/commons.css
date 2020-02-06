@@ -42,15 +42,15 @@
 
 
 .send-email-form {
-    background: #ffffffff !important;
-    display: block !important;
-    height: 70% !important;
-    min-width: 80% !important;
-    z-index: 100 !important;
-    position: absolute !important;
-    box-shadow: 0 0 10px -7px inset !important;
+    background: #ffffffff;
+    display: block;
+    height: 60%;
+    min-width: 50%;
+    z-index: 100;
+    position: absolute ;
+    box-shadow: 0 0 12px -5px inset;
 }
 
 .send-email-form form {
-    margin: 15% 10%;
+    margin: 10%;
 }
