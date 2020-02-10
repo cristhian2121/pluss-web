@@ -1,30 +1,28 @@
 import React, { PureComponent } from "react";
 
 import Grid from '@material-ui/core/Grid';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import Dialog from '@material-ui/core/Dialog';
-import Tooltip from '@material-ui/core/Tooltip';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
 
 import { connect } from 'react-redux'
 
 // services
 import { ProductsService } from '../../services/products';
-
-
 import Button from '@material-ui/core/Button';
-
-
 import Detail from '../../components/products/detail'
 
 // common
 import conf from '../../config'
 import Loader from '../../components/common/loader';
+import * as productActions from '../../actions/productActions';
 
+// Style
 import '../../styles/product.css'
 
-import * as productActions from '../../actions/productActions';
+// Component
+import { ProductIndividual } from './product-individual';
+
 
 class Products extends PureComponent {
 
@@ -37,15 +35,23 @@ class Products extends PureComponent {
       detailProducts: {},
       open: false,
       count: 0,
-      productSelect: [],
+      productSelect: props.products || [],
+      productsSelectedsIds: [],
       loader: true
     }
+    this.addProduct = this.addProduct.bind(this);
+
+    // store.subscribe(() => {
+    //   console.log('paso');
+    //   this.setState({
+    //     productDetail: store.getProducts()
+    //   })
+    // })
   }
 
   componentDidMount() {
-    const productsSelect = this.getProducts()
+    this.getProducts()
     console.log('this.props: ', this.props);
-    console.log('productsSelect: ', productsSelect);
   }
 
   getProducts = async () => {
@@ -71,51 +77,13 @@ class Products extends PureComponent {
   }
 
   addProduct = (dataProduct) => {
-    console.log('dataProduct: ', dataProduct);
     this.props.addProduct(dataProduct)
+    // const amor = this.props.getProducts()
+    this.setState({
+      productSelect: [...this.state.productSelect, dataProduct],
+      productsSelectedsIds: [...this.state.productSelect.map(_ => _.referency_id), dataProduct.referency_id]
+    })
   }
-
-  htmlProduct = () => (
-    <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
-      {this.state.dataProducts.map(function (obj) {
-        return (
-          <div className="pl-1 pr-1 pb-3 ">
-            <div class="card" style={{ width: '16.5rem', height: '25rem' }}>
-              <img className="img-product" alt={obj.bame} src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
-              <div class="card-body card-body">
-                <div className="px-0 card-text text-common">
-                  {obj.detail}
-                </div>
-
-              </div>
-              <div className="card-footer text-alter" style={{padding: '0.5rem 0.7rem'}}>
-                <div className="py-0 px-0">
-                  Ref. {obj.referency_id}
-                </div>
-                <div className="col-12 px-0 py-0 d-flex">
-                  <div className="col-8 d-flex d-flex align-items-center px-0 py-0">
-                    ${obj.more_info.vlrUnitario} c/u
-                      </div>
-                  <div className="d-flex col-4 px-0 py-0">
-                    <div className="icon-active d-flex justify-content-center align-items-center">
-                      <Tooltip title="Ver detalle" arrow>
-                        <VisibilityIcon onClick={() => { this.productDetail(obj) }} />
-                      </Tooltip>
-                    </div>
-                    <div className="icon-active d-flex justify-content-center align-items-center">
-                      <Tooltip title="Agregar producto" arrow>
-                        <AddCircleIcon onClick={() => { this.addProduct(obj) }} />
-                      </Tooltip>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-      }, this)}
-    </div>
-  )
 
   render() {
     return (
@@ -141,7 +109,19 @@ class Products extends PureComponent {
                   <Loader size={70} />
                 </div>
               )
-              : this.htmlProduct()
+              :
+              (
+                <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
+                  {this.state.dataProducts.map(product => {
+                    return (
+                      <ProductIndividual
+                        product={product}
+                        productDetail={obj => this.productDetail(obj)}
+                        addProduct={obj => this.addProduct(obj)}
+                        selecteds={this.state.productsSelectedsIds} />)
+                  })}
+                </div>
+              )
           }
         </div>
 
@@ -156,13 +136,14 @@ class Products extends PureComponent {
     )
   }
 
-
 }
 
+// Add reducers
 const mapStateToProps = (reducers) => {
   return reducers.productReducer;
 }
 
+// Connect actions between redurcers with the component
 const ProductComponent = connect(mapStateToProps, productActions)(Products)
 
 export {
