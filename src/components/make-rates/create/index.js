@@ -19,6 +19,7 @@ class CreateQuotationHook extends Component {
   preViewPDF = false;
 
   constructor(props) {
+    console.log('props llegando 1: ', props);
     super(props)
     this.state = {
       downloadPDF: false,
@@ -26,6 +27,7 @@ class CreateQuotationHook extends Component {
     }
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
+    // this.updatesQuotation = this.updatesQuotation.bind(this)
     // this.generatePDF = this.generatePDF.bind(this)
   }
 
@@ -76,13 +78,16 @@ class CreateQuotationHook extends Component {
 
   render() {
     console.log('***', this.props)
+    // let updatesQuotation = this.props.location.state.selectUpdate ? this.props.location.state.selectUpdate : null
     return (
       <div>
         {/* <Menu /> */}
         <FormQuotation
           eventCreateQuotation={this.createQuotation}
-          preQuotation={this.props.quotation} eventSavePDF={this.eventSavePDF}/>
-          
+          preQuotation={this.props.quotation}
+          eventSavePDF={this.eventSavePDF}
+          updateQuotation={this.props.location.state}
+        />          
         {/* {this.redirectToPDF()} */}
       </div>
     );

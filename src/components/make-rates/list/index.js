@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import MaterialTable from 'material-table';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import conf from '../../../config'
 
@@ -7,19 +9,25 @@ export class MakeRate extends Component {
 
     constructor(props){
       super(props)
+      console.log('props list cotización: ', props);
+      this.state = {
+          columns: [
+              { title: 'Id', field: 'id' },
+              { title: 'Fecha creación', field: 'date_created' },
+              { title: 'Cliente', field: 'client.name' },
+              { title: 'Creado por', field: 'user.first_name' },
+              { title: 'Estado', field: 'status'}
+          ],
+          dataQuotations: [],
+          redirectFormQuotation: false,
+          alert: {
+            open: props.location.state ? props.location.state.open : false,
+            message: props.location.state ? props.location.state.message : '',
+            type: props.location.state ? props.location.state.type : '',
+          }
+      };
     }
 
-    state = {
-        columns: [
-            { title: 'Id', field: 'id' },
-            { title: 'Fecha creación', field: 'date_created' },
-            { title: 'Cliente', field: 'client.name' },
-            { title: 'Creado por', field: 'user.first_name' },
-            // { title: 'Teléfono', field: 'phone_number'},
-            // { title: 'Estado', field: 'user.is_active'}
-        ],
-        dataQuotations: []
-    };
 
     componentDidMount () {
       this.getDataQuotations()
@@ -40,12 +48,43 @@ export class MakeRate extends Component {
         }    
     }
 
+    duplicateQuotation = quotation => {
+      console.log('quotation: ', quotation);
+      const data = quotation
+      data.status = "En progreso"
+      data.client = quotation.client.id
+      data.user = quotation.user.id
+  
+      fetch(`${conf.api_url}/quotation/`,{
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      }).then(async (response) => {
+        console.log('response: ', response);
+        let resp = await response.json()
+        console.log('resp: ', resp);
+        if (response.status === 200 ||  response.status == 201){
+          // this.setState({
+          //   // dataQuotations: [...this.state.dataQuotations, resp],
+          //   alert: {
+          //     open: true,
+          //     message: 'La cotización se duplicao correctamente.',
+          //     type:'success'
+          //   }
+          // })
+        }
+      })
+      .catch(error => console.log('Error: ', error))
+    }
+
     render(){
         return(
           <>
-          <div className="title">
-            Listado de cotizaciones
-          </div><br/>
+            <div className="title">
+              Listado de cotizaciones
+            </div>
           
             <MaterialTable
                 title=''
@@ -56,13 +95,46 @@ export class MakeRate extends Component {
                       icon: 'visibility',
                       tooltip: 'Ver cotización',
                       onClick: (event, rowData) => {
-                        console.log('rowData: ', rowData);
                         sessionStorage.setItem('quotation', JSON.stringify(rowData))
                         window.open('/cotizacion', '_blank','',true)
                       }
-                    }
+                    },
+                    rowData => ({
+                      icon: 'edit',
+                      tooltip: 'Editar cotización',
+                      onClick: (event, rowData) => {
+                        this.props.history.push({
+                          pathname: '/cotizaciones/crear',
+                          state: {
+                            selectUpdate: rowData
+                          }  
+                        })
+                      },
+                      hidden: rowData.status == 'Finalizado'
+                    }),
+                    rowData => ({
+                      icon: 'file_copy',
+                      tooltip: 'Duplicar cotización',
+                      onClick: (event, rowData) => {
+                        this.duplicateQuotation(rowData)
+                      },
+                      hidden: rowData.status == 'En progreso'
+                    })
                   ]}
                 /> 
+            
+            <Snackbar
+              open={this.state.alert.open}
+              autoHideDuration={4000}
+              onClose={() => 
+                this.setState({alert: {open: false}})
+              }
+              anchorOrigin= {{ 
+                vertical: 'bottom',
+                horizontal: 'left'
+              }}>
+              <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+            </Snackbar>
           </>
         )
     }

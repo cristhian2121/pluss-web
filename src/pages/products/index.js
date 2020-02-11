@@ -100,6 +100,7 @@ class Products extends Component {
                       <div className="col-8 px-0">
                         ${obj.vlrUnitario} c/u
                       </div>
+
                       {/* <Divider orientation="vertical" /> */}
                       <div className="d-flex col-4 px-0">
                         <div className="icon-active d-flex justify-content-center align-items-center">

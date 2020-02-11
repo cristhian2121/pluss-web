@@ -14,7 +14,7 @@ export class ClientList extends React.Component {
             { title: 'Nit', field: 'nit'},
             { title: 'Nombre', field: 'name' },
             { title: 'Teléfono', field: 'phone' },
-            { title: 'Asesor de venta', field: 'agent.name' },
+            { title: 'Asesor de venta', field: 'agent' },
             { title: 'Ciudad', field: 'city'}
         ],
         dataUser: []
@@ -23,11 +23,13 @@ export class ClientList extends React.Component {
     render () {
       return (
         <div>            
-            <br/>
+            <div className="sub-title">
+                <span className="text">
+                    Lista de Clientes
+                </span>
+            </div>
             <MaterialTable
-                title={<div className="sub-title">
-                Lista de Clientes
-                </div>}
+                title=""
                 columns={this.state.columns}
                 data={this.props.clientList}
                 actions={[

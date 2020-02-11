@@ -27,11 +27,13 @@ export class List extends Component {
     render () {
       return (
         <div>            
-            <br/>
+            <div className="sub-title">
+                <span className="text">
+                    Lista de usuarios
+                </span>
+            </div>
             <MaterialTable
-                title={<div className="sub-title">
-                Lista de usuarios
-                </div>}
+                title=""
                 columns={this.state.columns}
                 data={this.props.userList}
                 actions={[
