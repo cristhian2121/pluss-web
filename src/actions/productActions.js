@@ -5,7 +5,6 @@ import {
 } from '../types'
 
 export const addProduct = (product) => (dispatch) => {
-    console.log('product ** : ', product);
     dispatch({
         type: ADD_PRODUCT,
         entity: product
@@ -22,10 +21,10 @@ export const addProduct = (product) => (dispatch) => {
 // }
 
 export const getProducts = () => (dispatch) => {
-    console.log('entro');
-    dispatch({
+    const epa = dispatch({
         type: GET_ALL
     })
+    console.log('epa: ', epa);
 }
 
 export const removeProduct = (productId) => (dispatch, productId) => {

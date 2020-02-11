@@ -20,7 +20,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state };
         case GET_ALL:
             console.log('state: ', state);
-            return 'state'
+            return { ...state }
         default:
             console.log('defaul: ', state);
             return { ...state }
