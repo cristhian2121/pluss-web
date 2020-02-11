@@ -27,6 +27,7 @@ import { ProductIndividual } from './product-individual';
 class Products extends PureComponent {
 
   productsService = new ProductsService()
+  longitud = 0
 
   constructor(props) {
     super(props)
@@ -36,7 +37,7 @@ class Products extends PureComponent {
       open: false,
       count: 0,
       productSelect: props.products || [],
-      productsSelectedsIds: [],
+      // productsSelectedsIds: props.products.map(_ => _.referency_id),
       loader: true
     }
     this.addProduct = this.addProduct.bind(this);
@@ -69,20 +70,21 @@ class Products extends PureComponent {
 
   productDetail = (dataProduct) => {
     if (dataProduct) {
-      this.setState({
-        open: true,
-        detailProducts: dataProduct
-      })
+      console.log('dataProduct: ', dataProduct);
+      // this.setState({
+      //   open: true,
+      //   detailProducts: dataProduct
+      // })
     }
   }
 
   addProduct = (dataProduct) => {
     this.props.addProduct(dataProduct)
+    this.longitud += 1
     // const amor = this.props.getProducts()
-    this.setState({
-      productSelect: [...this.state.productSelect, dataProduct],
-      productsSelectedsIds: [...this.state.productSelect.map(_ => _.referency_id), dataProduct.referency_id]
-    })
+    // this.setState({
+    //   productSelect: [...this.state.productSelect, dataProduct],
+    // })
   }
 
   render() {
@@ -94,7 +96,7 @@ class Products extends PureComponent {
               Productos
             </div>
             <div className="col-4 px-0 d-flex flex-row-reverse">
-              {this.props.products.length}
+              {this.longitud}
               <LocalGroceryStoreIcon />
             </div>
           </div>
@@ -117,8 +119,7 @@ class Products extends PureComponent {
                       <ProductIndividual
                         product={product}
                         productDetail={obj => this.productDetail(obj)}
-                        addProduct={obj => this.addProduct(obj)}
-                        selecteds={this.state.productsSelectedsIds} />)
+                        addProduct={obj => this.addProduct(obj)} />)
                   })}
                 </div>
               )

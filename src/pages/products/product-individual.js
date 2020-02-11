@@ -7,18 +7,21 @@ export const ProductIndividual = (props) => {
     console.log('props: ', props);
 
     // pasar objeto detalle al componente padre
-    const productDetail = (obj) => props.productDetail(obj)
-    const addProduct = (obj) => props.addProduct(obj)
+    const productDetail = (obj) => props.productDetail(obj);
+    const addProduct = (obj) => {
+        setColorViewIcon('red')
+        props.addProduct(obj)
+    }
 
     let [colorViewIcon, setColorViewIcon] = useState('');
 
-    useEffect(() => {
-        if (props.selecteds) {
-            const color = props.selecteds.includes(props.product.referency_id) ? 'red' : '';
-            setColorViewIcon(color)
-            colorViewIcon ? console.log('SI') : console.log('NO');
-        }
-    })
+    // useEffect(() => {
+    //     if (props.selecteds && props.selecteds.length) {
+    //         console.log('emtrop');
+    //         const color = props.selecteds.includes(props.product.referency_id) ? 'red' : '';
+    //         setColorViewIcon(color)
+    //     }
+    // })
 
     return (
         <div className="pl-1 pr-1 pb-3 ">
