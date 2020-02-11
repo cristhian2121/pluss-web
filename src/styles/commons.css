@@ -14,10 +14,50 @@
     color: red;
 }
 
-.button-action{
-    margin: 0em 0.5em;
-}
-
 .MuiTable-root {
     width: 98% !important;
+}
+
+.margin-component {
+    margin-top: 1em;
+}
+
+.margin-component .text-center {
+    padding: 10px 0;
+}
+
+.container-button {
+    margin: 2em 0;
+}
+
+.container-button button {
+    margin: 0em 0.5em !important;
+}
+
+/***** envio de emails ***********/
+.send-email {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #00000052;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+
+.send-email-form {
+    background: #ffffffff;
+    display: block;
+    height: 60%;
+    min-width: 50%;
+    z-index: 100;
+    box-shadow: 0 0 12px -5px inset;
+}
+
+.send-email-form form {
+    margin: 10%;
 }
