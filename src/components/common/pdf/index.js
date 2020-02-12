@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import Logo from '../../../static/logo_pop_litle.png'
 import conf from '../../../config'
 
@@ -33,7 +33,8 @@ const getQuotation = async(quotation) => {
     try{
         let response = await fetch(`${conf.api_url}/quotation/${quotation}/`)
         let data = await response.json()
-        console.log('data: ', data);
+        
+        return data
     }
     catch {
         console.log('errrorrrrr');
@@ -42,28 +43,29 @@ const getQuotation = async(quotation) => {
 
 const getQuotationSession = (props) => {
     const idInitial = props.match.params.id;
-    const dataString = idInitial ? getQuotation(idInitial) : sessionStorage.getItem('quotation');
-    console.log('dataString: ', dataString);
+    const dataString = idInitial ? getQuotation(idInitial) : JSON.parse(sessionStorage.getItem('quotation'));
 
-    return JSON.parse(dataString);
+    return dataString;
 }
 
 export const GeneratePDFHook = (props) => {
     console.log('props pdf: ', props.match.path);
     const [unitsCost, setUnitsCost] = useState([])
-    const [quotation, SetQuotation] = useState()
-    const data = getQuotationSession(props)
-    !quotation && SetQuotation(data)
-    if (!unitsCost.length) {
-        const units = buildUnits(data)
-        if (units.length) {
-            setUnitsCost(units);
-        }
-    }
+    const [quotation, SetQuotation] = useState()    
 
-    if ( props.match.path === "/cotizacion/:id") {
-        
-    }
+    useEffect(async () => { 
+        const data = await getQuotationSession(props)
+
+        !quotation && SetQuotation(data)
+
+        if (!unitsCost.length) {
+            const units = buildUnits(data)
+            if (units.length) {
+                setUnitsCost(units);
+            }
+        }
+    }, []);
+
     return (
         <div>
             {quotation && <div className="container-pdf">
