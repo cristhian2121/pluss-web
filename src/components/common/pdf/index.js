@@ -29,21 +29,40 @@ const printPDF = () => {
     return true
 }
 
-const getQuotationSession = () => {
-    const dataString = sessionStorage.getItem('quotation');
+const getQuotation = async(quotation) => {
+    try{
+        let response = await fetch(`${conf.api_url}/quotation/${quotation}/`)
+        let data = await response.json()
+        console.log('data: ', data);
+    }
+    catch {
+        console.log('errrorrrrr');
+    }
+}
+
+const getQuotationSession = (props) => {
+    const idInitial = props.match.params.id;
+    const dataString = idInitial ? getQuotation(idInitial) : sessionStorage.getItem('quotation');
+    console.log('dataString: ', dataString);
+
     return JSON.parse(dataString);
 }
 
 export const GeneratePDFHook = (props) => {
+    console.log('props pdf: ', props.match.path);
     const [unitsCost, setUnitsCost] = useState([])
     const [quotation, SetQuotation] = useState()
-    const data = getQuotationSession()
+    const data = getQuotationSession(props)
     !quotation && SetQuotation(data)
     if (!unitsCost.length) {
         const units = buildUnits(data)
         if (units.length) {
             setUnitsCost(units);
         }
+    }
+
+    if ( props.match.path === "/cotizacion/:id") {
+        
     }
     return (
         <div>

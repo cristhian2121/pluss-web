@@ -7,6 +7,7 @@ import conf from '../../config'
 export class CreateClient extends React.Component {
 
   constructor(props) {
+    console.log('props: ', props);
     super(props)
     this.state = {
       dataEdit: null

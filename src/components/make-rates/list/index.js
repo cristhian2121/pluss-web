@@ -28,18 +28,15 @@ export class MakeRate extends Component {
       };
     }
 
-
     componentDidMount () {
       this.getDataQuotations()
     }
 
     getDataQuotations = async () => {
         try {
-            let response = await fetch(`${conf.api_url}/quotation/?limit=20&nopaginate=true`)
+            let response = await fetch(`${conf.api_url}/quotation/?limit=30`)
             let data = await response.json()
-            console.log('data quotation: ', data);
-
-        
+            console.log('data quotation: ', data);        
             this.setState({
               dataQuotations: data.results
             })
@@ -61,9 +58,11 @@ export class MakeRate extends Component {
           'Content-Type': 'application/json'
         }
       }).then(async (response) => {
+
+        console.log('response duplicate: ', response);
         let resp = await response.json()
+        console.log('resp duplicate: ', resp);
         if (response.status === 200 ||  response.status == 201){
-          this.getDataQuotations()
           this.setState({
             dataQuotations: [...this.state.dataQuotations, resp],
             alert: {
@@ -94,7 +93,7 @@ export class MakeRate extends Component {
                       tooltip: 'Ver cotización',
                       onClick: (event, rowData) => {
                         sessionStorage.setItem('quotation', JSON.stringify(rowData))
-                        window.open('/cotizacion', '_blank','',true)
+                        window.open(`/cotizacion/${rowData.id}/`, '_blank','',true)
                       }
                     },
                     rowData => ({
@@ -123,7 +122,7 @@ export class MakeRate extends Component {
             
             <Snackbar
               open={this.state.alert.open}
-              autoHideDuration={4000}
+              autoHideDuration={3000}
               onClose={() => 
                 this.setState({alert: {open: false}})
               }
