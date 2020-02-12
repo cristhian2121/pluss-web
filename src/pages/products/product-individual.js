@@ -4,17 +4,20 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 export const ProductIndividual = (props) => {
-    console.log('props: ', props);
-
+    
+    props.selected && console.log('props: ', props);
     // pasar objeto detalle al componente padre
+
+
     const productDetail = (obj) => props.productDetail(obj);
     const addProduct = (obj) => {
-        setColorViewIcon('red')
+        // setColorViewIcon('red')
         props.addProduct(obj)
     }
 
-    let [colorViewIcon, setColorViewIcon] = useState('');
+    // let [colorViewIcon, setColorViewIcon] = useState('');
 
+    // props.selected && setColorViewIcon('red')
     // useEffect(() => {
     //     if (props.selecteds && props.selecteds.length) {
     //         console.log('emtrop');
@@ -22,6 +25,15 @@ export const ProductIndividual = (props) => {
     //         setColorViewIcon(color)
     //     }
     // })
+
+    const color = {
+        colorRed: {
+            color: 'red'
+        },
+        colorNormal: {
+            color: ''
+        }
+    }
 
     return (
         <div className="pl-1 pr-1 pb-3 ">
@@ -48,7 +60,7 @@ export const ProductIndividual = (props) => {
                             </div>
                             <div
                                 className="icon-active d-flex justify-content-center align-items-center"
-                                style={{ color: colorViewIcon }}>
+                                style={props.selected ? color.colorRed : color.colorNormal}>
                                 <Tooltip title="Agregar producto" arrow>
                                     <AddCircleIcon onClick={() => { addProduct(props.product) }} />
                                 </Tooltip>

@@ -16,7 +16,7 @@ export default (state = INITIAL_STATE, action) => {
             state.products.filter(_ => _.productId !== action.productId)
             return { ...state }
         case ADD_PRODUCT:
-            state.products.push(action.entity)
+            state.products = [...state.products, action.entity]
             return { ...state };
         case GET_ALL:
             console.log('state: ', state);

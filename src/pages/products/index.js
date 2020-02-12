@@ -31,14 +31,15 @@ class Products extends PureComponent {
 
   constructor(props) {
     super(props)
+    console.log('Init');
     this.state = {
       dataProducts: [],
       detailProducts: {},
       open: false,
       count: 0,
-      productSelect: props.products || [],
-      // productsSelectedsIds: props.products.map(_ => _.referency_id),
-      loader: true
+      loader: true,
+      products: props.products,
+      productsSelecteds: []
     }
     this.addProduct = this.addProduct.bind(this);
 
@@ -50,9 +51,15 @@ class Products extends PureComponent {
     // })
   }
 
-  componentDidMount() {
+  componentDidMount(props) {
     this.getProducts()
+    if(this.state.products.length){
+      this.setState({
+        productsSelecteds: this.state.products.map(_ => _.id)
+      })
+    }
     console.log('this.props: ', this.props);
+    console.log('productsSelecteds: ', this.state.productsSelecteds);
   }
 
   getProducts = async () => {
@@ -79,12 +86,10 @@ class Products extends PureComponent {
   }
 
   addProduct = (dataProduct) => {
-    this.props.addProduct(dataProduct)
-    this.longitud += 1
-    // const amor = this.props.getProducts()
-    // this.setState({
-    //   productSelect: [...this.state.productSelect, dataProduct],
-    // })
+    console.log('dataProduct: ', dataProduct);
+    this.props.addProduct(dataProduct);
+    console.log('dataProduct.id: ', dataProduct.id);
+    this.setState({ productsSelecteds: [...this.state.productsSelecteds, dataProduct.id] });
   }
 
   render() {
@@ -96,7 +101,7 @@ class Products extends PureComponent {
               Productos
             </div>
             <div className="col-4 px-0 d-flex flex-row-reverse">
-              {this.longitud}
+              {this.state.productsSelecteds.length}
               <LocalGroceryStoreIcon />
             </div>
           </div>
@@ -115,11 +120,14 @@ class Products extends PureComponent {
               (
                 <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
                   {this.state.dataProducts.map(product => {
+                    let selected = this.state.productsSelecteds.indexOf(product.id) < 0 ? false : true;
+                    console.log('selected: ', selected);
                     return (
                       <ProductIndividual
                         product={product}
                         productDetail={obj => this.productDetail(obj)}
-                        addProduct={obj => this.addProduct(obj)} />)
+                        addProduct={obj => this.addProduct(obj)}
+                        selected={selected} />)
                   })}
                 </div>
               )
