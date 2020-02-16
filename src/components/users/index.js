@@ -10,6 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import Alert from '@material-ui/lab/Alert';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import conf from '../../config'
 
@@ -23,20 +24,21 @@ export class Create extends Component {
         message: '',
         type: '',
       },
-      dataEdit: null,
-      showForm: true,
       dataGroups: [],
-      passDiff: false,
-      code: null,
-      first_name: null,
-      identification_number: null,
-      username: null,
-      phone_number: null,
-      password: null,
-      passwordConfirm: null,
-      groups: []
+      showForm: true,
+      // dataEdit: null,
+      // passDiff: false,
+      // code: null,
+      // first_name: null,
+      // identification_number: null,
+      // username: null,
+      // phone_number: null,
+      // password: null,
+      // passwordConfirm: null,
+      // groups: []
     }
   }
+  
   showForm = () => {
     if (this.state.showForm) { document.getElementById('userForm').style.display='block' }
     else { document.getElementById('userForm').style.display='none' }
@@ -44,6 +46,7 @@ export class Create extends Component {
     this.setState({ showForm: !this.state.showForm })
     console.log('segundo', this.state.showForm)
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       dataEdit: nextProps.selectUpdate.user ? nextProps.selectUpdate : null,
@@ -65,8 +68,9 @@ export class Create extends Component {
     try {
       let response = await fetch(`${conf.api_url}/group/`)
       let data = await response.json();
+      console.log('datadddddd: ', data.results);
       this.setState({
-        dataGroups: data
+        dataGroups: data.results
       })
     } catch (error) {
       console.log('error', error)
@@ -120,14 +124,6 @@ export class Create extends Component {
       groups: []
     })
   };
-  // handleClose = (event, reason) => {
-  //   console.log('reason: ', reason);
-
-  //   if (reason === 'clickaway') {
-  //     return;
-  //   }
-  //   this.setState({ alert: {open: false} })
-  // }
   generateData = () => {
     let elements = document.getElementById('userForm').elements;
     let data = {};
@@ -259,10 +255,12 @@ export class Create extends Component {
     return (
       <div>
         <div className="sub-title">
-          <Button onClick={this.showForm}>
-            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
-          </Button>
+          <span className="text" onClick={this.showForm}>
+            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {/*this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> */}
+          </span>
+          <Button className="button-more" onClick={this.showForm}> <AddCircleIcon/>  </Button>
         </div>
+
         <form id="userForm">
           <TextField
             required
@@ -271,6 +269,7 @@ export class Create extends Component {
             value={this.state.code}
             label="Código"
             margin="normal"
+            className="col-md-2 col-xs-4"
           />
           <TextField
             required
@@ -279,6 +278,7 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.first_name}
+            className="col-md-3 col-xs-8"
           />
           <TextField
             name="identification_number"
@@ -286,6 +286,7 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.identification_number}
+            className="col-md-2 col-xs-4"
           />
           <TextField
             required
@@ -294,6 +295,7 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.username}
+            className="col-md-3 col-xs-8"
           />
           <TextField
             required
@@ -302,29 +304,9 @@ export class Create extends Component {
             margin="normal"
             onChange={this.handleChange}
             value={this.state.phone_number}
+            className="col-md-2 col-xs-6"
           />
-          <TextField
-            required
-            type="password"
-            name="password1"
-            label="Contraseña"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.passwordConfirm}
-          />
-          <FormControl>
-            <TextField
-              required
-              type="password"
-              name="password"
-              label="Confirme contraseña"
-              margin="normal"
-              onChange={this.handleChange}
-              value={this.state.password}
-            />
-            {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
-          </FormControl>
-          <FormControl margin="normal">
+          <FormControl margin="normal" className="col-md-3 col-xs-6">
             <InputLabel id="groups">Tipo usuario</InputLabel>
             <Select
               labelId="groups"
@@ -339,13 +321,37 @@ export class Create extends Component {
               ))}
             </Select>
           </FormControl>
-          <br /><br /><br />
-          <div className="text-center">
-            <Button variant="contained" color="secondary" onClick={this.clear}>
+
+          <TextField
+            required
+            type="password"
+            name="password1"
+            label="Contraseña"
+            margin="normal"
+            onChange={this.handleChange}
+            value={this.state.passwordConfirm}
+            className="col-md-2 col-xs-6"
+          />
+          <FormControl className="col-md-2 col-xs-6">
+            <TextField
+              required
+              type="password"
+              name="password"
+              label="Confirme contraseña"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.password}
+              
+            />
+            {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
+          </FormControl>
+          <div className="text-center container-button">
+            <Button variant="contained" onClick={this.clear}>
               Limpiar
             </Button>
-            <Button variant="contained" color="primary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
-              {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'}
+            <Button variant="contained" color="secondary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
+              {/* {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'} */}
+              Guardar
             </Button>
           </div>
         </form>

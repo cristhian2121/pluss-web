@@ -42,7 +42,7 @@ export class User extends Component {
           let data = await response.json()
       
           this.setState({
-              dataUser: data
+              dataUser: data.results
           })
       } catch (error) {
           console.log('error', error)
@@ -64,9 +64,7 @@ export class User extends Component {
             <div className="title">
                Usuarios
             </div>
-            <br/>
             <Create addUserList={this.insertUser} selectUpdate={this.state.dataFormUpdate} />
-            <br/>
             <List userList={this.state.dataUser} selectUpdate={this.dataUpdate}/>
           </div>
         );

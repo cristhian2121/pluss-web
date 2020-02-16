@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 
 import MaterialTable from 'material-table';
-import {Aler} from '../common/alerts'
 
 import conf from '../../config'
 
 export class List extends Component {
-
     constructor(props){
-        console.log('props list: ', props);
         super(props)
     }
 
@@ -27,32 +24,16 @@ export class List extends Component {
         dataUser: []
     };
 
-    // componentDidMount () {
-    //     // this.getDataUsers()
-    // }
-    // getDataUsers = async () => {
-    //     try {
-    //         let response = await fetch(`${conf.api_url}/profile/`)
-    //         let data = await response.json()
-        
-    //         this.setState({
-    //             dataUser: data
-    //         })
-    //     } catch (error) {
-    //         console.log('error', error)
-    //     }    
-    // }
-
     render () {
       return (
-        <div>
-            
-            <br/>
-            {console.log('el amor', this.props.userList)}
+        <div>            
+            <div className="sub-title">
+                <span className="text">
+                    Lista de usuarios
+                </span>
+            </div>
             <MaterialTable
-                title={<div className="sub-title">
-                Lista de usuarios
-                </div>}
+                title=""
                 columns={this.state.columns}
                 data={this.props.userList}
                 actions={[
@@ -60,17 +41,11 @@ export class List extends Component {
                       icon: 'edit',
                       tooltip: 'Editar usuario',
                       onClick: (event, rowData) => {
-                        Aler({open:true});
-                        // Aler(true)
-                        // this.setState({alert:{open:true}})
                         this.props.selectUpdate(rowData)
-                        // return <Aler />
                       }
                     }
                   ]}
             />
-            {/* <Aler /> */}
-            {/* {this.open ? <Aler/> : ''} */}
         </div>
       );
     }

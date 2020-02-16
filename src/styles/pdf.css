@@ -90,8 +90,8 @@ p {
     margin: 0px;
 }
 
-.text-descriptionPDF span {
-    font-weight: bold
+.text-descriptionPDF {
+    margin: 1em 0;
 }
 
 /* .product-image-pdf{
