@@ -51,9 +51,9 @@ class Products extends PureComponent {
     // })
   }
 
-  componentDidMount(props) {
+  componentDidMount() {
     this.getProducts()
-    if(this.state.products.length){
+    if (this.state.products.length) {
       this.setState({
         productsSelecteds: this.state.products.map(_ => _.id)
       })
@@ -92,6 +92,16 @@ class Products extends PureComponent {
     this.setState({ productsSelecteds: [...this.state.productsSelecteds, dataProduct.id] });
   }
 
+  goToProducts = () => {
+    console.log('entro');
+    this.props.history.push({
+      pathname: '/cotizaciones/crear',
+      // state: {
+      //   selectUpdate: rowData
+      // }  
+    })
+  }
+
   render() {
     return (
       <div>
@@ -102,7 +112,7 @@ class Products extends PureComponent {
             </div>
             <div className="col-4 px-0 d-flex flex-row-reverse">
               {this.state.productsSelecteds.length}
-              <LocalGroceryStoreIcon />
+              <LocalGroceryStoreIcon onClick={this.goToProducts} />
             </div>
           </div>
         </div>

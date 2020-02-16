@@ -11,8 +11,8 @@ import { Menu } from '../../common/nav-bar'
 
 // redux
 import { connect } from 'react-redux'
+import * as productActions from '../../../actions/productActions'
 import * as quotationActions from '../../../actions/quotationActions'
-import { getQuotationActive } from '../../../actions/quotationActions'
 
 class CreateQuotationHook extends Component {
 
@@ -47,7 +47,7 @@ class CreateQuotationHook extends Component {
     // const $link = document.querySelector('#new-tap');
     // $link.print()
     // this.amor($link)
-    window.open('/cotizacion', '_blank','',true)
+    window.open('/cotizacion', '_blank', '', true)
   }
 
   // amor($link) {
@@ -67,7 +67,7 @@ class CreateQuotationHook extends Component {
   redirectToPDF() {
     if (this.preViewPDF) {
       // return <Redirect to='/cotizacion' push={true} />
-      
+
       this.props.history.push('/cotizacion')
     }
   }
@@ -84,10 +84,10 @@ class CreateQuotationHook extends Component {
         {/* <Menu /> */}
         <FormQuotation
           eventCreateQuotation={this.createQuotation}
-          preQuotation={this.props.quotation}
+          preQuotation={this.props.quotationReducer.quotation}
           eventSavePDF={this.eventSavePDF}
           updateQuotation={this.props.location.state}
-        />          
+        />
         {/* {this.redirectToPDF()} */}
       </div>
     );
@@ -96,12 +96,23 @@ class CreateQuotationHook extends Component {
 
 // pass state to props (console.log(pros)) end i selected the into return
 
-const mapStateToProps = (reducers) => {
-  return reducers.quotationReducer;
+const mapStateToProps = reducers => {
+  return {
+    productReducer: reducers.productReducer,
+    quotationReducer: reducers.quotationReducer
+  }
+
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    productActions,
+    quotationActions
+  }
+}
+
 // connect reducer to component
-const CreateQuotation = connect(mapStateToProps, quotationActions)(CreateQuotationHook);
+const CreateQuotation = connect(mapStateToProps, mapDispatchToProps)(CreateQuotationHook);
 export {
   CreateQuotation
 }
