@@ -16,8 +16,8 @@ export class MakeRate extends Component {
           columns: [
               { title: 'Id', field: 'id' },
               { title: 'Fecha creación', field: 'date_created' },
-              { title: 'Cliente', field: 'client.name' },
-              { title: 'Creado por', field: 'user.first_name' },
+              { title: 'Cliente', field: 'client_name' },
+              { title: 'Creado por', field: 'user_name' },
               { title: 'Estado', field: 'status'}
           ],
           dataQuotations: [],
@@ -30,18 +30,15 @@ export class MakeRate extends Component {
       };
     }
 
-
     componentDidMount () {
       this.getDataQuotations()
     }
 
     getDataQuotations = async () => {
         try {
-            let response = await fetch(`${conf.api_url}/quotation/`)
+            let response = await fetch(`${conf.api_url}/quotation/?limit=30`)
             let data = await response.json()
-            console.log('data quotation: ', data);
-
-        
+            console.log('data quotation: ', data);        
             this.setState({
               dataQuotations: data.results
             })
@@ -51,7 +48,6 @@ export class MakeRate extends Component {
     }
 
     duplicateQuotation = quotation => {
-      console.log('quotation: ', quotation);
       const data = quotation
       data.status = "En progreso"
       data.client = quotation.client.id
@@ -64,18 +60,19 @@ export class MakeRate extends Component {
           'Content-Type': 'application/json'
         }
       }).then(async (response) => {
-        console.log('response: ', response);
+
+        console.log('response duplicate: ', response);
         let resp = await response.json()
-        console.log('resp: ', resp);
+        console.log('resp duplicate: ', resp);
         if (response.status === 200 ||  response.status == 201){
-          // this.setState({
-          //   // dataQuotations: [...this.state.dataQuotations, resp],
-          //   alert: {
-          //     open: true,
-          //     message: 'La cotización se duplicao correctamente.',
-          //     type:'success'
-          //   }
-          // })
+          this.setState({
+            dataQuotations: [...this.state.dataQuotations, resp],
+            alert: {
+              open: true,
+              message: 'La cotización se duplico correctamente.',
+              type:'success'
+            }
+          })
         }
       })
       .catch(error => console.log('Error: ', error))
@@ -98,9 +95,7 @@ export class MakeRate extends Component {
                       tooltip: 'Ver cotización',
                       onClick: (event, rowData) => {
                         sessionStorage.setItem('quotation', JSON.stringify(rowData))
-                        // window.open('/cotizacion', '_blank','',true)
-                        const link$ = document.querySelector('#linkQuotation');
-                        link$.click()
+                        window.open(`/cotizacion/${rowData.id}/`, '_blank','',true)
                       }
                     },
                     rowData => ({
@@ -130,7 +125,7 @@ export class MakeRate extends Component {
 
             <Snackbar
               open={this.state.alert.open}
-              autoHideDuration={4000}
+              autoHideDuration={3000}
               onClose={() => 
                 this.setState({alert: {open: false}})
               }
