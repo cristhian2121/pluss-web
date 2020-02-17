@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import MaterialTable from 'material-table';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import { Link } from 'react-router-dom'
+
 
 import conf from '../../../config'
 
@@ -120,7 +122,8 @@ export class MakeRate extends Component {
                     })
                   ]}
                 /> 
-            
+            <Link to="chart" id="linkQuotation" target="_blank" to="/clientes" ></Link>
+
             <Snackbar
               open={this.state.alert.open}
               autoHideDuration={3000}

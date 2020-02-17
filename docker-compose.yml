@@ -1,22 +1,58 @@
-version: '3.7'
-services: 
-  www: 
+version: "3.7"
+services:
+  # web
+  www:
     image: nginx
     container_name: www
     restart: always
-    volumes: 
-      # - /pluss_web/build:share-volumen-pluss-web
-      - share-volumen-pluss-web:/usr/share/nginx/html:ro
     ports:
       - "80:80"
-    depends_on: 
+    volumes:
+      # - /pluss_web/build:share-volumen-pluss-web
+      - share-volumen-pluss-web:/usr/share/nginx/html:ro
+    environment:
+      - VIRTUAL_HOST=app.plusspop.com
+      # - LETSENCRYPT_HOST=app.plusspop.com
+      # - LETSENCRYPT_EMAIL=ccdelgadop@gmail.com
+    depends_on:
       - pluss-web
-  # expose: 
+  # nginx-proxy
+  # nginx-proxy:
+  #   image: jwilder/nginx-proxy
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+  #     - certs:/etc/nginx/certs:ro
+  #     - vhostd:/etc/nginx/vhost.d
+  #     - html:/usr/share/nginx/html
+  #   depends_on:
+  #     - www
+  #   labels:
+  #     - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+  # letsencrypt
+  # lets-encrypt:
+  #   image: jrcs/letsencrypt-nginx-proxy-companion
+  #   restart: always
+  #   environment:
+  #     - NGINX_PROXY_CONTAINER=nginx-proxy
+  #   volumes:
+  #     - certs:/etc/nginx/certs:rw
+  #     - vhostd:/etc/nginx/vhost.d
+  #     - html:/usr/share/nginx/html
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  # expose:
   pluss-web:
-    build: .
+    # build: .
+    image: cristhiankr/pluss_web:prod
     container_name: web
-    volumes:      
-      - share-volumen-pluss-web:/pluss_web/build 
+    volumes:
+      - share-volumen-pluss-web:/pluss_web/build
 
-volumes: 
+volumes:
   share-volumen-pluss-web:
+  # certs:
+  # html:
+  # vhostd:
