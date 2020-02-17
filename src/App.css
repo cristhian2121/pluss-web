@@ -57,7 +57,18 @@
   font-weight: 500;
   color: #464646;
   font-size: 19px;
-  margin: 0 0 2em;
+  margin: 0 0 2em !important;
+}
+.title-modal {
+  /* background: #DB2929; */
+  /* color: black; */
+  /* border-left: 5px solid #DB2929; */
+  padding: 12px 12px;
+  font-weight: bolder;
+  font-size: 19px;
+  text-align: center;
+  background: #c11212;
+  color: #f9d8d8;
 }
 
 .sub-title span.text {
@@ -102,6 +113,24 @@
   margin: 6px 0 !important;;
   min-width: auto !important;
   color: #000000;
+}
+
+.action-title {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.action-title span.text {
+  background: #f9d8d8;
+  color: #c11212;
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.title-text {
+  padding-left: 0 !important;
 }
 
 .App-header {

@@ -35,7 +35,7 @@
 }
 
 /***** envio de emails ***********/
-.send-email {
+.create-update {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,16 +48,15 @@
     z-index: 100;
 }
 
-
-.send-email-form {
+.create-update-form {
     background: #ffffffff;
     display: block;
-    height: 60%;
     min-width: 50%;
     z-index: 100;
     box-shadow: 0 0 12px -5px inset;
+    max-width: 70%;
 }
 
-.send-email-form form {
-    margin: 10%;
+.create-update-form form {
+    margin: 1% 5% 5%;
 }

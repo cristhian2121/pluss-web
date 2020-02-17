@@ -35,7 +35,7 @@ function App() {
           <Route exact path="/" render={() => <Redirect to="/login" />} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/cotizacion" component={GeneratePDF} />
-          <Route exact path="/cotizacion/:id" component={GeneratePDF} />
+          {/* <Route exact path="/cotizacion/:id" component={GeneratePDF} /> */}
           <Route component={DefaultContainer} />
         </Switch>
       </Router>

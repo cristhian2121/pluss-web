@@ -93,7 +93,8 @@ export class MakeRate extends Component {
                       tooltip: 'Ver cotización',
                       onClick: (event, rowData) => {
                         sessionStorage.setItem('quotation', JSON.stringify(rowData))
-                        window.open(`/cotizacion/${rowData.id}/`, '_blank','',true)
+                        // window.open(`/cotizacion/${rowData.id}/`, '_blank','',true)
+                        window.open(`/cotizacion/`, '_blank','',true)
                       }
                     },
                     rowData => ({

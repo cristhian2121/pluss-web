@@ -18,8 +18,7 @@ export class List extends Component {
             { title: 'Nombre', field: 'user.first_name' },
             { title: 'Correo electrónico', field: 'user.username' },
             { title: 'Documento', field: 'identification_number' },
-            { title: 'Teléfono', field: 'phone_number'},
-            { title: 'Estado', field: 'user.is_active'}
+            { title: 'Teléfono', field: 'phone_number'}
         ],
         dataUser: []
     };
@@ -43,6 +42,14 @@ export class List extends Component {
                       onClick: (event, rowData) => {
                         this.props.selectUpdate(rowData)
                       }
+                    },
+                    {
+                        icon: 'delete',
+                        tooltip: 'Eliminar cliente',
+                        onClick: (event, rowData) => {
+                          console.log('rowData: ', rowData);
+                          this.props.selectDelete(rowData)                     
+                        }
                     }
                   ]}
             />

@@ -10,12 +10,12 @@ import Snackbar from '@material-ui/core/Snackbar';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import Alert from '@material-ui/lab/Alert';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import conf from '../../config'
 
 export class Create extends Component {
   constructor(props) {
+    console.log('props usaurios: ', props);
     super(props)
     this.data = {}
     this.state = {
@@ -26,43 +26,19 @@ export class Create extends Component {
       },
       dataGroups: [],
       showForm: true,
-      // dataEdit: null,
-      // passDiff: false,
-      // code: null,
-      // first_name: null,
-      // identification_number: null,
-      // username: null,
-      // phone_number: null,
-      // password: null,
-      // passwordConfirm: null,
-      // groups: []
+      idUser: props.selectUpdate.user ? props.selectUpdate.id : null,
+      code: props.selectUpdate.user ? props.selectUpdate.code : null,
+      first_name: props.selectUpdate.user ? props.selectUpdate.user.first_name : null,
+      identification_number: props.selectUpdate.identification_number,
+      username: props.selectUpdate.user ? props.selectUpdate.user.username : null,
+      phone_number: props.selectUpdate ? props.selectUpdate.phone_number : null,
+      password: props.selectUpdate.user ? props.selectUpdate.user.password : null,
+      passwordConfirm: props.selectUpdate.user ? props.selectUpdate.user.password : null,
+      groups: props.selectUpdate.user ? props.selectUpdate.user.groups : []
     }
-  }
-  
-  showForm = () => {
-    if (this.state.showForm) { document.getElementById('userForm').style.display='block' }
-    else { document.getElementById('userForm').style.display='none' }
-
-    this.setState({ showForm: !this.state.showForm })
-    console.log('segundo', this.state.showForm)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      dataEdit: nextProps.selectUpdate.user ? nextProps.selectUpdate : null,
-      code: nextProps.selectUpdate.user ? nextProps.selectUpdate.code : null,
-      first_name: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.first_name : null,
-      identification_number: nextProps.selectUpdate.identification_number,
-      username: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.username : null,
-      phone_number: nextProps.selectUpdate ? nextProps.selectUpdate.phone_number : null,
-      password: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
-      passwordConfirm: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
-      groups: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.groups : []
-    })
   }
   componentDidMount() {
     this.getGroups()
-    document.getElementById('userForm').style.display='none'
   }
   getGroups = async () => {
     try {
@@ -108,12 +84,12 @@ export class Create extends Component {
         }
         break
     }
-  };
+  }
   clear = () => {
     this.data = {}
     document.getElementById("userForm").reset()
     this.setState({
-      dataEdit: null,
+      idUser: null,
       code: null,
       first_name: null,
       identification_number: null,
@@ -123,6 +99,7 @@ export class Create extends Component {
       passwordConfirm: null,
       groups: []
     })
+    this.props.cancelForm(false)
   };
   generateData = () => {
     let elements = document.getElementById('userForm').elements;
@@ -253,125 +230,121 @@ export class Create extends Component {
 
   render() {
     return (
-      <div>
-        <div className="sub-title">
-          <span className="text" onClick={this.showForm}>
-            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {/*this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> */}
-          </span>
-          <Button className="button-more" onClick={this.showForm}> <AddCircleIcon/>  </Button>
-        </div>
+      <div id="userForm-cu" className="create-update">
+        <div className="create-update-form">
 
-        <form id="userForm">
-          <TextField
-            required
-            name="code"
-            onChange={this.handleChange}
-            value={this.state.code}
-            label="Código"
-            margin="normal"
-            className="col-md-2 col-xs-4"
-          />
-          <TextField
-            required
-            name="first_name"
-            label="Nombre"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.first_name}
-            className="col-md-3 col-xs-8"
-          />
-          <TextField
-            name="identification_number"
-            label="Documento"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.identification_number}
-            className="col-md-2 col-xs-4"
-          />
-          <TextField
-            required
-            name="username"
-            label="Correo electrónico"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.username}
-            className="col-md-3 col-xs-8"
-          />
-          <TextField
-            required
-            name="phone_number"
-            label="Teléfono"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.phone_number}
-            className="col-md-2 col-xs-6"
-          />
-          <FormControl margin="normal" className="col-md-3 col-xs-6">
-            <InputLabel id="groups">Tipo usuario</InputLabel>
-            <Select
-              labelId="groups"
-              name="groups"
+          <div className="title-modal">
+              {this.state.idUser ? 'Editar' : 'Crear'} usuario
+          </div>
+            
+          <form autocomplete="off" id="userForm" >
+            <TextField required
+              name="code"
               onChange={this.handleChange}
-            // value={this.props.selectUpdate ? this.props.selectUpdate.user.groups : null}
-            >
-              {this.state.dataGroups.map(groups => (
-                <MenuItem
-                  value={groups.id}
-                >{groups.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              value={this.state.code}
+              label="Código"
+              margin="normal"
+              className="col-md-4 col-xs-4"
+            />
+            <TextField required
+              name="first_name"
+              label="Nombre"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.first_name}
+              className="col-md-4 col-xs-8"
+            />
+            <TextField
+              name="identification_number"
+              label="Documento"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.identification_number}
+              className="col-md-4 col-xs-4"
+            />
+            <TextField required
+              name="username"
+              label="Correo electrónico"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.username}
+              className="col-md-4 col-xs-8"
+            />
+            <TextField
+              required
+              name="phone_number"
+              label="Teléfono"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.phone_number}
+              className="col-md-4 col-xs-6"
+            />
+            <FormControl margin="normal" className="col-md-4 col-xs-6">
+              <InputLabel id="groups">Tipo usuario</InputLabel>
+              <Select
+                labelId="groups"
+                name="groups"
+                onChange={this.handleChange}
+                defaultValue={this.state.groups}
+              >
+                {this.state.dataGroups.map(groups => (
+                  <MenuItem
+                    value={groups.id}
+                  >{groups.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-          <TextField
-            required
-            type="password"
-            name="password1"
-            label="Contraseña"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.passwordConfirm}
-            className="col-md-2 col-xs-6"
-          />
-          <FormControl className="col-md-2 col-xs-6">
             <TextField
               required
               type="password"
-              name="password"
-              label="Confirme contraseña"
+              name="password1"
+              label="Contraseña"
               margin="normal"
               onChange={this.handleChange}
-              value={this.state.password}
-              
+              value={this.state.passwordConfirm}
+              className="col-md-4 col-xs-6"
             />
-            {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
-          </FormControl>
-          <div className="text-center container-button">
-            <Button variant="contained" onClick={this.clear}>
-              Limpiar
-            </Button>
-            <Button variant="contained" color="secondary" onClick={this.state.dataEdit ? this.updateUser : this.saveUser}>
-              {/* {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'} */}
-              Guardar
-            </Button>
-          </div>
-        </form>
+            <FormControl className="col-md-4 col-xs-6">
+              <TextField
+                required
+                type="password"
+                name="password"
+                label="Confirme contraseña"
+                margin="normal"
+                onChange={this.handleChange}
+                value={this.state.password}
+                
+              />
+              {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
+            </FormControl>
+            <div className="text-center container-button">
+              <Button variant="contained" onClick={this.clear}>
+                Cancelar
+              </Button>
+              <Button variant="contained" color="secondary" onClick={this.state.idUser ? this.updateUser : this.saveUser}>
+                Guardar
+              </Button>
+            </div>
+          </form>
 
-        <Snackbar
-          open={this.state.alert.open}
-          autoHideDuration={4000}
-          onClose={() => 
-            this.setState({alert: {open: false}})
-          }
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          anchorOrigin= {{ 
-            vertical: 'bottom',
-            horizontal: 'left'
-          }}
-        >
-          <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
-        </Snackbar>
+          <Snackbar
+            open={this.state.alert.open}
+            autoHideDuration={4000}
+            onClose={() => 
+              this.setState({alert: {open: false}})
+            }
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            anchorOrigin= {{ 
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+          >
+            <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+          </Snackbar>
+        </div>
         
       </div>
     );

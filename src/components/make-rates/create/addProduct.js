@@ -267,14 +267,14 @@ export const ProductForm = (props) => {
             <Button color="secondary" onClick={clearForm}>
                 Limpiar
             </Button>
-            <Button color="primary" onClick={handleAddProduct}>
-                Agregar <AddCircleIcon />
+            <Button color="primary" href="#new-product" onClick={handleAddProduct}>
+                Agregar producto <AddCircleIcon />
             </Button>
           </form>
 
             {/* Ver productos */}
             <div>{products.map((product, index) => (
-                <div className="add-product" key={index}>
+                <div id="new-product" className="add-product" key={index}>
                     {<ProductPDF product={product} removeProduct={handleRemoveProduct}/>}
                 </div>
                 // <Product key={product} number={product} />
