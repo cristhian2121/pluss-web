@@ -45,7 +45,6 @@ export class ClientList extends React.Component {
                         icon: 'file_copy',
                         tooltip: 'Duplicar cliente',
                         onClick: (event, rowData) => {
-                            console.log('rowData: ', rowData);
                             this.props.duplicateClient(rowData)
                         }
                     },
@@ -53,7 +52,6 @@ export class ClientList extends React.Component {
                         icon: 'delete',
                         tooltip: 'Eliminar cliente',
                         onClick: (event, rowData) => {
-                            console.log('rowData: ', rowData);
                             this.props.selectDelete(rowData)
                         }
                     }

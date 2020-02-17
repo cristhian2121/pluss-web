@@ -27,6 +27,16 @@ const buildUnits = (quotation) => {
 const printPDF = () => {
     window.print()
     return true
+    // let data = document.getElementById('pdf')
+    // // let data = element.innerHTML
+    // console.log('data: ', data.innerHTML);
+    // fetch(`${conf.api_url}/quotation/pdf/`,{
+    //     method: 'POST',
+    //     body: data.innerHTML,
+    //     headers:{'Content-Type':'text/xml'}
+    // }).then(response => response.json())
+    // .then(res => console.log(res))
+    // .catch(e => console.log('error', e))
 }
 
 const getQuotation = async(quotation) => {
@@ -42,14 +52,16 @@ const getQuotation = async(quotation) => {
 }
 
 const getQuotationSession = (props) => {
-    const idInitial = props.match.params.id;
-    const dataString = idInitial ? getQuotation(idInitial) : JSON.parse(sessionStorage.getItem('quotation'));
+    // const idInitial = props.match.params.id;
+    // const dataString = idInitial ? getQuotation(idInitial) : JSON.parse(sessionStorage.getItem('quotation'));
+    const dataString = JSON.parse(sessionStorage.getItem('quotation'));
+    console.log('dataString: ', dataString);
 
     return dataString;
 }
 
 export const GeneratePDFHook = (props) => {
-    console.log('props pdf: ', props.match.path);
+    console.log('props pdf: ', props);
     const [unitsCost, setUnitsCost] = useState([])
     const [quotation, SetQuotation] = useState()    
 
@@ -67,17 +79,17 @@ export const GeneratePDFHook = (props) => {
     }, []);
 
     return (
-        <div>
+        <div id='pdf'>
             {quotation && <div className="container-pdf">
                 <section>
                     <div className="header-pdf col-12 d-flex">
                         <div className="col-6 text-descripcion">
                             <p>Medellín, {quotation.quotationDate}</p><br />
                             <p>Señores:</p>
-                            <p><span>{quotation.client.name.charAt(0).toUpperCase() + quotation.client.name.slice(1).toLowerCase()}</span></p>
-                            <p>{quotation.client.address}</p>
-                            <p>email. {quotation.client.email}</p>
-                            <p>tel. {quotation.client.phone}</p>
+                            <p><span>{quotation.client[0].name.charAt(0).toUpperCase() + quotation.client[0].name.slice(1).toLowerCase()}</span></p>
+                            <p>{quotation.client[0].address}</p>
+                            <p>email. {quotation.client[0].email}</p>
+                            <p>tel. {quotation.client[0].phone}</p>
                             <p>{quotation.city}</p>
 
                         </div>
@@ -129,10 +141,11 @@ export const GeneratePDFHook = (props) => {
                         <div className="col-2 px-0"></div>
                         <div className="col-2 px-0">
                             <div className="sub-title-pdf text-center">Información de contacto</div><br />
-                            <p>Cristina Tobon</p>
+                            <p>{quotation.user[0].user.first_name}</p>
                             <p>Ventas</p>
                             <p>PLUSS P.O.P S.A.S</p>
-                            <p>Cel: 312 310 6719</p>
+                            <p>Email: {quotation.user[0].user.email}</p>
+                            <p>Cel: {quotation.user[0].phone_number}</p>
                         </div>
                     </div><br />
                 </section>
