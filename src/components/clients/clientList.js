@@ -15,7 +15,8 @@ export class ClientList extends React.Component {
             { title: 'Nombre', field: 'name' },
             { title: 'Teléfono', field: 'phone' },
             { title: 'Asesor de venta', field: 'agent' },
-            { title: 'Ciudad', field: 'city'}
+            { title: 'Ciudad', field: 'city'},
+            { title: 'id', field: 'id'}
         ],
         dataUser: []
     };
@@ -41,9 +42,18 @@ export class ClientList extends React.Component {
                         }
                     },
                     {
+                        icon: 'file_copy',
+                        tooltip: 'Duplicar cliente',
+                        onClick: (event, rowData) => {
+                            console.log('rowData: ', rowData);
+                            this.props.duplicateClient(rowData)
+                        }
+                    },
+                    {
                         icon: 'delete',
                         tooltip: 'Eliminar cliente',
                         onClick: (event, rowData) => {
+                            console.log('rowData: ', rowData);
                             this.props.selectDelete(rowData)
                         }
                     }
