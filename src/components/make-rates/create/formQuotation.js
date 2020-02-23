@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { createHashHistory } from 'history'
 
 // Material
@@ -66,10 +66,12 @@ export const FormQuotation = (props) => {
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
 
-  useEffect(() => { 
+  useEffect(() => {
     getClients()
     getUsers()
   }, []);
+
+  console.log('products **********', products);
 
   const history = createHashHistory()
 
@@ -94,11 +96,11 @@ export const FormQuotation = (props) => {
     SetUnits(units => [..._units])
   }
 
-  const handleAddProduct = (_product) => { 
+  const handleAddProduct = (_product) => {
     setProducts(products => [...products, _product])
   }
 
-  const handleRemoveProduct = (_product) => { 
+  const handleRemoveProduct = (_product) => {
     let productss = products.filter(item => item != _product)
     setProducts(productss)
   }
@@ -140,27 +142,27 @@ export const FormQuotation = (props) => {
     //   const data = generateData()
     //   props.eventCreateQuotation(data)
     // }
-    fetch(`${conf.api_url}/quotation/`,{
+    fetch(`${conf.api_url}/quotation/`, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       }
     }).then(async (response) => {
       let resp = await response.json()
-      if (response.status === 200 ||  response.status == 201){
+      if (response.status === 200 || response.status == 201) {
         setOpenAlert({
           open: true,
           message: 'La cotización se creo correctamente.',
-          type:'success'
+          type: 'success'
         })
         setRedirectList(true)
       }
     })
-    .catch(error => console.log('Error: ', error))
-    .then(response => {
-      // this.props.addClientToList(response)
-    })
+      .catch(error => console.log('Error: ', error))
+      .then(response => {
+        // this.props.addClientToList(response)
+      })
   }
 
   const updateQuotation = event => {
@@ -168,32 +170,32 @@ export const FormQuotation = (props) => {
     data.status = event
     console.log('data updatequotation: ', data);
 
-    fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`,{
+    fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`, {
       method: 'PUT',
       body: JSON.stringify(data),
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       }
     }).then(async (response) => {
       let resp = await response.json()
 
-      if (response.status === 200 ||  response.status == 201){
+      if (response.status === 200 || response.status == 201) {
         setOpenAlert({
           open: true,
           message: 'La cotización se guardo correctamente.',
-          type:'success'
+          type: 'success'
         })
-        setRedirectList(true)  
+        setRedirectList(true)
       }
     })
-    .catch(error => console.log('Error: ', error))
+      .catch(error => console.log('Error: ', error))
   }
 
   const generatePDF = async () => {
     const data = generateData()
     let itemClient = data.client
 
-    for (let i = 0; i < dataClients.length; i++){
+    for (let i = 0; i < dataClients.length; i++) {
       if (dataClients[i].id == itemClient) {
         data.client = dataClients[i]
       }
@@ -264,7 +266,7 @@ export const FormQuotation = (props) => {
         setCientSelectUpdate(e.target.value)
         break
       case "user":
-        setUserSelectUpdate( e.target.value )
+        setUserSelectUpdate(e.target.value)
         break
       case "pay_format":
         setSelectUpdate({ pay_format: e.target.value })
@@ -281,14 +283,14 @@ export const FormQuotation = (props) => {
 
   return (
     <div >
-      { openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={updateQuotation}/> }
+      {openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={updateQuotation} />}
       <>
-      <div className="title">
-        Crear cotización
+        <div className="title">
+          Crear cotización
       </div>
 
-      <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
-          <MuiPickersUtilsProvider  utils={DateFnsUtils}>
+        <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               disabled
               className="col-md-3 col-xs-12"
@@ -299,7 +301,7 @@ export const FormQuotation = (props) => {
               id="date-picker-inline"
               name="quotationDate"
               label="Fecha de cotización"
-              value={idSelectUpdate ? selectUpdate.date_created: selectedDate}
+              value={idSelectUpdate ? selectUpdate.date_created : selectedDate}
               onChange={handleDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
@@ -357,39 +359,39 @@ export const FormQuotation = (props) => {
             value={idSelectUpdate ? selectUpdate.delivery_time : null}
             onChange={handleChange}
           />
-      </form>
+        </form>
 
-      <div className="sub-title">
-        <span className="text">Agregar Unidades</span> 
-      </div>
+        <div className="sub-title">
+          <span className="text">Agregar Unidades</span>
+        </div>
 
-      {/* Unidades */}
-      <UnitsCost handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
+        {/* Unidades */}
+        <UnitsCost handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units} />
 
-      <div className="sub-title">
-        <span className="text">Agregar productos</span> <Button className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
-      </div>
+        <div className="sub-title">
+          <span className="text">Agregar productos</span> <Button className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon />  </Button>
+        </div>
 
-      {/* Anadir producto */}
-      { showproductForm &&
+        {/* Anadir producto */}
+        {showproductForm &&
           <>
-              <ProductForm units={units} productsE={products} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
+            <ProductForm units={units} productsE={products} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
           </>
-      }
+        }
 
-      <div className="col-12 px-0 d-flex justify-content-end container-button">
-        <Button variant="contained" color="secondary" type="submit" onClick={() => idSelectUpdate ? updateQuotation("En progreso") : saveQuotation("En progreso")}>
+        <div className="col-12 px-0 d-flex justify-content-end container-button">
+          <Button variant="contained" color="secondary" type="submit" onClick={() => idSelectUpdate ? updateQuotation("En progreso") : saveQuotation("En progreso")}>
             Guardar cotización
         </Button>
-        <Button variant="contained" onClick={generatePDF}>
+          <Button variant="contained" onClick={generatePDF}>
             Vista previa PDF <PictureAsPdfIcon />
-        </Button>
-        <Button variant="contained" type="submit" onClick={() => setOpenEmail(true)}>
+          </Button>
+          <Button variant="contained" type="submit" onClick={() => setOpenEmail(true)}>
             Finalizar
         </Button>
-      </div>
+        </div>
       </>
-      {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert}}/>}
+      {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert }} />}
     </div>
   );
 }

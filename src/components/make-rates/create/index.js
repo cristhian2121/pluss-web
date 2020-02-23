@@ -23,7 +23,9 @@ class CreateQuotationHook extends Component {
     super(props)
     this.state = {
       downloadPDF: false,
-      preView: false
+      preView: false,
+      dataInput: this.props.location.state,
+      rendered: false
     }
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
@@ -32,8 +34,21 @@ class CreateQuotationHook extends Component {
   }
 
   componentDidMount() {
-    const quotation = this.props.quotation;
+    const quotation = this.props.quotationReducer.quotation;
     console.log('quotation: ', quotation);
+    if (this.props.productReducer.products.length) {
+      this.setState({
+        dataInput: {
+          selectUpdate: {
+            ...this.props.productReducer
+          }
+        }
+      })
+    }
+    this.setState({
+      rendered: true
+    })
+
     // const $navBar = document.querySelector('#nav-var-pluss')
     // $navBar.style.visibility = 'visible'
   }
@@ -77,17 +92,16 @@ class CreateQuotationHook extends Component {
   }
 
   render() {
-    console.log('***', this.props)
     // let updatesQuotation = this.props.location.state.selectUpdate ? this.props.location.state.selectUpdate : null
     return (
       <div>
         {/* <Menu /> */}
-        <FormQuotation
+        {this.state.rendered && <FormQuotation
           eventCreateQuotation={this.createQuotation}
           preQuotation={this.props.quotationReducer.quotation}
           eventSavePDF={this.eventSavePDF}
-          updateQuotation={this.props.location.state}
-        />
+          updateQuotation={this.state.dataInput}
+        />}
         {/* {this.redirectToPDF()} */}
       </div>
     );

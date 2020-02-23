@@ -222,7 +222,7 @@ export const ProductForm = (props) => {
                 <span className="text-2">Valor por unidades</span> 
             </div>
 
-            {props.units.map((unit, index) => (
+            {props.units && props.units.map((unit, index) => (
                 <div key={index} className="row margin-component">
                     <div className="col-md-2 col-xs-12 text-center"><b>{unit} Unidades</b></div>
                     <TextField

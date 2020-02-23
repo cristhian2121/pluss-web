@@ -19,10 +19,8 @@ export default (state = INITIAL_STATE, action) => {
             state.products = [...state.products, action.entity]
             return { ...state };
         case GET_ALL:
-            console.log('state: ', state);
             return { ...state }
         default:
-            console.log('defaul: ', state);
             return { ...state }
     }
 }

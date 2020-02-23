@@ -93,7 +93,6 @@ class Products extends PureComponent {
   }
 
   goToProducts = () => {
-    console.log('entro');
     this.props.history.push({
       pathname: '/cotizaciones/crear',
       // state: {

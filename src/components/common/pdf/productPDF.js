@@ -42,14 +42,14 @@ export const ProductPDF = ({ product, removeProduct }) => {
                     <Table aria-label="a dense table">
                         <TableHead>
                             <TableRow>
-                            {product.units.map((unit) => (
+                            {product.units && product.units.map((unit) => (
                             <TableCell>{unit} Und</TableCell>
                             ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             <TableRow key=''>
-                            {product.units.map((unit, index) => (
+                            {product.units && product.units.map((unit, index) => (
                                 <TableCell component="th" scope="row">
                                   {formatCurrency.format(product.prices[index])}
                                 {/* $ {product.prices[index]} */}
