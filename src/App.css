@@ -274,3 +274,27 @@
 .MuiChip-deleteIcon:hover {
   color: rgba(0, 0, 0, 0.8) !important;
 }
+
+
+/**************** NAV-BAR ***************/
+.nav-bar-text {
+  margin-left: 0 !important;
+  color: #000000 !important;
+  text-decoration: none !important;
+  /* font-weight: 400 !important; */
+  font-size: 1em !important;
+}
+
+.nav-bar-items:hover .MuiListItemIcon-root {
+  color: #db2929 !important;
+  /* color: #f9d8d8 !important; */
+}
+
+.nav-bar-items:hover p {
+  /* color: #db2929 !important; */
+  font-weight: 700 !important;
+}
+
+.nav-bar-items .MuiListItemIcon-root {
+  min-width: 30px !important;
+}
