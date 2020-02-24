@@ -24,7 +24,7 @@ import { GeneratePDF } from '../pdf'
 import ListItemText from '@material-ui/core/ListItemText';
 
 
-const drawerWidth = 270;
+const drawerWidth = 210;
 
 const useStyles = makeStyles(theme => ({
   root: {
