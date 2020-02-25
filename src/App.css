@@ -310,9 +310,10 @@
 }
 
 .lbl-error{
-  font-size: 11px;
+  font-size: 11.5px;
   color: red;
   background: #f9d8d8;
-  width: 100%;
+  width: initial;
   margin-right: 15px !important;
+  text-align: center;
 }

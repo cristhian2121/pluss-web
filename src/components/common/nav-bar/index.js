@@ -15,6 +15,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Tooltip from '@material-ui/core/Tooltip';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import PageNotFound from "../page-not-found";
 import { User } from "../../../pages/users/index";
@@ -89,6 +91,10 @@ export const Menu = ({ children }) => {
     open ? setOpen(false) : setOpen(true);
   };
 
+  const logOut = () => {
+    
+  }
+
   return (
     <div className={classes.root} id="nav-var-pluss">
       <Drawer
@@ -150,6 +156,15 @@ export const Menu = ({ children }) => {
           ))}
         </List>
         <Divider />
+        <div >
+          <Link to="/" >
+            <Tooltip title="Cerrar sesión" placement="right-start" variant="regular">
+              <IconButton onClick={logOut}>
+                <ExitToAppIcon />
+              </IconButton>
+            </Tooltip>            
+          </Link>
+        </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
