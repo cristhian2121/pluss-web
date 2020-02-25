@@ -7,7 +7,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 // Components
 import { ProductPDF } from '../../common/pdf/productPDF'
 import { TotalCost } from './totalCost'
-
+import AlertDialog from '../../common/confirm'
 
 export const ProductForm = (props) => {
     console.log('props aaaaaaa: ', props);
@@ -19,6 +19,8 @@ export const ProductForm = (props) => {
     const [markValue, setMarkValue] = useState([])
     const [discountValue, setDiscountValue] = useState([])
     const [costValue, setCostValue] = useState(0)
+    const [showAlert, setShowAlert] = useState(false)
+    const [selectRegister, setSelectRegister] = useState(null)
 
     const calculateValue = () => {
 
@@ -134,13 +136,26 @@ export const ProductForm = (props) => {
     }
 
     const handleRemoveProduct = (product) => {
-        let productss = products.filter(item => item != product)
+        // let productss = products.filter(item => item != product)
+        let productss = products.filter(item => item != selectRegister)
         setProducts(productss)
-        props.removeProduct(product)  
+        props.removeProduct(selectRegister)
+        // props.removeProduct(product)  
+    }
+
+    const showConfirmation = (product) => {
+        setSelectRegister(product)
+        setShowAlert(true)
+    }
+
+    const closeConfirmation = () => {
+        setSelectRegister(null)
+        setShowAlert(!showAlert)
     }
 
     return (
         <Fragment>
+          <AlertDialog open={showAlert} option={selectRegister && true} close={closeConfirmation} confirm={selectRegister ? handleRemoveProduct : clearForm} />
           <form noValidate autoComplete="off" id="addProductForm" className="">
             <TextField
                 id='image'
@@ -264,7 +279,7 @@ export const ProductForm = (props) => {
                 </div>
             ))}
             <br/><br/>
-            <Button color="secondary" onClick={clearForm}>
+            <Button color="secondary" onClick={() => setShowAlert(true)}>
                 Limpiar
             </Button>
             <Button color="primary" href="#new-product" onClick={handleAddProduct}>
@@ -275,7 +290,7 @@ export const ProductForm = (props) => {
             {/* Ver productos */}
             <div>{products.map((product, index) => (
                 <div id="new-product" className="add-product" key={index}>
-                    {<ProductPDF product={product} removeProduct={handleRemoveProduct}/>}
+                    {<ProductPDF product={product} removeProduct={showConfirmation}/>}
                 </div>
                 // <Product key={product} number={product} />
             ))}</div>

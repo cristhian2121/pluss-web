@@ -277,10 +277,6 @@ export const FormQuotation = (props) => {
     props.endQuotation(data)
   }
 
-  const alertShow = () => {
-    console.log('entra al alert')
-  }
-
   return (
     <div >
       <div>
@@ -367,7 +363,7 @@ export const FormQuotation = (props) => {
         </div>
 
         {/* Unidades */}
-        <UnitsCost alertUnits={alertShow} handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
+        <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
 
         <div className="sub-title">
           <span className="text">Agregar productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
