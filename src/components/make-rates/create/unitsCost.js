@@ -9,48 +9,77 @@ export const UnitsCost = (props) => {
 
     const [units, setUnits] = useState(() => props.preUnits || [])
     const [oblUnit, setOblUnit] = useState(false)
+    const [errors, setErrors] = useState(false)
 
     const handleAddUnits = () => {
         const $unit = document.querySelector(`#unit`)
         console.log('$unit: ', $unit.value);
 
-        if ($unit.value) {
+        setErrors(false)
+
+        if (validate($unit)) {
             const unit = $unit.value
             const _units = [...units, unit]
             setUnits(units => [...units, unit]);
             props.handleAddUnit(_units)
             document.querySelector(`#unit`).value = ''
         }else {
-            setOblUnit(true)
+            // setOblUnit(true)
         }
     }
 
     const handleDelete = unitToDelete => () => {
-      let del = units.indexOf(unitToDelete)
-      if (del !== -1) {
-        units.splice(del, 1)
-        props.handleAddUnit(units)
-      }
+        if (!props.products.length) {
+            let del = units.indexOf(unitToDelete)
+            if (del !== -1) {
+              units.splice(del, 1)
+              props.handleAddUnit(units)
+            }
+        }else {
+            setErrors({cant: true})
+        }
     };
+
+    const validate = (e) => {
+        if (props.products.length) {
+            setErrors({cant: true})
+            return false
+        }
+        else if (!e.value) {
+            setErrors({obl: true})
+            return false
+        }
+
+        return true
+    }
+
+    const clearAlert = () => {
+        setOblUnit(false)
+    }
 
     return (
         <div className="row form-units">  
-            <div className="col-md-4 col-xs-12">
+            <div className="col-md-3 col-xs-12">
                 <TextField
                     id={'unit'}
                     name={'unit'}
                     label="Unidades"
-                    className="col-md-10 col-xs-10"
+                    className="col-12"
                 />
-                {oblUnit &&
+                {errors.obl &&
                     <div class="lbl-error" >
                         Debe ingresar una unidad válida.
                     </div>
                 }
-                <Button className="col-md-2 col-xs-2 button-more-units" onClick={handleAddUnits}>
-                    <AddCircleIcon />
-                </Button>
+                {errors.cant &&
+                    <div class="lbl-error" >
+                        No puede modificar las unidades porque hay productos agregados.
+                    </div>
+                }
             </div>
+            <Button className="col-md-1 col-xs-2 button-more-units" onClick={handleAddUnits}>
+                <AddCircleIcon />
+            </Button>
             {/* Mostrar unidades */}
             <div className="col-md-8 col-xs-12 margin-component">
                 {units.map(unit => (
