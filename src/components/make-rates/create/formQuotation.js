@@ -277,6 +277,10 @@ export const FormQuotation = (props) => {
     props.endQuotation(data)
   }
 
+  const alertShow = () => {
+    console.log('entra al alert')
+  }
+
   return (
     <div >
       <div>
@@ -286,11 +290,11 @@ export const FormQuotation = (props) => {
         </div>
         <div>
 
-        <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
+        <form id="quotationForm" className="form-quotation" >{/* onSubmit={saveQuotation} */}
             <MuiPickersUtilsProvider  utils={DateFnsUtils}>
               <KeyboardDatePicker
                 disabled
-                className="col-md-3 col-xs-12"
+                className="col-md-4 col-xs-12"
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
@@ -305,7 +309,7 @@ export const FormQuotation = (props) => {
                 }}
               />
             </MuiPickersUtilsProvider>
-            <FormControl className="col-md-3 col-xs-12" margin="normal">
+            <FormControl className="col-md-4 col-xs-12" margin="normal">
               <InputLabel id="clients">Cliente</InputLabel>
               <Select
                 labelId="client"
@@ -323,7 +327,7 @@ export const FormQuotation = (props) => {
 
             {/* segunda fila  */}
 
-            <FormControl className="col-md-3 col-xs-12" margin="normal">
+            <FormControl className="col-md-4 col-xs-12" margin="normal">
               <InputLabel id="users">Ejecutivo de ventas</InputLabel>
               <Select
                 labelId="user"
@@ -341,7 +345,7 @@ export const FormQuotation = (props) => {
             <TextField
               id="pay_format"
               name="pay_format"
-              className="col-md-3 col-xs-12"
+              className="col-md-4 col-xs-12"
               label="Formato de pago"
               margin="normal"
               value={idSelectUpdate ? selectUpdate.pay_format : null}
@@ -350,7 +354,7 @@ export const FormQuotation = (props) => {
             <TextField
               id="delivery_time"
               name="delivery_time"
-              className="col-md-2 col-xs-12"
+              className="col-md-4 col-xs-12"
               label="Tiempo de entrega (Días)"
               margin="normal"
               value={idSelectUpdate ? selectUpdate.delivery_time : null}
@@ -363,7 +367,7 @@ export const FormQuotation = (props) => {
         </div>
 
         {/* Unidades */}
-        <UnitsCost handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
+        <UnitsCost alertUnits={alertShow} handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
 
         <div className="sub-title">
           <span className="text">Agregar productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>

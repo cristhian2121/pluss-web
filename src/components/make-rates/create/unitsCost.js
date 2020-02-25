@@ -5,17 +5,23 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Chip from '@material-ui/core/Chip';
 
 export const UnitsCost = (props) => {
+    console.log('props: ', props);
 
     const [units, setUnits] = useState(() => props.preUnits || [])
+    const [oblUnit, setOblUnit] = useState(false)
 
     const handleAddUnits = () => {
         const $unit = document.querySelector(`#unit`)
-        if ($unit) {
+        console.log('$unit: ', $unit.value);
+
+        if ($unit.value) {
             const unit = $unit.value
             const _units = [...units, unit]
             setUnits(units => [...units, unit]);
             props.handleAddUnit(_units)
             document.querySelector(`#unit`).value = ''
+        }else {
+            setOblUnit(true)
         }
     }
 
@@ -28,19 +34,25 @@ export const UnitsCost = (props) => {
     };
 
     return (
-        <div className="row">  
-            <div className="col-md-3 col-xs-11">
+        <div className="row form-units">  
+            <div className="col-md-4 col-xs-12">
                 <TextField
                     id={'unit'}
                     name={'unit'}
                     label="Unidades"
+                    className="col-md-10 col-xs-10"
                 />
-                <Button className="button-more-units" onClick={handleAddUnits}>
+                {oblUnit &&
+                    <div class="lbl-error" >
+                        Debe ingresar una unidad válida.
+                    </div>
+                }
+                <Button className="col-md-2 col-xs-2 button-more-units" onClick={handleAddUnits}>
                     <AddCircleIcon />
                 </Button>
             </div>
             {/* Mostrar unidades */}
-            <div className="col-md-8 col-xs-10 margin-component">
+            <div className="col-md-8 col-xs-12 margin-component">
                 {units.map(unit => (
                     <Chip
                         key={unit}

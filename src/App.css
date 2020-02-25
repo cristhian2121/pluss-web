@@ -298,3 +298,21 @@
 .nav-bar-items .MuiListItemIcon-root {
   min-width: 30px !important;
 }
+
+/************************* FORM QUOTATION ***************************/
+
+.form-quotation {
+  padding: 0 3em;
+}
+
+.form-units {
+  padding: 1em 3em 0;
+}
+
+.lbl-error{
+  font-size: 11px;
+  color: red;
+  background: #f9d8d8;
+  width: 100%;
+  margin-right: 15px !important;
+}
