@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import MaterialTable from 'material-table';
 
+import AlertDialog from '../common/confirm'
 import conf from '../../config'
 
 export class List extends Component {
@@ -20,7 +21,9 @@ export class List extends Component {
             { title: 'Documento', field: 'identification_number' },
             { title: 'Teléfono', field: 'phone_number'}
         ],
-        dataUser: []
+        dataUser: [],
+        showAlert: false,
+        selectRegister: null,
     };
 
     render () {
@@ -45,13 +48,23 @@ export class List extends Component {
                     },
                     {
                         icon: 'delete',
-                        tooltip: 'Eliminar cliente',
+                        tooltip: 'Eliminar usuario',
                         onClick: (event, rowData) => {
-                          console.log('rowData: ', rowData);
-                          this.props.selectDelete(rowData)                     
+                          this.setState({
+                            showAlert: true,
+                            selectRegister: rowData
+                          })
+                          // this.props.selectDelete(rowData)                     
                         }
                     }
                   ]}
+            />
+
+            <AlertDialog
+                open={this.state.showAlert}
+                option={this.state.selectRegister && true}
+                close={() => this.setState({showAlert: !this.state.showAlert})}
+                confirm={() => this.props.selectDelete(this.state.selectRegister)}
             />
         </div>
       );
