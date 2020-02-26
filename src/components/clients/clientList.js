@@ -1,6 +1,8 @@
 import React from 'react'
 import MaterialTable from 'material-table';
 
+import AlertDialog from '../common/confirm'
+
 export class ClientList extends React.Component {
     constructor(props){
         super(props)
@@ -15,9 +17,12 @@ export class ClientList extends React.Component {
             { title: 'Nombre', field: 'name' },
             { title: 'Teléfono', field: 'phone' },
             { title: 'Asesor de venta', field: 'agent' },
-            { title: 'Ciudad', field: 'city'}
+            { title: 'Ciudad', field: 'city'},
+            { title: 'id', field: 'id'}
         ],
-        dataUser: []
+        dataUser: [],
+        showAlert: false,
+        selectRegister: null,
     };
 
     render () {
@@ -41,13 +46,31 @@ export class ClientList extends React.Component {
                         }
                     },
                     {
+                        icon: 'file_copy',
+                        tooltip: 'Duplicar cliente',
+                        onClick: (event, rowData) => {
+                            this.props.duplicateClient(rowData)
+                        }
+                    },
+                    {
                         icon: 'delete',
                         tooltip: 'Eliminar cliente',
                         onClick: (event, rowData) => {
-                            this.props.selectDelete(rowData)
+                            this.setState({
+                                showAlert: true,
+                                selectRegister: rowData
+                            })
+                            // this.props.selectDelete(rowData)
                         }
                     }
                   ]}/>
+
+            <AlertDialog
+                open={this.state.showAlert}
+                option={this.state.selectRegister && true}
+                close={() => this.setState({showAlert: !this.state.showAlert})}
+                confirm={() => this.props.selectDelete(this.state.selectRegister)}
+            />
         </div>
       );
     }

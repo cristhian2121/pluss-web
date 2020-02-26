@@ -25,8 +25,19 @@ const buildUnits = (quotation) => {
 }
 
 const printPDF = () => {
-    window.print()
-    return true
+    // window.print()
+    // return true
+    let data = {'aa':'cccc'}
+    // let data = document.getElementById('pdf')
+    // let data = element.innerHTML
+    console.log('data: ', data);
+    fetch(`${conf.api_url}/quotation/pdf/`,{
+        method: 'POST',
+        body: data,
+        headers:{'Content-Type':'application/json'}//'text/xml'}
+    }).then(response => response.json())
+    .then(res => console.log(res))
+    .catch(e => console.log('error', e))
 }
 
 const getQuotation = async(quotation) => {
@@ -44,12 +55,14 @@ const getQuotation = async(quotation) => {
 const getQuotationSession = (props) => {
     const idInitial = props.match.params.id;
     const dataString = idInitial ? getQuotation(idInitial) : JSON.parse(sessionStorage.getItem('quotation'));
+    // const dataString = JSON.parse(sessionStorage.getItem('quotation'));
+    console.log('dataString: ', dataString);
 
     return dataString;
 }
 
 export const GeneratePDFHook = (props) => {
-    console.log('props pdf: ', props.match.path);
+    console.log('props pdf: ', props);
     const [unitsCost, setUnitsCost] = useState([])
     const [quotation, SetQuotation] = useState()    
 
@@ -67,7 +80,7 @@ export const GeneratePDFHook = (props) => {
     }, []);
 
     return (
-        <div>
+        <div id='pdf'>
             {quotation && <div className="container-pdf">
                 <section>
                     <div className="header-pdf col-12 d-flex">
@@ -129,10 +142,11 @@ export const GeneratePDFHook = (props) => {
                         <div className="col-2 px-0"></div>
                         <div className="col-2 px-0">
                             <div className="sub-title-pdf text-center">Información de contacto</div><br />
-                            <p>Cristina Tobon</p>
+                            <p>{quotation.user.first_name}</p>
                             <p>Ventas</p>
                             <p>PLUSS P.O.P S.A.S</p>
-                            <p>Cel: 312 310 6719</p>
+                            <p>Email: {quotation.user.email}</p>
+                            <p>Cel: {quotation.user.phone_number}</p>
                         </div>
                     </div><br />
                 </section>

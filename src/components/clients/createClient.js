@@ -10,23 +10,17 @@ export class CreateClient extends React.Component {
     console.log('props: ', props);
     super(props)
     this.state = {
-      dataEdit: null
+      idClient: props.clientUpdate ? props.clientUpdate.id : null,
+      name: props.clientUpdate ? props.clientUpdate.name : null,
+      nit: props.clientUpdate ? props.clientUpdate.nit : null,
+      phone: props.clientUpdate ? props.clientUpdate.phone : null,
+      agent: props.clientUpdate.agent ? props.clientUpdate.agent : null,
+      dependece: props.clientUpdate.dependece ? props.clientUpdate.dependece : null,
+      city: props.clientUpdate ? props.clientUpdate.city : null,
+      address: props.clientUpdate ? props.clientUpdate.address : null,
+      email: props.clientUpdate ? props.clientUpdate.email : null,
+      phone_two: props.clientUpdate ? props.clientUpdate.phone_two : null,
     }
-  }
-
-  componentWillReceiveProps = (nextProps)=>{
-    this.setState({
-      dataEdit: nextProps.clientUpdate ? nextProps.clientUpdate.name : null,
-      name: nextProps.clientUpdate ? nextProps.clientUpdate.name : null,
-      nit: nextProps.clientUpdate ? nextProps.clientUpdate.nit : null,
-      phone: nextProps.clientUpdate ? nextProps.clientUpdate.phone : null,
-      agent: nextProps.clientUpdate.agent ? nextProps.clientUpdate.agent : null,
-      dependece: nextProps.clientUpdate.dependece ? nextProps.clientUpdate.dependece : null,
-      city: nextProps.clientUpdate ? nextProps.clientUpdate.city : null,
-      address: nextProps.clientUpdate ? nextProps.clientUpdate.address : null,
-      email: nextProps.clientUpdate ? nextProps.clientUpdate.email : null,
-      phone_two: nextProps.clientUpdate ? nextProps.clientUpdate.phone_two : null,
-    })
   }
 
   addClient = (event) => {
@@ -55,7 +49,7 @@ export class CreateClient extends React.Component {
         dependece: dependece
       }
       console.log("ok", this.state)
-      this.state.dataEdit ? this.props.updateClient(client) : this.props.saveClient(client)
+      this.state.idClient ? this.props.updateClient(client) : this.props.saveClient(client)
     }else{
       console.log('faltan datos')
     }
@@ -86,7 +80,7 @@ export class CreateClient extends React.Component {
     this.client = {}
     document.getElementById("clientForm").reset()
     this.setState({
-      dataEdit: null,
+      idClient: null,
       name: null,
       nit: null,
       city: null,
@@ -97,6 +91,7 @@ export class CreateClient extends React.Component {
       phone: null,
       phone_two: null
     })
+    this.props.cancelForm(false)
   };
 
   handleChange = e => {
@@ -133,33 +128,33 @@ export class CreateClient extends React.Component {
 
   render() {
     return (
-      <>
-        <div className="sub-title">
-          <span className="text">
-            {this.state.dataEdit ? 'Editar cliente' : 'Crear Cliente' }
-          </span>
-        </div>
-        <form noValidate id="clientForm">
-          <TextField id="name" name="name" label="Nombre empresa" value={this.state.name} onChange={this.handleChange} className="col-md-3 col-xs-12" margin="normal"/>
-          <TextField id="nit" name="nit" label="Nit" value={this.state.nit} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
-          <TextField id="agent" name="agent" label="Nombre representante" value={this.state.agent} onChange={this.handleChange} className="col-md-3 col-xs-12" margin="normal"/>
-          <TextField id="dependece" name="dependece" label="Area a la que pertenece" value={this.state.dependece} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
-          <TextField id="email" name="email" label="Correo electrónico" value={this.state.email} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
-          <TextField id="phone" name="phone" label="Teléfono" value={this.state.phone} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
-          <TextField id="phone_two" name="phone_two" label="Teléfono alternativo" value={this.state.phone_two} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
-          <TextField id="city" name="city" label="Ciudad" value={this.state.city} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
-          <TextField id="address" name="address" label="Dirección" value={this.state.address} onChange={this.handleChange} className="col-md-2 col-xs-12" margin="normal"/>
-
-          <div className="text-center container-button">
-            <Button variant="contained" onClick={this.clearForm}>
-              Limpiar
-            </Button>
-            <Button variant="contained" color="secondary" onClick={this.addClient}>
-              Guardar
-            </Button>
+      <div className="create-update">
+        <div className="create-update-form">
+          <div className="title-modal">
+              {this.state.idClient ? 'Editar' : 'Crear' } Cliente
           </div>
-        </form>
-      </>
+          <form noValidate id="clientForm">
+            <TextField id="name" name="name" label="Nombre empresa" value={this.state.name} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="nit" name="nit" label="Nit" value={this.state.nit} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="agent" name="agent" label="Nombre responsable" value={this.state.agent} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="dependece" name="dependece" label="Area responsable" value={this.state.dependece} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="email" name="email" label="Correo electrónico" value={this.state.email} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="phone" name="phone" label="Teléfono" value={this.state.phone} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="phone_two" name="phone_two" label="Teléfono alternativo" value={this.state.phone_two} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="city" name="city" label="Ciudad" value={this.state.city} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+            <TextField id="address" name="address" label="Dirección" value={this.state.address} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+
+            <div className="text-center container-button">
+              <Button variant="contained" onClick={this.clearForm}>
+                Cancelar
+              </Button>
+              <Button variant="contained" color="secondary" onClick={this.addClient}>
+                Guardar
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
     )
   }
 }

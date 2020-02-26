@@ -1,6 +1,8 @@
 import React from "react"
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Button from '@material-ui/core/Button';
 
 import { CreateClient } from './createClient'
 import { ClientList } from './clientList'
@@ -17,7 +19,8 @@ export class Clients extends React.Component {
         open: false,
         message: '',
         type: '',
-      }
+      },
+      openCreateUpdate: false
     }
     this.clientDelete = this.clientDelete.bind(this)
   }
@@ -39,10 +42,11 @@ export class Clients extends React.Component {
       .catch(e => {
         console.log('Error getClient: ', e)
       })
-    this.clearForm()
+    // this.clearForm()
   }
 
   saveClient = (client) => {
+    console.log('client: ', client);
     fetch(`${config.api_url}/client/`,
       {
         method: 'POST',
@@ -53,6 +57,7 @@ export class Clients extends React.Component {
       }).then(res => res.json())
       .catch(error => console.log('Error saveClient: ', error))
       .then(response => {
+        console.log('response: ', response)
         this.setState({
           clients: [...this.state.clients, client],
           alert: {
@@ -61,12 +66,15 @@ export class Clients extends React.Component {
             type: 'success'
           }
         })
-        this.clearForm()
+        // this.clearForm()
+        this.showForm()
       })
   }
 
   updateClient = (client) => {
+    console.log('client: ', client);
     let idClient = this.state.updateClient.id
+    console.log('idClient: ', idClient);
     fetch(`${config.api_url}/client/${idClient}/`,
       {
         method: 'PUT',
@@ -87,7 +95,8 @@ export class Clients extends React.Component {
               type: 'success'
             }
           })
-          this.clearForm()
+          // this.clearForm()
+          this.showForm()
         } else {
           let idCli = this.state.updateClient.id
           this.setState({
@@ -121,27 +130,56 @@ export class Clients extends React.Component {
       .catch(e => { console.log('Error clientDelete: ', e) })
   }
 
-  clearForm() {
-    document.getElementById("clientForm").reset()
-  }
+  // clearForm() {
+  //   // document.getElementById("clientForm").reset()
+  // }
 
   selectUpdate = (client) => {
+    this.showForm('update')
     this.setState({
       updateClient: client
     })
+  }
+
+  showForm = (action) => {
+    this.setState({
+      openCreateUpdate: !this.state.openCreateUpdate
+    })
+    if (action != "update") {
+      console.log('entro al if')
+      this.setState({
+        updateClient: {},
+      })
+    }
   }
 
   render() {
 
     return (
       <>
-        <div className="title">
-          Clientes
+        <div className="title row">
+          <div className="title-text col-md-6 col-xs-12">
+            Clientes
+          </div>
+          <div className="action-title col-md-6 col-xs-12">
+            <span onClick={this.showForm} className="text">
+            Crear Cliente
+            <Button className="button-more" onClick={this.showForm}><AddCircleIcon/>  </Button>
+            </span>
+          </div>
         </div>
 
-        <CreateClient saveClient={this.saveClient} clientUpdate={this.state.updateClient} updateClient={this.updateClient} />
+        {
+          this.state.openCreateUpdate &&
+          <CreateClient 
+          saveClient={this.saveClient}
+          clientUpdate={this.state.updateClient}
+          updateClient={this.updateClient}
+          cancelForm={this.showForm}
+          />
+        }
 
-        <ClientList selectDelete={this.clientDelete} selectUpdate={this.selectUpdate} clientList={this.state.clients} />
+        <ClientList duplicateClient={this.saveClient} selectDelete={this.clientDelete} selectUpdate={this.selectUpdate} clientList={this.state.clients} />
 
         <Snackbar
           open={this.state.alert.open}

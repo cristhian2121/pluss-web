@@ -42,14 +42,16 @@ export const ProductPDF = ({ product, removeProduct }) => {
                     <Table aria-label="a dense table">
                         <TableHead>
                             <TableRow>
-                            {product.units && product.units.map((unit) => (
+                            <TableCell> Cantidad </TableCell>
+                            {product.units.map((unit) => (
                             <TableCell>{unit} Und</TableCell>
                             ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             <TableRow key=''>
-                            {product.units && product.units.map((unit, index) => (
+                            <TableCell component="th" scope="row"> Precio </TableCell>
+                            {product.units.map((unit, index) => (
                                 <TableCell component="th" scope="row">
                                   {formatCurrency.format(product.prices[index])}
                                 {/* $ {product.prices[index]} */}
@@ -58,23 +60,24 @@ export const ProductPDF = ({ product, removeProduct }) => {
                             </TableRow>
                         </TableBody>
                     </Table>
-                </div><br/>
+                </div>
                 <div className="col-12 text-center">
                     <p className="name-product">{product.name.charAt(0).toUpperCase() + product.name.slice(1).toLowerCase()}</p>
                     <p style={{textAlign: "justify"}}>{product.description}</p>
                     <div className="text-descriptionPDF" style={{textAlign: "justify"}}>
                         <p><b>Material: </b>{product.material}</p>
-                        <p><span>Medidas: </span>{product.size}</p>
-                        <p><span>Colores: </span>{product.colors}</p>
-                        <p><span>Perzonalización: </span>{product.prints}</p>
-                        <p><span>Inventario: </span>{product.inventory}</p>
+                        <p><b>Medidas: </b>{product.size}</p>
+                        <p><b>Colores: </b>{product.colors}</p>
+                        <p><b>Perzonalización: </b>{product.prints}</p>
+                        <p><b>Inventario: </b>{product.inventory}</p>
                     </div>
 
+                    {product.observation && 
                     <div className="text-descriptionPDF" style={{textAlign: "justify"}}>
                         <p><b><span>Observaciones: </span></b><br/>{product.observation}</p>
-                    </div>
+                    </div>}
                 </div>
-            </div>
+            </div> 
         </div></>
     )
 }

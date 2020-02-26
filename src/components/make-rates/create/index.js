@@ -8,6 +8,7 @@ import {
 import { FormQuotation } from './formQuotation'
 import { GeneratePDF } from '../../common/pdf'
 import { Menu } from '../../common/nav-bar'
+import conf from '../../../config'
 
 // redux
 import { connect } from 'react-redux'
@@ -24,8 +25,8 @@ class CreateQuotationHook extends Component {
     this.state = {
       downloadPDF: false,
       preView: false,
-      dataInput: this.props.location.state,
-      rendered: false
+      OpenAlert: null,
+      redirectList: false
     }
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
@@ -89,10 +90,39 @@ class CreateQuotationHook extends Component {
 
   createQuotation(data) {
     this.props.createQuotation({ ...data })
+
+    fetch(`${conf.api_url}/quotation/`,{ method: 'POST', body: JSON.stringify(data),
+      headers:{ 'Content-Type': 'application/json' }})
+      .then(async (response) => {
+        let resp = await response.json()
+
+        if (response.status === 200 ||  response.status == 201){
+          this.setState({
+            OpenAlert: {
+              open: true,
+              message: 'La cotización se creo correctamente.',
+              type:'success'
+            }
+          })        
+        }
+    })
+    .catch(error => console.log('Error: ', error))
+  }
+
+  endQuotation(data) {
+    console.log('data llega al index: ', data);
+    
+    fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(data),headers:{ 'Content-Type': 'application/json' } })
+    .then(async (response) => {
+      console.log('response: ', response);
+      let resp = response.json()
+      console.log('entro al senemail: ', resp);
+    })
+    .catch(e => console.log('no entro al send Email', e))
+
   }
 
   render() {
-    // let updatesQuotation = this.props.location.state.selectUpdate ? this.props.location.state.selectUpdate : null
     return (
       <div>
         {/* <Menu /> */}
@@ -100,9 +130,10 @@ class CreateQuotationHook extends Component {
           eventCreateQuotation={this.createQuotation}
           preQuotation={this.props.quotationReducer.quotation}
           eventSavePDF={this.eventSavePDF}
-          updateQuotation={this.state.dataInput}
-        />}
-        {/* {this.redirectToPDF()} */}
+          updateQuotation={this.props.location.state}
+          endQuotation = {this.endQuotation}
+        />,
+        this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state: this.state.openAlert}}/>}
       </div>
     );
   }

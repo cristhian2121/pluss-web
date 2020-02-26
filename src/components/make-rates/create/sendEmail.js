@@ -4,15 +4,33 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+
 export const SendEmail = (props) => {
 
+    const sendEmail = () => {
+        let data = generateData()
+        data.status = "Finalizado"
+
+        props.sendEmail(data)
+    }
+
+    const generateData = () => {
+        let elements = document.getElementById('form-send-email').elements;
+        let data = {};
+        console.log('dataform', elements)
+        for (let item of elements) {
+          data[item.name] = item.value;
+        }
+        return data
+      }
+
     return (
-        <div className="send-email">
-            <div className="send-email-form">
-                <form className="">
-                    <div className="title">
-                        Enviar cotización
-                    </div>
+        <div className="create-update">
+            <div className="create-update-form">
+                <div className="title-modal">
+                    Enviar cotización
+                </div>
+                <form id="form-send-email">
                     <TextField
                         id="subject"
                         name="subject"
@@ -21,15 +39,15 @@ export const SendEmail = (props) => {
                         className="col-md-6 col-xs-12"
                         />
                     <TextField
-                        id="send-copy"
-                        name="send-copy"
+                        id="send_copy"
+                        name="send_copy"
                         label="Enviar copia"
                         margin="normal"
                         className="col-md-6 col-xs-12"
                         />
                     <TextField
-                        id='observation'
-                        name='observation'
+                        id='message'
+                        name='message'
                         multiline
                         rowsMax="4"
                         label="Observaciones"
@@ -40,7 +58,7 @@ export const SendEmail = (props) => {
                         <Button variant="contained" onClick={() => props.cancelEmail(false)}>
                             Cancelar
                         </Button>
-                        <Button variant="contained" color="secondary" onClick={() => props.sendEmail("Finalizado")} >
+                        <Button variant="contained" color="secondary" onClick={sendEmail} >
                             Enviar cotización
                         </Button>
                     </div>

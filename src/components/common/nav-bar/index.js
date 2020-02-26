@@ -15,6 +15,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Tooltip from '@material-ui/core/Tooltip';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import PageNotFound from "../page-not-found";
 import { User } from "../../../pages/users/index";
@@ -24,7 +26,7 @@ import { GeneratePDF } from '../pdf'
 import ListItemText from '@material-ui/core/ListItemText';
 
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,10 +71,11 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen
     }),
     overflowX: "hidden",
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1
-    }
+    width: 50,
+    // theme.spacing(7) + 1,
+    // [theme.breakpoints.up("sm")]: {
+    //   width: theme.spacing(9) + 1
+    // }
   },
   content: {
     flexGrow: 1,
@@ -87,6 +90,10 @@ export const Menu = ({ children }) => {
   const handleDrawerClose = () => {
     open ? setOpen(false) : setOpen(true);
   };
+
+  const logOut = () => {
+    
+  }
 
   return (
     <div className={classes.root} id="nav-var-pluss">
@@ -110,7 +117,7 @@ export const Menu = ({ children }) => {
           </IconButton>
         </div>
         <Divider />
-        <List>
+        <List >
           {[
             {
               text: "Usuarios",
@@ -138,17 +145,26 @@ export const Menu = ({ children }) => {
               path: "/clientes"
             }
           ].map((section, index) => (
-            <ListItem button key={section.text}>
-              <Tooltip title={section.text}>
-                <Link to={section.path}>
+            <ListItem button key={section.text} className='nav-bar-items'>
+              <Tooltip title={section.text} placement="right-start" variant="regular" className='row nav-bar-text'>
+                <Link to={section.path} >
                   <ListItemIcon>{section.icon}</ListItemIcon>
-                  {/* <ListItemText primary={section.text} /> */}
+                  {open && <p>{section.text}</p>}
                 </Link>
               </Tooltip>
             </ListItem>
           ))}
         </List>
         <Divider />
+        <div >
+          <Link to="/" >
+            <Tooltip title="Cerrar sesión" placement="right-start" variant="regular">
+              <IconButton onClick={logOut}>
+                <ExitToAppIcon />
+              </IconButton>
+            </Tooltip>            
+          </Link>
+        </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
