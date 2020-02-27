@@ -34,6 +34,41 @@
     margin: 0em 0.5em !important;
 }
 
+/*************************** Style lists **********************/
+table:first-child td div button span.material-icons.MuiIcon-root {
+    background: #d22e2e;
+    border-radius: 50px;
+    padding: 4px;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+table:first-child td div button {
+    padding: 3px;
+}
+
+table:first-child td div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+td.MuiTableCell-root.MuiTableCell-body.MuiTableCell-alignLeft {
+    text-align: center;
+}
+
+button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorInherit:hover span {
+    transition: .1s;
+    font-size: 19px;
+    width: 31px;
+    height: 31px;
+}
+
 /***** envio de emails ***********/
 .create-update {
     display: flex;

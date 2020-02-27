@@ -147,8 +147,20 @@ export const FormQuotation = (props) => {
     let idClient = data.client
     let idUser = data.user
     console.log('idUser: ', idUser);
-    data.client = dataClients.filter(item => item.id == idClient)
-    data.user = dataUsers.filter(item => item.user.id == idUser)
+
+    for (let i = 0; i < dataClients.length; i++){
+      if (dataClients[i].id == idClient) {
+        data.client = dataClients[i]
+      }
+    }
+
+    for (let i=0; i < dataUsers.length; i++) {
+      if (dataUsers[i].id == idUser) {
+        data.user = dataUsers[i]
+      }
+    }
+    // data.client = dataClients.filter(item => item.id == idClient)
+    // data.user = dataUsers.filter(item => item.user.id == idUser)
 
     sessionStorage.setItem('quotation', JSON.stringify(data))
     props.eventSavePDF(data)

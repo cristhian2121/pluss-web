@@ -43,8 +43,11 @@
 
 
 .App {
-  /* text-align: center; */
   font-family: Roboto,-apple-system,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+:focus {
+  outline: none !important;
 }
 
 .App-logo {
@@ -281,12 +284,13 @@
   margin-left: 0 !important;
   color: #000000 !important;
   text-decoration: none !important;
-  /* font-weight: 400 !important; */
   font-size: 1em !important;
 }
 
 .nav-bar-items:hover .MuiListItemIcon-root {
   color: #db2929 !important;
+  /* text-decoration: none; */
+  /* background-color: #f9d8d8; */
   /* color: #f9d8d8 !important; */
 }
 
@@ -297,6 +301,23 @@
 
 .nav-bar-items .MuiListItemIcon-root {
   min-width: 30px !important;
+}
+
+button.MuiButtonBase-root.MuiIconButton-root:hover,
+.MuiListItem-button:hover,
+.MuiButtonBase-root.MuiListItem-root.nav-bar-items.MuiListItem-gutters.MuiListItem-button:hover {
+  background-color: #f9d8d8;
+  color: #db2929;
+  text-decoration: none !important;
+}
+
+.MuiDrawer-paperAnchorDockedLeft {
+  border-right: 2px solid rgb(249, 216, 216);
+}
+
+.MuiDivider-root {
+  height: 2px !important;
+  background-color: rgb(249, 216, 216) !important;
 }
 
 /************************* FORM QUOTATION ***************************/
