@@ -90,7 +90,6 @@ export const UnitsCost = (props) => {
                         color="primary"
                         variant="outlined"
                     />
-                    // <span key={unit} style={{ paddingRight: '1em' }}>{unit},</span>
                 ))}
             </div>
         </div>

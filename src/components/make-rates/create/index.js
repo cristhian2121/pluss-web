@@ -6,14 +6,11 @@ import {
 
 // components
 import { FormQuotation } from './formQuotation'
-import { GeneratePDF } from '../../common/pdf'
-import { Menu } from '../../common/nav-bar'
 import conf from '../../../config'
 
 // redux
 import { connect } from 'react-redux'
 import * as quotationActions from '../../../actions/quotationActions'
-import { getQuotationActive } from '../../../actions/quotationActions'
 
 class CreateQuotationHook extends Component {
 
@@ -37,40 +34,15 @@ class CreateQuotationHook extends Component {
   componentDidMount() {
     const quotation = this.props.quotation;
     console.log('quotation: ', quotation);
-    // const $navBar = document.querySelector('#nav-var-pluss')
-    // $navBar.style.visibility = 'visible'
   }
 
   eventSavePDF(quotation) {
     console.log('quotation: ', quotation);
-    // this.props.createQuotation(quotation);
-    // this.setState({ preView: true })
-    // this.preViewPDF = true
-    // this.redirectToPDF()
-    // const $link = document.querySelector('#new-tap');
-    // $link.print()
-    // this.amor($link)
     window.open('/cotizacion', '_blank','',true)
   }
 
-  // amor($link) {
-  //   let mywindow = window.open('', 'PRINT', 'height=400,width=600');
-
-  //   mywindow.document.appendChild(
-  //     $link
-  //   )
-
-  //   mywindow.document.close(); // necessary for IE >= 10
-  //   mywindow.focus(); // necessary for IE >= 10*/
-
-  //   mywindow.print();
-  //   mywindow.close();
-  // }
-
   redirectToPDF() {
     if (this.preViewPDF) {
-      // return <Redirect to='/cotizacion' push={true} />
-      
       this.props.history.push('/cotizacion')
     }
   }
@@ -97,8 +69,7 @@ class CreateQuotationHook extends Component {
   }
 
   endQuotation(data) {
-    console.log('data llega al index: ', data);
-    
+    console.log('data llega al index: ', data);    
     fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(data),headers:{ 'Content-Type': 'application/json' } })
     .then(async (response) => {
       console.log('response: ', response);
@@ -106,13 +77,11 @@ class CreateQuotationHook extends Component {
       console.log('entro al senemail: ', resp);
     })
     .catch(e => console.log('no entro al send Email', e))
-
   }
 
   render() {
     return (
       <div>
-        {/* <Menu /> */}
         <FormQuotation
           eventCreateQuotation={this.createQuotation}
           preQuotation={this.props.quotation}
@@ -120,14 +89,11 @@ class CreateQuotationHook extends Component {
           updateQuotation={this.props.location.state}
           endQuotation = {this.endQuotation}
         />          
-        {/* {this.redirectToPDF()} */}
         {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state: this.state.openAlert}}/>}
       </div>
     );
   }
 }
-
-// pass state to props (console.log(pros)) end i selected the into return
 
 const mapStateToProps = (reducers) => {
   return reducers.quotationReducer;
