@@ -11,6 +11,7 @@ import conf from '../../../config'
 // redux
 import { connect } from 'react-redux'
 import * as quotationActions from '../../../actions/quotationActions'
+import * as productActions from '../../../actions/productActions'
 
 class CreateQuotationHook extends Component {
 
@@ -84,7 +85,7 @@ class CreateQuotationHook extends Component {
       <div>
         <FormQuotation
           eventCreateQuotation={this.createQuotation}
-          preQuotation={this.props.quotation}
+          preQuotation={this.props.quotationReducer.quotation}
           eventSavePDF={this.eventSavePDF}
           updateQuotation={this.props.location.state}
           endQuotation = {this.endQuotation}
@@ -95,12 +96,23 @@ class CreateQuotationHook extends Component {
   }
 }
 
-const mapStateToProps = (reducers) => {
-  return reducers.quotationReducer;
+const mapStateToProps = reducers => {
+  return {
+    productReducer: reducers.productReducer,
+    quotationReducer: reducers.quotationReducer
+  }
+
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    productActions,
+    quotationActions
+  }
+}
+
 // connect reducer to component
-const CreateQuotation = connect(mapStateToProps, quotationActions)(CreateQuotationHook);
+const CreateQuotation = connect(mapStateToProps, mapDispatchToProps)(CreateQuotationHook);
 export {
   CreateQuotation
 }

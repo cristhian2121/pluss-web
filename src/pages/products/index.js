@@ -53,13 +53,11 @@ class Products extends PureComponent {
 
   componentDidMount(props) {
     this.getProducts()
-    if(this.state.products.length){
+    if (this.state.products.length) {
       this.setState({
         productsSelecteds: this.state.products.map(_ => _.id)
       })
     }
-    console.log('this.props: ', this.props);
-    console.log('productsSelecteds: ', this.state.productsSelecteds);
   }
 
   getProducts = async () => {
@@ -92,6 +90,10 @@ class Products extends PureComponent {
     this.setState({ productsSelecteds: [...this.state.productsSelecteds, dataProduct.id] });
   }
 
+  goToCreateQuotation = () => {
+
+  }
+
   render() {
     return (
       <div>
@@ -102,7 +104,9 @@ class Products extends PureComponent {
             </div>
             <div className="col-4 px-0 d-flex flex-row-reverse">
               {this.state.productsSelecteds.length}
-              <LocalGroceryStoreIcon />
+              <span className="store-car" onClick={this.goToCreateQuotation()}>
+                <LocalGroceryStoreIcon />
+              </span>
             </div>
           </div>
         </div>
