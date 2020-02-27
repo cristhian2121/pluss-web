@@ -21,7 +21,7 @@ export const UnitsCost = (props) => {
             const unit = $unit.value
             const _units = [...units, unit]
             setUnits(units => [...units, unit]);
-            props.handleAddUnit(_units)
+            !props.fromDialog && props.handleAddUnit(_units)
             document.querySelector(`#unit`).value = ''
         }else {
             // setOblUnit(true)
@@ -29,7 +29,7 @@ export const UnitsCost = (props) => {
     }
 
     const handleDelete = unitToDelete => () => {
-        if (!props.products.length) {
+        if (props.products && !props.products.length) {
             let del = units.indexOf(unitToDelete)
             if (del !== -1) {
               units.splice(del, 1)
@@ -41,7 +41,7 @@ export const UnitsCost = (props) => {
     };
 
     const validate = (e) => {
-        if (props.products.length) {
+        if (props.products && props.products.length) {
             setErrors({cant: true})
             return false
         }
@@ -90,7 +90,6 @@ export const UnitsCost = (props) => {
                         color="primary"
                         variant="outlined"
                     />
-                    // <span key={unit} style={{ paddingRight: '1em' }}>{unit},</span>
                 ))}
             </div>
         </div>

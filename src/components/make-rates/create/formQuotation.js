@@ -3,7 +3,6 @@ import {Redirect} from "react-router-dom";
 import { createHashHistory } from 'history'
 
 // Material
-import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -16,33 +15,20 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-// PDF
-// import pdfMake from "pdfmake/build/pdfmake";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
-
-
 // Icons
-import ExpandLessIcon from '@material-ui/icons/ExpandMore';
+
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-
-import { Link } from "react-router-dom"
 
 // component
 import { ProductForm } from './addProduct'
 import { SendEmail } from './sendEmail'
-
-// utils
-// import { generateTemplatePDF } from '../../common/pdf/templatePDF'
-
-
 import { UnitsCost } from './unitsCost'
+import conf from '../../../config'
 
 // css
 import '../../../styles/commons.css';
-import { da } from "date-fns/locale";
 
-import conf from '../../../config'
 
 
 
@@ -59,7 +45,6 @@ export const FormQuotation = (props) => {
   const [clientSelectUpdate, setCientSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.client : null)
   const [userSelectUpdate, setUserSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.user : null)
   const [idSelectUpdate, setIdSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.id : null)
-  // pdfMake.vfs = pdfFonts.pdfMake.vfs;
   const [redirectList, setRedirectList] = useState(false)
   const [openAlert, setOpenAlert] = useState({})
   const [openEmail, setOpenEmail] = useState(false)
@@ -82,13 +67,6 @@ export const FormQuotation = (props) => {
   const showUnits = () => {
     setshowUnitForm(!showUnitForm)
   }
-
-  // const calculateValue = (event) => {
-  //   const eventAux = { ...event }
-  //   SetCostUnit(costUnit => {
-  //     return { ...costUnit, discount: eventAux.target.value }
-  //   })
-  // }
 
   const handleAddUnit = (_units) => {
     SetUnits(units => [..._units])
@@ -186,24 +164,6 @@ export const FormQuotation = (props) => {
 
     sessionStorage.setItem('quotation', JSON.stringify(data))
     props.eventSavePDF(data)
-
-    // const templatePdf = await generateTemplatePDF(data)
-    // pdfMake.createPdf(templatePdf).open();
-
-    // fetch(`${conf.api_url}/quotationtemp/`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({ data: data }),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     props.eventSavePDF(res.data)
-    //   })
-    //   .catch(() => {
-    //     console.log('ERROR');
-    //   })
   }
 
   const generateData = () => {
@@ -216,7 +176,6 @@ export const FormQuotation = (props) => {
     }
     obj.products = products
     obj.units = units
-    // obj.products = generateProducts({ ...obj });
     return obj
   }
 
@@ -236,10 +195,7 @@ export const FormQuotation = (props) => {
     try {
       let response = await fetch(`${conf.api_url}/profile/`)
       let data = await response.json();
-      console.log('data users: ', data);
-
       setDataUsers(data.results)
-
     } catch (error) {
       console.log('error', error)
     }
@@ -268,18 +224,12 @@ export const FormQuotation = (props) => {
 
   const preEmail = () => {
     setOpenEmail(true)
-    // idSelectUpdate ? updateQuotation("En progreso") : saveQuotation("En progreso")
-    // updateQuotation("Finalizado")
-
   }
 
   const confEmail = (dataEmail) => {
     let data = dataEmail
     let formQuotation = generateData()
-    console.log('formQuotation antes de enviar: ', formQuotation);
     data.client = formQuotation.client
-    console.log('data final: ', data);
-
     props.endQuotation(data)
   }
 
@@ -292,7 +242,7 @@ export const FormQuotation = (props) => {
         </div>
         <div>
 
-        <form id="quotationForm" className="form-quotation" >{/* onSubmit={saveQuotation} */}
+        <form id="quotationForm" className="form-quotation" >
             <MuiPickersUtilsProvider  utils={DateFnsUtils}>
               <KeyboardDatePicker
                 disabled
