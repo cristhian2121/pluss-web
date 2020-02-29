@@ -26,3 +26,12 @@
 .text-alter {
     padding-top: 4em;
 }
+
+.store-car {
+    font-size: 1.7 !important;
+    cursor: pointer;
+}
+
+.store-car :hover {
+    font-size: 1.8 !important;
+}

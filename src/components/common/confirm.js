@@ -6,44 +6,94 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import { UnitsCost } from '../make-rates/create/unitsCost';
+
 export default function AlertDialog(props) {
-    console.log('props: ', props);
-  const [optionDelete, setOptionDelete] = React.useState(props.option);
+  console.log('props: ', props);
+  // const [optionDelete, setOptionDelete] = React.useState(props.option);
+  const [content, setContent] = React.useState();
+  let units = [];
+  const UNITS_TEXT = 'units';
 
   const handleClose = () => {
     props.close(false)
   };
 
   const handleConfirm = () => {
-      props.confirm(true)
-      handleClose()
+    props.option == UNITS_TEXT  ? props.confirm(units) : props.confirm(true);
+    handleClose();
   }
 
+  const manageContent = (option) => {
+    switch (option) {
+      case true:
+        setContent({
+          ...content,
+          buttonText: 'Eliminar',
+          textBody: '¿Esta seguro que desea eliminar el registro?',
+          textTitle: 'Eliminar registro'
+        });
+        break;
+      case false:
+        setContent({
+          ...content,
+          buttonText: 'Limpiar',
+          textBody: '¿Esta seguro que desea limpiar los campos?',
+          textTitle: 'Limpiar campos'
+        });
+        break;
+      case 'units':
+        setContent({
+          ...content,
+          buttonText: 'Agregar',
+          textBody: 'Antes de continuar en crear una cotización, debe agregar las unidades base de los productos.',
+          textTitle: 'Agregar unidades'
+        });
+        break;
+      default: break;
+    }
+  }
+
+  const handleAddUnit = (_units) => {
+    units = _units;
+  }
+
+  React.useEffect(() => {
+    if (!content && props.option) {
+      manageContent(props.option)
+    }
+  })
+
   return (
-    <div>
+    <>
       <Dialog
         open={props.open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-            {props.option ? 'Eliminar registro' : 'Limpiar campos'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {props.option ? '¿Esta seguro que desea eliminar el registro?' : '¿Esta seguro que desea limpiar los campos?'}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="contained">
-            Cancelar
+        {content &&
+          <div>
+            <DialogTitle id="alert-dialog-title">
+              {content.textTitle}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {content.textBody}
+                {props.option === UNITS_TEXT && <UnitsCost fromDialog={true} handleAddUnit={handleAddUnit}/>}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} variant="contained">
+                Cancelar
           </Button>
-          <Button onClick={handleConfirm} color="secondary" variant="contained" autoFocus>
-            {props.option ? 'Eliminar' : 'Limpiar'}
-          </Button>
-        </DialogActions>
+              <Button onClick={handleConfirm} color="secondary" variant="contained" autoFocus>
+                {content.buttonText}
+              </Button>
+            </DialogActions>
+          </div>
+        }
       </Dialog>
-    </div>
+    </>
   );
 }

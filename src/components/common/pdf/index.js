@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from '../../../static/logo_pop_litle.png'
 import conf from '../../../config'
 
@@ -9,6 +9,7 @@ import { ProductPDF } from './productPDF'
 import { connect } from 'react-redux'
 
 import * as quotationActions from '../../../actions/quotationActions'
+import { saveAs } from 'file-saver'
 
 const buildUnits = (quotation) => {
     const keys = Object.keys(quotation);
@@ -27,16 +28,15 @@ const buildUnits = (quotation) => {
 const printPDF = () => {
     // window.print()
     // return true
-    let data = {'aa':'cccc'}
-    // let data = document.getElementById('pdf')
-    // let data = element.innerHTML
-    console.log('data: ', data);
+    let data = window.location.href
+
     fetch(`${conf.api_url}/quotation/pdf/`,{
         method: 'POST',
-        body: data,
-        headers:{'Content-Type':'application/json'}//'text/xml'}
-    }).then(response => response.json())
-    .then(res => console.log(res))
+        body: JSON.stringify(data),
+        headers:{'Content-Type': 'application/json'},//'text/xml'}
+        responseType: 'blob'
+    }).then(response => response.blob())
+    .then(blob => saveAs(blob, 'test.pdf'))
     .catch(e => console.log('error', e))
 }
 
@@ -47,9 +47,7 @@ const getQuotation = async(quotation) => {
         
         return data
     }
-    catch {
-        console.log('errrorrrrr');
-    }
+    catch {console.log('errrorrrrr')}
 }
 
 const getQuotationSession = (props) => {
@@ -87,7 +85,7 @@ export const GeneratePDFHook = (props) => {
                         <div className="col-6 text-descripcion">
                             <p>Medellín, {quotation.quotationDate}</p><br />
                             <p>Señores:</p>
-                            <p><span>{quotation.client.name.charAt(0).toUpperCase() + quotation.client.name.slice(1).toLowerCase()}</span></p>
+                            {/* <p><span>{quotation.client.name.charAt(0).toUpperCase() + quotation.client.name.slice(1).toLowerCase()}</span></p> */}
                             <p>{quotation.client.address}</p>
                             <p>email. {quotation.client.email}</p>
                             <p>tel. {quotation.client.phone}</p>

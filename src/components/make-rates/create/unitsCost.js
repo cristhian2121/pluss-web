@@ -8,7 +8,7 @@ export const UnitsCost = (props) => {
     console.log('props: ', props);
 
     const [units, setUnits] = useState(() => props.preUnits || [])
-    const [oblUnit, setOblUnit] = useState(false)
+    // const [oblUnit, setOblUnit] = useState(false)
     const [errors, setErrors] = useState(false)
 
     const handleAddUnits = () => {
@@ -29,7 +29,7 @@ export const UnitsCost = (props) => {
     }
 
     const handleDelete = unitToDelete => () => {
-        if (!props.products.length) {
+        if (props.products && !props.products.length) {
             let del = units.indexOf(unitToDelete)
             if (del !== -1) {
               units.splice(del, 1)
@@ -41,7 +41,7 @@ export const UnitsCost = (props) => {
     };
 
     const validate = (e) => {
-        if (props.products.length) {
+        if (props.products && props.products.length) {
             setErrors({cant: true})
             return false
         }
@@ -53,9 +53,9 @@ export const UnitsCost = (props) => {
         return true
     }
 
-    const clearAlert = () => {
-        setOblUnit(false)
-    }
+    // const clearAlert = () => {
+    //     setOblUnit(false)
+    // }
 
     return (
         <div className="row form-units">  
@@ -90,7 +90,6 @@ export const UnitsCost = (props) => {
                         color="primary"
                         variant="outlined"
                     />
-                    // <span key={unit} style={{ paddingRight: '1em' }}>{unit},</span>
                 ))}
             </div>
         </div>
