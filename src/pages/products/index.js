@@ -22,6 +22,7 @@ import '../../styles/product.css'
 
 // Component
 import { ProductIndividual } from './product-individual';
+import AlertDialog from '../../components/common/confirm'
 
 
 class Products extends PureComponent {
@@ -39,7 +40,9 @@ class Products extends PureComponent {
       count: 0,
       loader: true,
       products: props.products,
-      productsSelecteds: []
+      productsSelecteds: [],
+      units: [],
+      showDialogUnits: false
     }
     this.addProduct = this.addProduct.bind(this);
 
@@ -91,7 +94,17 @@ class Products extends PureComponent {
   }
 
   goToCreateQuotation = () => {
+    console.log('***');
+    if (!this.state.units.length) {
+      console.log('xasd');
+      this.setState({
+        showDialogUnits: true
+      });
+    }
+  }
 
+  addUnits = (_units) => {
+    console.log('_units', _units);
   }
 
   render() {
@@ -104,7 +117,7 @@ class Products extends PureComponent {
             </div>
             <div className="col-4 px-0 d-flex flex-row-reverse">
               {this.state.productsSelecteds.length}
-              <span className="store-car" onClick={this.goToCreateQuotation()}>
+              <span className="store-car" onClick={this.goToCreateQuotation}>
                 <LocalGroceryStoreIcon />
               </span>
             </div>
@@ -128,6 +141,7 @@ class Products extends PureComponent {
                     console.log('selected: ', selected);
                     return (
                       <ProductIndividual
+                        key={product.id}
                         product={product}
                         productDetail={obj => this.productDetail(obj)}
                         addProduct={obj => this.addProduct(obj)}
@@ -145,6 +159,13 @@ class Products extends PureComponent {
         >
           <Detail selectDetail={this.state.detailProducts} />
         </Dialog>
+        {this.state.showDialogUnits &&
+          <AlertDialog 
+          option='units' 
+          open={this.state.showDialogUnits} 
+          close={() => this.setState({ showDialogUnits: false })} 
+          confirm={this.addUnits}
+          />}
       </div>
     )
   }

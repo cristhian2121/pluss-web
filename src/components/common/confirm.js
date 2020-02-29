@@ -10,22 +10,23 @@ import { UnitsCost } from '../make-rates/create/unitsCost';
 
 export default function AlertDialog(props) {
   console.log('props: ', props);
-  const [optionDelete, setOptionDelete] = React.useState(props.option);
+  // const [optionDelete, setOptionDelete] = React.useState(props.option);
   const [content, setContent] = React.useState();
+  let units = [];
+  const UNITS_TEXT = 'units';
 
   const handleClose = () => {
     props.close(false)
   };
 
   const handleConfirm = () => {
-    props.confirm(true)
-    handleClose()
+    props.option == UNITS_TEXT  ? props.confirm(units) : props.confirm(true);
+    handleClose();
   }
 
   const manageContent = (option) => {
     switch (option) {
       case true:
-        console.log('here');
         setContent({
           ...content,
           buttonText: 'Eliminar',
@@ -34,7 +35,6 @@ export default function AlertDialog(props) {
         });
         break;
       case false:
-        console.log('false');
         setContent({
           ...content,
           buttonText: 'Limpiar',
@@ -43,29 +43,29 @@ export default function AlertDialog(props) {
         });
         break;
       case 'units':
-        console.log('units');
         setContent({
           ...content,
           buttonText: 'Agregar',
-          textBody: 'Antes de continuar en crear cotización, debe agregar las unidades base de los productos.',
+          textBody: 'Antes de continuar en crear una cotización, debe agregar las unidades base de los productos.',
           textTitle: 'Agregar unidades'
         });
         break;
-      default:
-        console.log('e');
-        break;
+      default: break;
     }
   }
 
+  const handleAddUnit = (_units) => {
+    units = _units;
+  }
+
   React.useEffect(() => {
-    console.log('yUJU');
     if (!content && props.option) {
       manageContent(props.option)
     }
   })
 
   return (
-    <div>
+    <>
       <Dialog
         open={props.open}
         onClose={handleClose}
@@ -73,14 +73,14 @@ export default function AlertDialog(props) {
         aria-describedby="alert-dialog-description"
       >
         {content &&
-          <>
+          <div>
             <DialogTitle id="alert-dialog-title">
               {content.textTitle}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 {content.textBody}
-                {props.optionDelete === 'units' && <UnitsCost fromDialog={true} />}
+                {props.option === UNITS_TEXT && <UnitsCost fromDialog={true} handleAddUnit={handleAddUnit}/>}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -91,9 +91,9 @@ export default function AlertDialog(props) {
                 {content.buttonText}
               </Button>
             </DialogActions>
-          </>
+          </div>
         }
       </Dialog>
-    </div>
+    </>
   );
 }

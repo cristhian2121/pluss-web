@@ -77,32 +77,32 @@ export const ProductForm = (props) => {
         return product
     }
 
-    const validateProduct = products => {
-        const properties = Object.values(products);
-        const keys = Object.keys(products);
-        let i = 0;
-        let validate = true;
-        for (i; i < properties.length; i++) {
-            let $input = document.querySelector(`#${keys[i]}`)
-            const $parent = document.querySelector(`.input-validation-${$input.name}`)
-            const $elementMessagge = document.querySelector(`.messagge-${keys[i]}`)
-            if (!properties[i]) {
-                validate = false;
-                if (!$elementMessagge) {
-                    const element = document.createElement('P')
-                    const text = document.createTextNode(`El campo es obligatorio`)
-                    element.className = `messagge-${keys[i]} messagge-validator`
-                    element.appendChild(text)
-                    $parent.insertBefore(element, $input.nextSibling)
-                }
-            } else {
-                if ($elementMessagge) {
-                    $parent.removeChild($elementMessagge)
-                }
-            }
-        }
-        return validate
-    }
+    // const validateProduct = products => {
+    //     const properties = Object.values(products);
+    //     const keys = Object.keys(products);
+    //     let i = 0;
+    //     let validate = true;
+    //     for (i; i < properties.length; i++) {
+    //         let $input = document.querySelector(`#${keys[i]}`)
+    //         const $parent = document.querySelector(`.input-validation-${$input.name}`)
+    //         const $elementMessagge = document.querySelector(`.messagge-${keys[i]}`)
+    //         if (!properties[i]) {
+    //             validate = false;
+    //             if (!$elementMessagge) {
+    //                 const element = document.createElement('P')
+    //                 const text = document.createTextNode(`El campo es obligatorio`)
+    //                 element.className = `messagge-${keys[i]} messagge-validator`
+    //                 element.appendChild(text)
+    //                 $parent.insertBefore(element, $input.nextSibling)
+    //             }
+    //         } else {
+    //             if ($elementMessagge) {
+    //                 $parent.removeChild($elementMessagge)
+    //             }
+    //         }
+    //     }
+    //     return validate
+    // }
 
     const handleChange = (event, index) => {
         console.log('event.target.name: ', event.target.name);
