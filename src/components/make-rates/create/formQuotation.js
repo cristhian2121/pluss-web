@@ -121,27 +121,9 @@ export const FormQuotation = (props) => {
   const updateQuotation = event => {
     const data = generateData()
     data.status = event
-    console.log('data updatequotation: ', data);
-
-    fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(async (response) => {
-      let resp = await response.json()
-
-      if (response.status === 200 || response.status == 201) {
-        setOpenAlert({
-          open: true,
-          message: 'La cotización se actualizo correctamente.',
-          type:'success'
-        })
-        // setOpenEmail && setRedirectList(true)  
-      }
-    })
-      .catch(error => console.log('Error: ', error))
+    data.id = idSelectUpdate
+    console.log('data updatequotation: ', data, idSelectUpdate);
+    props.updateQuotations(data)
   }
 
   const generatePDF = async () => {
@@ -232,6 +214,10 @@ export const FormQuotation = (props) => {
     let data = dataEmail
     let formQuotation = generateData()
     data.client = formQuotation.client
+    data.quotation = generateData()
+    data.quotation.id = idSelectUpdate
+    data.quotation.status = "En progreso"
+
     props.endQuotation(data)
   }
 
