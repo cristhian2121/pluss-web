@@ -7,8 +7,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Snackbar from '@material-ui/core/Snackbar';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import Alert from '@material-ui/lab/Alert';
 
 import conf from '../../config'
@@ -82,7 +80,8 @@ export class Create extends Component {
         } else {
           this.setState({ passDiff: false, password: e.target.value })
         }
-        break
+        break;
+        default: break;
     }
   }
   clear = () => {
@@ -125,7 +124,7 @@ export class Create extends Component {
       .then(async (response) => {
         let resp = await response.json()
         console.log('respresprespresp: ', resp);
-        if (response.status == 201) {
+        if (response.status === 201) {
           this.setState({ 
             alert: {
               open: true,
@@ -137,7 +136,7 @@ export class Create extends Component {
           this.props.addUserList(this.data)
           this.clear()
         }
-        if (response.status == 400) {
+        if (response.status === 400) {
           this.setState({ 
             alert: {
               open: true,
@@ -172,7 +171,7 @@ export class Create extends Component {
         let resp1 = await response.json()
         console.log('response', resp1, response.status)
 
-        if (response.status == 200 ||  response.status == 201) {
+        if (response.status === 200 ||  response.status === 201) {
           fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
             method: 'PUT',
             body: JSON.stringify(this.data),
@@ -181,7 +180,7 @@ export class Create extends Component {
             .then(async (response) => {
               let resp = await response.json()
               console.log('resp 2: ', resp);
-              if (response.status == 200 ||  response.status == 201) {
+              if (response.status === 200 ||  response.status === 201) {
                 this.setState({ 
                   alert: {
                     open: true,
@@ -191,7 +190,7 @@ export class Create extends Component {
                 })
                 this.clear()
               }
-              if (response.status == 400 ) {
+              if (response.status === 400 ) {
                 this.setState({ 
                   alert: {
                     open: true,
@@ -205,7 +204,7 @@ export class Create extends Component {
               console.log(err);
             });
         }
-        if (response.status == 400 ) {
+        if (response.status === 400 ) {
           this.setState({ 
             alert: {
               open: true,

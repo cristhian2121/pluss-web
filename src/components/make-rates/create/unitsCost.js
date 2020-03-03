@@ -8,7 +8,7 @@ export const UnitsCost = (props) => {
     console.log('props: ', props);
 
     const [units, setUnits] = useState(() => props.preUnits || [])
-    const [oblUnit, setOblUnit] = useState(false)
+    // const [oblUnit, setOblUnit] = useState(false)
     const [errors, setErrors] = useState(false)
 
     const handleAddUnits = () => {
@@ -21,7 +21,7 @@ export const UnitsCost = (props) => {
             const unit = $unit.value
             const _units = [...units, unit]
             setUnits(units => [...units, unit]);
-            !props.fromDialog && props.handleAddUnit(_units)
+            props.handleAddUnit(_units)
             document.querySelector(`#unit`).value = ''
         }else {
             // setOblUnit(true)
@@ -53,9 +53,9 @@ export const UnitsCost = (props) => {
         return true
     }
 
-    const clearAlert = () => {
-        setOblUnit(false)
-    }
+    // const clearAlert = () => {
+    //     setOblUnit(false)
+    // }
 
     return (
         <div className="row form-units">  

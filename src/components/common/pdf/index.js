@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from '../../../static/logo_pop_litle.png'
 import conf from '../../../config'
 
