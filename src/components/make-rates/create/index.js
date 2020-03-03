@@ -49,6 +49,7 @@ class CreateQuotationHook extends Component {
   }
 
   createQuotation(data) {
+    console.log('data: ', data);
     this.props.createQuotation({ ...data })
 
     fetch(`${conf.api_url}/quotation/`,{ method: 'POST', body: JSON.stringify(data),
@@ -57,27 +58,59 @@ class CreateQuotationHook extends Component {
         let resp = await response.json()
 
         if (response.status === 200 ||  response.status == 201){
-          this.setState({
-            OpenAlert: {
-              open: true,
-              message: 'La cotización se creo correctamente.',
-              type:'success'
-            }
-          })        
+          // this.setState({
+          //   OpenAlert: {
+          //     open: true,
+          //     message: 'La cotización se creo correctamente.',
+          //     type:'success'
+          //   }
+          // })        
         }
     })
     .catch(error => console.log('Error: ', error))
   }
 
-  endQuotation(data) {
-    console.log('data llega al index: ', data);    
-    fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(data),headers:{ 'Content-Type': 'application/json' } })
-    .then(async (response) => {
-      console.log('response: ', response);
-      let resp = response.json()
-      console.log('entro al senemail: ', resp);
+  updateQuotations (data) {
+    console.log('data update index: ', data);
+    let idSelectUpdate = data.id
+
+    fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`,{
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(async (response) => {
+      let resp = await response.json()
+      console.log('resp update: ', resp);
+
+      if (response.status === 200 ||  response.status == 201){
+        return resp
+        // setOpenAlert({
+        //   open: true,
+        //   message: 'La cotización se actualizo correctamente.',
+        //   type:'success'
+        // })
+        // setOpenEmail && setRedirectList(true)  
+      }
     })
-    .catch(e => console.log('no entro al send Email', e))
+    .catch(error => console.log('Error: ', error))
+  }
+
+  endQuotation = async(quotation) => {
+    console.log('data: ', quotation)
+
+    let data = await quotation.quotation.id ? this.updateQuotations(quotation.quotation) : this.createQuotation(quotation)
+    // data.url = window.origin
+    // let data.url = origin
+    console.log('data llega al index: ', data);    
+    // fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(data),headers:{ 'Content-Type': 'application/json' } })
+    // .then(async (response) => {
+    //   console.log('response: ', response);
+    //   let resp = response.json()
+    //   console.log('entro al senemail: ', resp);
+    // })
+    // .catch(e => console.log('no entro al send Email', e))
   }
 
   render() {
@@ -89,6 +122,7 @@ class CreateQuotationHook extends Component {
           eventSavePDF={this.eventSavePDF}
           updateQuotation={this.props.location.state}
           endQuotation = {this.endQuotation}
+          updateQuotations = {this.updateQuotations}
         />          
         {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state: this.state.openAlert}}/>}
       </div>

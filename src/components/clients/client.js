@@ -62,12 +62,14 @@ export class Clients extends React.Component {
           clients: [...this.state.clients, client],
           alert: {
             open: true,
-            message: 'El cliente se agrego.',
+            message: 'El cliente se creo correctamente.',
             type: 'success'
           }
         })
         // this.clearForm()
-        this.showForm()
+        this.setState({
+          openCreateUpdate: false
+        })
       })
   }
 
@@ -91,7 +93,7 @@ export class Clients extends React.Component {
             updateClient: [],
             alert: {
               open: true,
-              message: 'El cliente se modifico.',
+              message: 'El cliente se actualizo correctamente.',
               type: 'success'
             }
           })
@@ -121,7 +123,7 @@ export class Clients extends React.Component {
             clients: clients,
             alert: {
               open: true,
-              message: 'El cliente se elimino.',
+              message: 'El cliente se elimino correctamente.',
               type: 'success'
             }
           })
@@ -142,11 +144,11 @@ export class Clients extends React.Component {
   }
 
   showForm = (action) => {
+    console.log('action: ', action);
     this.setState({
       openCreateUpdate: !this.state.openCreateUpdate
     })
     if (action != "update") {
-      console.log('entro al if')
       this.setState({
         updateClient: {},
       })
@@ -191,7 +193,7 @@ export class Clients extends React.Component {
             vertical: 'bottom',
             horizontal: 'left'
           }}>
-          <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+          <Alert variant="filled" severity={this.state.alert.type}>{this.state.alert.message}</Alert>
         </Snackbar>
       </>
     )
