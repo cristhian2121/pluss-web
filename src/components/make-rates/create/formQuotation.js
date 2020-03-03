@@ -16,7 +16,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
 // Icons
-
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
@@ -29,10 +28,8 @@ import conf from '../../../config'
 // css
 import '../../../styles/commons.css';
 
-
-
-
 export const FormQuotation = (props) => {
+  console.log('props *****************: ', props);
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
   const [costUnit, SetCostUnit] = useState({})
@@ -41,6 +38,9 @@ export const FormQuotation = (props) => {
   const [dataClients, setDataClients] = useState([])
   const [dataUsers, setDataUsers] = useState([])
   const [status, setStatus] = useState("En progreso")
+  console.log('props.updateQuotation: ', props.updateQuotation);
+  if(props.updateQuotation) console.log('SI',products);
+  else console.log('NO');
   const [selectUpdate, setSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate : null)
   const [clientSelectUpdate, setCientSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.client : null)
   const [userSelectUpdate, setUserSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.user : null)
@@ -50,13 +50,12 @@ export const FormQuotation = (props) => {
   const [openEmail, setOpenEmail] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
+  console.log('selectUpdate: ', selectUpdate);
 
   useEffect(() => {
     getClients()
     getUsers()
   }, []);
-
-  console.log('products **********', products);
 
   const history = createHashHistory()
 
@@ -114,7 +113,6 @@ export const FormQuotation = (props) => {
     const data = generateData()
     data.status = status
     data.endQuotation = event
-
     props.eventCreateQuotation(data)
   }
 
@@ -217,6 +215,7 @@ export const FormQuotation = (props) => {
       case "delivery_time":
         setSelectUpdate({ delivery_time: e.target.value })
         break
+      default: break;
     }
   }
 
