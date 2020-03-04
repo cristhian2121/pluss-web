@@ -209,14 +209,17 @@ export const FormQuotation = (props) => {
   }
 
   const confEmail = (dataEmail) => {
-    let data = dataEmail
-    let formQuotation = generateData()
-    data.client = formQuotation.client
-    data.quotation = generateData()
-    data.quotation.id = idSelectUpdate
-    data.quotation.status = "En progreso"
+    let data = generateData()
+    data.email = dataEmail
+    data.status = "Finalizado"
+    // data.client = formQuotation.client
+    // data.quotation = generateData()
+    // data.quotation.status = "En progreso"
+    data.id = idSelectUpdate
+    
+    idSelectUpdate ? props.updateQuotations(data) : props.eventCreateQuotation(data)
 
-    props.endQuotation(data)
+    // props.endQuotation(data)
   }
 
   return (

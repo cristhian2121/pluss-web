@@ -28,6 +28,7 @@ class CreateQuotationHook extends Component {
     }
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
+    this.endQuotation = this.endQuotation.bind(this)
     // this.updatesQuotation = this.updatesQuotation.bind(this)
     // this.generatePDF = this.generatePDF.bind(this)
   }
@@ -73,6 +74,7 @@ class CreateQuotationHook extends Component {
   updateQuotations (data) {
     console.log('data update index: ', data);
     let idSelectUpdate = data.id
+    let dataEmail = data.email
 
     fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`,{
       method: 'PUT',
@@ -85,32 +87,43 @@ class CreateQuotationHook extends Component {
       console.log('resp update: ', resp);
 
       if (response.status === 200 ||  response.status == 201){
-        return resp
-        // setOpenAlert({
-        //   open: true,
-        //   message: 'La cotización se actualizo correctamente.',
-        //   type:'success'
+        // this.setState({
+        //   dataQuo: resp
+        // //   open: true,
+        // //   message: 'La cotización se actualizo correctamente.',
+        // //   type:'success'
         // })
+        if (dataEmail) {
+          dataEmail.client = resp.client
+          dataEmail.url = window.origin
+          console.log('dataEmail: ', dataEmail);
+
+          this.endQuotation(dataEmail)
+        }
+
         // setOpenEmail && setRedirectList(true)  
       }
     })
     .catch(error => console.log('Error: ', error))
   }
 
-  endQuotation = async(quotation) => {
-    console.log('data: ', quotation)
+  endQuotation (quotation) {
+    console.log('data email: ', quotation)
 
-    let data = await quotation.quotation.id ? this.updateQuotations(quotation.quotation) : this.createQuotation(quotation)
+    // quotation.quotation.id ? this.updateQuotations(quotation.quotation) : this.createQuotation(quotation)
+    // let data = quotation
     // data.url = window.origin
-    // let data.url = origin
-    console.log('data llega al index: ', data);    
-    // fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(data),headers:{ 'Content-Type': 'application/json' } })
-    // .then(async (response) => {
-    //   console.log('response: ', response);
-    //   let resp = response.json()
-    //   console.log('entro al senemail: ', resp);
-    // })
-    // .catch(e => console.log('no entro al send Email', e))
+    // // let data.url = origin
+    // data.id = this.state.dataQuo
+    // console.log('data llega al index: ', data);
+    
+    fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(quotation),headers:{ 'Content-Type': 'application/json' } })
+    .then(async (response) => {
+      console.log('response mail: ', response);
+      let resp = response.json()
+      console.log('entro al senemail: ', resp);
+    })
+    .catch(e => console.log('no entro al send Email', e))
   }
 
   render() {
@@ -121,7 +134,7 @@ class CreateQuotationHook extends Component {
           preQuotation={this.props.quotationReducer.quotation}
           eventSavePDF={this.eventSavePDF}
           updateQuotation={this.props.location.state}
-          endQuotation = {this.endQuotation}
+          // endQuotation = {this.endQuotation}
           updateQuotations = {this.updateQuotations}
         />          
         {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state: this.state.openAlert}}/>}
