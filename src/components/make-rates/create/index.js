@@ -29,7 +29,7 @@ class CreateQuotationHook extends Component {
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
     this.endQuotation = this.endQuotation.bind(this)
-    // this.updatesQuotation = this.updatesQuotation.bind(this)
+    this.updateQuotations = this.updateQuotations.bind(this)
     // this.generatePDF = this.generatePDF.bind(this)
   }
 
@@ -52,6 +52,7 @@ class CreateQuotationHook extends Component {
   createQuotation(data) {
     console.log('data: ', data);
     this.props.createQuotation({ ...data })
+    let dataEmail = data.email
 
     fetch(`${conf.api_url}/quotation/`,{ method: 'POST', body: JSON.stringify(data),
       headers:{ 'Content-Type': 'application/json' }})
@@ -59,13 +60,22 @@ class CreateQuotationHook extends Component {
         let resp = await response.json()
 
         if (response.status === 200 ||  response.status == 201){
-          // this.setState({
-          //   OpenAlert: {
-          //     open: true,
-          //     message: 'La cotización se creo correctamente.',
-          //     type:'success'
-          //   }
-          // })        
+          
+          if (dataEmail) {
+            dataEmail.client = resp.client
+            dataEmail.url = `${window.origin}/cotizacion/${resp.id}`
+            console.log('dataEmail: ', dataEmail);
+  
+            this.endQuotation(dataEmail)
+          }else{
+            this.setState({
+              OpenAlert: {
+                open: true,
+                message: 'La cotización se creo correctamente.',
+                type:'success'
+              }
+            })
+          }
         }
     })
     .catch(error => console.log('Error: ', error))
@@ -87,27 +97,30 @@ class CreateQuotationHook extends Component {
       console.log('resp update: ', resp);
 
       if (response.status === 200 ||  response.status == 201){
-        // this.setState({
-        //   dataQuo: resp
-        // //   open: true,
-        // //   message: 'La cotización se actualizo correctamente.',
-        // //   type:'success'
-        // })
+
         if (dataEmail) {
           dataEmail.client = resp.client
-          dataEmail.url = window.origin
+          dataEmail.url = `${window.origin}/cotizacion/${resp.id}`
           console.log('dataEmail: ', dataEmail);
 
           this.endQuotation(dataEmail)
+        }else{
+          this.setState({
+            OpenAlert: {
+              open: true,
+              message: 'La cotización se actualizo correctamente.',
+              type:'success'
+            }
+          })
         }
-
-        // setOpenEmail && setRedirectList(true)  
+        console.log('this.state.OpenAlert: ', this.state.OpenAlert);
+        // this.state.OpenAlert && this.setState({redirectList: true})  
       }
     })
     .catch(error => console.log('Error: ', error))
   }
 
-  endQuotation (quotation) {
+  endQuotation(quotation) {
     console.log('data email: ', quotation)
 
     // quotation.quotation.id ? this.updateQuotations(quotation.quotation) : this.createQuotation(quotation)
@@ -137,7 +150,7 @@ class CreateQuotationHook extends Component {
           // endQuotation = {this.endQuotation}
           updateQuotations = {this.updateQuotations}
         />          
-        {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state: this.state.openAlert}}/>}
+        {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state:this.state.OpenAlert}}/>}
       </div>
     );
   }

@@ -22,7 +22,7 @@ export class Create extends Component {
         message: '',
         type: '',
       },
-      dataGroups: [],
+      // dataGroups: [],
       showForm: true,
       idUser: props.selectUpdate.user ? props.selectUpdate.id : null,
       code: props.selectUpdate.user ? props.selectUpdate.code : null,
@@ -35,21 +35,68 @@ export class Create extends Component {
       groups: props.selectUpdate.user ? props.selectUpdate.user.groups : []
     }
   }
-  componentDidMount() {
-    this.getGroups()
-  }
-  getGroups = async () => {
-    try {
-      let response = await fetch(`${conf.api_url}/group/`)
-      let data = await response.json();
-      console.log('datadddddd: ', data.results);
-      this.setState({
-        dataGroups: data.results
-      })
-    } catch (error) {
-      console.log('error', error)
+  // componentDidMount() {
+  //   this.getGroups()
+  // }
+  // getGroups = async () => {
+  //   try {
+  //     let response = await fetch(`${conf.api_url}/group/`)
+  //     let data = await response.json();
+  //     console.log('datadddddd: ', data.results);
+  //     this.setState({
+  //       dataGroups: data.results
+  //     })
+  //   } catch (error) {
+  //     console.log('error', error)
+  //   }
+  // }
+  
+  
+  addUser = (e) => {
+    let data = this.generateData()
+    data.groups = data.groups.split(',')
+    console.log('this.data adduser: ', this.data);
+    if(this.validator) {
+      this.state.idUser ? this.props.updateUser(data) : this.props.saveUser(data)
+    }else {
+      console.log('faltan campos')
     }
+    
   }
+
+  generateData = () => {
+    let elements = document.getElementById('userForm').elements;
+    let data = {};
+    console.log('dataform', elements)
+    for (let item of elements) {
+      data[item.name] = item.value;
+    }
+    data.user = this.props.selectUpdate.user ? this.props.selectUpdate.user.id : ''
+    data.type_identification = 'CC'
+    return data
+  }
+
+  validator = () => {
+    return true
+  }
+
+  clear = () => {
+    this.data = {}
+    document.getElementById("userForm").reset()
+    this.setState({
+      idUser: null,
+      code: null,
+      first_name: null,
+      identification_number: null,
+      username: null,
+      phone_number: null,
+      password: null,
+      passwordConfirm: null,
+      groups: []
+    })
+    this.props.cancelForm(false)
+  }
+
   handleChange = e => {
     this.render()
     switch (e.target.name) {
@@ -84,148 +131,122 @@ export class Create extends Component {
         default: break;
     }
   }
-  clear = () => {
-    this.data = {}
-    document.getElementById("userForm").reset()
-    this.setState({
-      idUser: null,
-      code: null,
-      first_name: null,
-      identification_number: null,
-      username: null,
-      phone_number: null,
-      password: null,
-      passwordConfirm: null,
-      groups: []
-    })
-    this.props.cancelForm(false)
-  };
-  generateData = () => {
-    let elements = document.getElementById('userForm').elements;
-    let data = {};
-    console.log('dataform', elements)
-    for (let item of elements) {
-      data[item.name] = item.value;
-    }
-    data.user = this.props.selectUpdate.user ? this.props.selectUpdate.user.id : ''
-    data.type_identification = 'CC'
-    return data
-  }
-  saveUser = (evt) => {
-    this.data = this.generateData()
-    console.log('editando', this.data)
-    fetch(`${conf.api_url}/profile/`, {
-      method: 'POST',
-      body: JSON.stringify(this.data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(async (response) => {
-        let resp = await response.json()
-        console.log('respresprespresp: ', resp);
-        if (response.status === 201) {
-          this.setState({ 
-            alert: {
-              open: true,
-              message: resp['detail'],
-              type:'success'
-            }
-          })
 
-          this.props.addUserList(this.data)
-          this.clear()
-        }
-        if (response.status === 400) {
-          this.setState({ 
-            alert: {
-              open: true,
-              message: resp['error'],
-              type:'error'
-            }
-          })
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ 
-          alert: {
-            open: true,
-            message: 'Por favor valide los campos obligatorios',
-            type:'warning'
-          }
-        })
-      });
-  };
-  updateUser = () => {
-    this.data = this.generateData()
-    this.data.groups = this.data.groups.split(',')
-    console.log('entro por el editar casi ue no', this.data, this.props.selectUpdate.id)
+  // saveUsers = (evt) => {
+  //   this.data = this.generateData()
+  //   console.log('editando', this.data)
+  //   fetch(`${conf.api_url}/profile/`, {
+  //     method: 'POST',
+  //     body: JSON.stringify(this.data),
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+  //     .then(async (response) => {
+  //       let resp = await response.json()
+  //       console.log('respresprespresp: ', resp);
+  //       if (response.status === 201) {
+  //         this.setState({ 
+  //           alert: {
+  //             open: true,
+  //             message: resp['detail'],
+  //             type:'success'
+  //           }
+  //         })
 
-    fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
-      method: 'PUT',
-      body: JSON.stringify(this.data),
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then(async (response) => {
-        let resp1 = await response.json()
-        console.log('response', resp1, response.status)
+  //         this.props.addUserList(this.data)
+  //         this.clear()
+  //       }
+  //       if (response.status === 400) {
+  //         this.setState({ 
+  //           alert: {
+  //             open: true,
+  //             message: resp['error'],
+  //             type:'error'
+  //           }
+  //         })
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       this.setState({ 
+  //         alert: {
+  //           open: true,
+  //           message: 'Por favor valide los campos obligatorios',
+  //           type:'warning'
+  //         }
+  //       })
+  //     });
+  // };
+  // updateUsers = () => {
+  //   this.data = this.generateData()
+  //   this.data.groups = this.data.groups.split(',')
+  //   console.log('entro por el editar casi ue no', this.data, this.props.selectUpdate.id)
 
-        if (response.status === 200 ||  response.status === 201) {
-          fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
-            method: 'PUT',
-            body: JSON.stringify(this.data),
-            headers: { 'Content-Type': 'application/json' }
-          })
-            .then(async (response) => {
-              let resp = await response.json()
-              console.log('resp 2: ', resp);
-              if (response.status === 200 ||  response.status === 201) {
-                this.setState({ 
-                  alert: {
-                    open: true,
-                    message: 'El usuario se  actualizó correctamente',
-                    type:'success'
-                  }
-                })
-                this.clear()
-              }
-              if (response.status === 400 ) {
-                this.setState({ 
-                  alert: {
-                    open: true,
-                    message: 'No se pudo actualizar el usuario, por favor vuelva a intentarlo.',
-                    type:'error'
-                  }
-                })
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }
-        if (response.status === 400 ) {
-          this.setState({ 
-            alert: {
-              open: true,
-              message: resp1['error'],
-              type:'error'
-            }
-          })
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ 
-          alert: {
-            open: true,
-            message: 'Por favor valide los campos obligatorios',
-            type:'warning'
-          }
-        })
-      });
+  //   fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
+  //     method: 'PUT',
+  //     body: JSON.stringify(this.data),
+  //     headers: { 'Content-Type': 'application/json' }
+  //   })
+  //     .then(async (response) => {
+  //       let resp1 = await response.json()
+  //       console.log('response', resp1, response.status)
 
-  };
+  //       if (response.status === 200 ||  response.status === 201) {
+  //         fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
+  //           method: 'PUT',
+  //           body: JSON.stringify(this.data),
+  //           headers: { 'Content-Type': 'application/json' }
+  //         })
+  //           .then(async (response) => {
+  //             let resp = await response.json()
+  //             console.log('resp 2: ', resp);
+  //             if (response.status === 200 ||  response.status === 201) {
+  //               this.setState({ 
+  //                 alert: {
+  //                   open: true,
+  //                   message: 'El usuario se  actualizó correctamente',
+  //                   type:'success'
+  //                 }
+  //               })
+  //               this.clear()
+  //             }
+  //             if (response.status === 400 ) {
+  //               this.setState({ 
+  //                 alert: {
+  //                   open: true,
+  //                   message: 'No se pudo actualizar el usuario, por favor vuelva a intentarlo.',
+  //                   type:'error'
+  //                 }
+  //               })
+  //             }
+  //           })
+  //           .catch(err => {
+  //             console.log(err);
+  //           });
+  //       }
+  //       if (response.status === 400 ) {
+  //         this.setState({ 
+  //           alert: {
+  //             open: true,
+  //             message: resp1['error'],
+  //             type:'error'
+  //           }
+  //         })
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       this.setState({ 
+  //         alert: {
+  //           open: true,
+  //           message: 'Por favor valide los campos obligatorios',
+  //           type:'warning'
+  //         }
+  //       })
+  //     });
+
+  // };
 
   render() {
     return (
@@ -286,7 +307,7 @@ export class Create extends Component {
                 onChange={this.handleChange}
                 defaultValue={this.state.groups}
               >
-                {this.state.dataGroups.map(groups => (
+                {this.props.dataGroups.map(groups => (
                   <MenuItem
                     value={groups.id}
                   >{groups.name}</MenuItem>
@@ -321,7 +342,7 @@ export class Create extends Component {
               <Button variant="contained" onClick={this.clear}>
                 Cancelar
               </Button>
-              <Button variant="contained" color="secondary" onClick={this.state.idUser ? this.updateUser : this.saveUser}>
+              <Button variant="contained" color="secondary" onClick={this.addUser}>
                 Guardar
               </Button>
             </div>
@@ -341,7 +362,7 @@ export class Create extends Component {
               horizontal: 'left'
             }}
           >
-            <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+            <Alert variant="filled" severity={this.state.alert.type}>{this.state.alert.message}</Alert>
           </Snackbar>
         </div>
         

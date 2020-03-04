@@ -134,7 +134,7 @@ export class MakeRate extends Component {
                 vertical: 'bottom',
                 horizontal: 'left'
               }}>
-              <Alert severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+              <Alert variant="filled" severity={this.state.alert.type}>{this.state.alert.message}</Alert>
             </Snackbar>
           </>
         )
