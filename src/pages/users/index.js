@@ -6,8 +6,10 @@ import { List } from "../../components/users/list"
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import {Alert} from '../../components/common/alerts'
+// import {Alert} from '../../components/common/alerts'
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import { Menu } from '../../components/common/nav-bar'
 
@@ -18,15 +20,37 @@ export class User extends Component {
     constructor() {
         super();
         this.state = {
+          alert: {
+            open: false,
+            message: '',
+            type: '',
+          },
           dataFormUpdate: {},
           dataUser: [],
-          openCreateUpdate: false
+          openCreateUpdate: false,
+          dataGroups: []
         }
-        this.insertUser = this.insertUser.bind(this)
+        // this.insertUser = this.insertUser.bind(this)
+        this.saveUser = this.saveUser.bind(this)
+        this.updateUser = this.updateUser.bind(this)
     }
 
     componentDidMount () {
       this.getDataUsers()
+      this.getGroups()
+    }
+
+    getGroups = async () => {
+      try {
+        let response = await fetch(`${conf.api_url}/group/`)
+        let data = await response.json();
+        console.log('datadddddd: ', data.results);
+        this.setState({
+          dataGroups: data.results
+        })
+      } catch (error) {
+        console.log('error', error)
+      }
     }
 
     dataUpdate =  (data) => {
@@ -71,7 +95,7 @@ export class User extends Component {
             dataUser: users,
             alert: {
               open: true,
-              message: 'El cliente se elimino.',
+              message: 'El usuario se elimino correctamente.',
               type: 'success'
             }
           })
@@ -93,6 +117,123 @@ export class User extends Component {
       // documnt.getElementById("userForm-cu").style.display = 'block'
     }
 
+    saveUser = (user) => {
+      console.log('evt index user: ', user);
+      fetch(`${conf.api_url}/profile/`, {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(async (response) => {
+          let resp = await response.json()
+          console.log('respresprespresp: ', resp);
+          if (response.status === 201) {
+            this.setState({ 
+              dataUser: [...this.state.dataUser, user],
+              alert: {
+                open: true,
+                message: resp['detail'],
+                type:'success'
+              }
+            })
+
+            this.showForm()  
+            // this.clear()
+          }
+          if (response.status === 400) {
+            this.setState({ 
+              alert: {
+                open: true,
+                message: resp['error'],
+                type:'error'
+              }
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ 
+            alert: {
+              open: true,
+              message: 'Por favor valide los campos obligatorios',
+              type:'warning'
+            }
+          })
+        });
+    }
+
+    updateUser = (user) => {
+      console.log('entro por el editar casi ue no', user)
+      let idUser = this.state.dataFormUpdate.id
+      console.log('idUser: ', idUser);
+  
+      fetch(`${conf.api_url}/user/${idUser}/`, {
+        method: 'PUT',
+        body: JSON.stringify(user),
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(async (response) => {
+          let resp1 = await response.json()
+          console.log('response', resp1, response.status)
+  
+          if (response.status === 200 ||  response.status === 201) {
+            fetch(`${conf.api_url}/profile/${idUser}/`, {
+              method: 'PUT',
+              body: JSON.stringify(user),
+              headers: { 'Content-Type': 'application/json' }
+            })
+              .then(async (response) => {
+                let resp = await response.json()
+                console.log('resp 2: ', resp);
+                if (response.status === 200 ||  response.status === 201) {
+                  this.setState({
+                    dataUser: [...this.state.dataUser, resp],
+                    alert: {
+                      open: true,
+                      message: 'El usuario se  actualizo correctamente',
+                      type:'success'
+                    }
+                  })
+                  // this.clear()
+                  this.showForm() 
+                }
+                if (response.status === 400 ) {
+                  this.setState({ 
+                    alert: {
+                      open: true,
+                      message: 'No se pudo actualizar el usuario, por favor vuelva a intentarlo.',
+                      type:'error'
+                    }
+                  })
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }
+          if (response.status === 400 ) {
+            this.setState({ 
+              alert: {
+                open: true,
+                message: resp1['error'],
+                type:'error'
+              }
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ 
+            alert: {
+              open: true,
+              message: 'Por favor valide los campos obligatorios',
+              type:'warning'
+            }
+          })
+        })
+    }
 
     render() {
         return (
@@ -111,9 +252,31 @@ export class User extends Component {
             
             {
               this.state.openCreateUpdate &&
-              <Create addUserList={this.insertUser} selectUpdate={this.state.dataFormUpdate} cancelForm={this.showForm} />
+              <Create 
+              saveUser={this.saveUser}
+              updateUser={this.updateUser}
+              dataGroups={this.state.dataGroups}
+              selectUpdate={this.state.dataFormUpdate}
+              cancelForm={this.showForm} />
             }
             <List selectDelete={this.deleteUser} userList={this.state.dataUser} selectUpdate={this.dataUpdate}/>
+
+            <Snackbar
+            open={this.state.alert.open}
+            autoHideDuration={4000}
+            onClose={() => 
+              this.setState({alert: {open: false}})
+            }
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            anchorOrigin= {{ 
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+          >
+            <Alert variant="filled" severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+          </Snackbar>
           </div>
         );
       }
