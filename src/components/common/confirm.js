@@ -25,7 +25,7 @@ export default function AlertDialog(props) {
   }
 
   const manageContent = (option) => {
-¿    switch (option) {
+    switch (option) {
       case 'delete':
         setContent({
           ...content,
