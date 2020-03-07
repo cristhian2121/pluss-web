@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, Fragment } from 'react';
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -18,6 +18,9 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import {Redirect} from "react-router-dom";
+
+import AlertDialog from "../confirm"
 import PageNotFound from "../page-not-found";
 import { User } from "../../../pages/users/index";
 import { CreateQuotation } from "../../make-rates/create";
@@ -85,14 +88,21 @@ const useStyles = makeStyles(theme => ({
 
 export const Menu = ({ children }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [confirm, setConfirm] = useState(false)
 
   const handleDrawerClose = () => {
     open ? setOpen(false) : setOpen(true);
   };
 
-  const logOut = () => {
+  const logOut = (eeee) => {
+    setConfirm(true)
     
+  }
+
+  const closeConfirmation = () => {
+    setShowAlert(!showAlert)
   }
 
   return (
@@ -157,19 +167,20 @@ export const Menu = ({ children }) => {
         </List>
         <Divider />
         <div >
-          <Link to="/" >
-            <Tooltip title="Cerrar sesión" placement="right-start" variant="regular">
-              <IconButton onClick={logOut}>
-                <ExitToAppIcon />
-              </IconButton>
-            </Tooltip>            
-          </Link>
+          <Tooltip title="Cerrar sesión" placement="right-start" variant="regular">
+            <IconButton onClick={() => setShowAlert({open:true, option:'logout'})}>
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>            
         </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {children}
       </main>
+
+      <AlertDialog open={showAlert.open} option={showAlert.option} close={closeConfirmation} confirm={logOut} />
+      {confirm && <Redirect to='/'/>}
     </div>
   );
 }

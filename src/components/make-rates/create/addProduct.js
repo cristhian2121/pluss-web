@@ -136,16 +136,14 @@ export const ProductForm = (props) => {
     }
 
     const handleRemoveProduct = (product) => {
-        // let productss = products.filter(item => item != product)
         let productss = products.filter(item => item != selectRegister)
         setProducts(productss)
         props.removeProduct(selectRegister)
-        // props.removeProduct(product)  
     }
 
     const showConfirmation = (product) => {
         setSelectRegister(product)
-        setShowAlert(true)
+        setShowAlert({open:true, option:'delete'})
     }
 
     const closeConfirmation = () => {
@@ -155,7 +153,7 @@ export const ProductForm = (props) => {
 
     return (
         <Fragment>
-          <AlertDialog open={showAlert} option={selectRegister && true} close={closeConfirmation} confirm={selectRegister ? handleRemoveProduct : clearForm} />
+          <AlertDialog open={showAlert.open} option={showAlert.option} close={closeConfirmation} confirm={selectRegister ? handleRemoveProduct : clearForm} />
           <form noValidate autoComplete="off" id="addProductForm" className="">
             <TextField
                 id='image'
@@ -279,7 +277,7 @@ export const ProductForm = (props) => {
                 </div>
             ))}
             <br/><br/>
-            <Button color="secondary" onClick={() => setShowAlert(true)}>
+            <Button color="secondary" onClick={() => setShowAlert({open:true, option:'clean'})}>
                 Limpiar
             </Button>
             <Button color="primary" href="#new-product" onClick={handleAddProduct}>

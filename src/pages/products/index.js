@@ -98,7 +98,10 @@ class Products extends PureComponent {
     if (!this.state.units.length) {
       console.log('xasd');
       this.setState({
-        showDialogUnits: true
+        showDialogUnits: {
+          open: true,
+          option: 'units'
+        }
       });
     }
   }
@@ -161,8 +164,8 @@ class Products extends PureComponent {
         </Dialog>
         {this.state.showDialogUnits &&
           <AlertDialog 
-          option='units' 
-          open={this.state.showDialogUnits} 
+          option={this.state.showDialogUnits.option} 
+          open={this.state.showDialogUnits.open} 
           close={() => this.setState({ showDialogUnits: false })} 
           confirm={this.addUnits}
           />}

@@ -306,14 +306,14 @@ export const FormQuotation = (props) => {
         </form>
 
         <div className="sub-title">
-          <span className="text">Agregar Unidades</span> 
+          <span className="text">Unidades</span> 
         </div>
 
         {/* Unidades */}
         <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
 
         <div className="sub-title">
-          <span className="text">Agregar productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
+          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
         </div>
 
         {/* Anadir producto */}
