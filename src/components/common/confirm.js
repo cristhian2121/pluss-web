@@ -9,13 +9,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { UnitsCost } from '../make-rates/create/unitsCost';
 
 export default function AlertDialog(props) {
-  console.log('props: ', props);
-  // const [optionDelete, setOptionDelete] = React.useState(props.option);
+  console.log('props alert: ', props);
   const [content, setContent] = React.useState();
   let units = [];
   const UNITS_TEXT = 'units';
 
   const handleClose = () => {
+    setContent(null)
     props.close(false)
   };
 
@@ -25,8 +25,8 @@ export default function AlertDialog(props) {
   }
 
   const manageContent = (option) => {
-    switch (option) {
-      case true:
+¿    switch (option) {
+      case 'delete':
         setContent({
           ...content,
           buttonText: 'Eliminar',
@@ -34,7 +34,7 @@ export default function AlertDialog(props) {
           textTitle: 'Eliminar registro'
         });
         break;
-      case false:
+      case 'clean':
         setContent({
           ...content,
           buttonText: 'Limpiar',
@@ -48,6 +48,14 @@ export default function AlertDialog(props) {
           buttonText: 'Agregar',
           textBody: 'Antes de continuar en crear una cotización, debe agregar las unidades base de los productos.',
           textTitle: 'Agregar unidades'
+        });
+        break;
+      case 'logout':
+        setContent({
+          ...content,
+          buttonText: 'Aceptar',
+          textBody: '¿Esta seguro que desea cerrar sesión?',
+          textTitle: 'Cerrar sesión'
         });
         break;
       default: break;
