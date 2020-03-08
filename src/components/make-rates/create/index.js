@@ -24,8 +24,15 @@ class CreateQuotationHook extends Component {
       downloadPDF: false,
       preView: false,
       OpenAlert: null,
-      redirectList: false
+      redirectList: false,
+      productReducerAux: {
+        selectUpdate: {
+          products: this.props.productReducer.products,
+          units: this.props.productReducer.units,
+        }
+      } // Create for pass product from products
     }
+    console.log('this.props.location.state: ', this.props.location.state);
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
     this.endQuotation = this.endQuotation.bind(this)
@@ -34,13 +41,23 @@ class CreateQuotationHook extends Component {
   }
 
   componentDidMount() {
-    const quotation = this.props.quotationReducer.quotation;
-    console.log('quotation: ', quotation);
+    console.log('************************************************************************');
+    if (this.props.productReducer.products.length) {
+      this.setState({
+        productReducerAux: {
+          selectUpdate: {
+            products: this.props.productReducer.products,
+            units: this.props.productReducer.units,
+            selectUpdate: 1
+          }
+        }
+      })
+    }
   }
 
   eventSavePDF(quotation) {
     console.log('quotation: ', quotation);
-    window.open('/cotizacion', '_blank','',true)
+    window.open('/cotizacion', '_blank', '', true)
   }
 
   redirectToPDF() {
@@ -54,8 +71,10 @@ class CreateQuotationHook extends Component {
     this.props.createQuotation({ ...data })
     let dataEmail = data.email
 
-    fetch(`${conf.api_url}/quotation/`,{ method: 'POST', body: JSON.stringify(data),
-      headers:{ 'Content-Type': 'application/json' }})
+    fetch(`${conf.api_url}/quotation/`, {
+      method: 'POST', body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    })
       .then(async (response) => {
         let resp = await response.json()
 
@@ -146,11 +165,18 @@ class CreateQuotationHook extends Component {
           eventCreateQuotation={this.createQuotation}
           preQuotation={this.props.quotationReducer.quotation}
           eventSavePDF={this.eventSavePDF}
+<<<<<<< HEAD
           updateQuotation={this.props.location.state}
           // endQuotation = {this.endQuotation}
           updateQuotations = {this.updateQuotations}
         />          
         {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state:this.state.OpenAlert}}/>}
+=======
+          updateQuotation={this.props.location.state || {...this.state.productReducerAux}}
+          endQuotation={this.endQuotation}
+        />
+        {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state: this.state.openAlert }} />}
+>>>>>>> development_cris
       </div>
     );
   }

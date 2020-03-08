@@ -29,6 +29,7 @@ class Products extends PureComponent {
 
   productsService = new ProductsService()
   longitud = 0
+  productsAux = [];
 
   constructor(props) {
     super(props)
@@ -42,7 +43,7 @@ class Products extends PureComponent {
       products: props.products,
       productsSelecteds: [],
       units: [],
-      showDialogUnits: false
+      showDialogUnits: false,
     }
     this.addProduct = this.addProduct.bind(this);
 
@@ -88,14 +89,16 @@ class Products extends PureComponent {
 
   addProduct = (dataProduct) => {
     console.log('dataProduct: ', dataProduct);
-    this.props.addProduct(dataProduct);
+    // this.props.addProduct(dataProduct);
     console.log('dataProduct.id: ', dataProduct.id);
+    this.productsAux.push(dataProduct)
     this.setState({ productsSelecteds: [...this.state.productsSelecteds, dataProduct.id] });
   }
 
   goToCreateQuotation = () => {
     console.log('***');
     if (!this.state.units.length) {
+      this.props.addProduct(this.state.prod);
       console.log('xasd');
       this.setState({
         showDialogUnits: {
@@ -108,6 +111,14 @@ class Products extends PureComponent {
 
   addUnits = (_units) => {
     console.log('_units', _units);
+    if (this.productsAux.length) {
+      const productsWithUnits = this.productsAux.map(_ => {
+        _.units = _units
+        return _
+      })
+      this.props.addProduct(productsWithUnits);
+      this.props.addUnits(_units);
+    }
   }
 
   render() {
