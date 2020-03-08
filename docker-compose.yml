@@ -1,21 +1,22 @@
-version: "3.7"
+version: "3"
 services:
-  # web
+  # web 
   www:
     image: nginx
     container_name: www
     restart: always
     ports:
       - "80:80"
-    volumes:
-      # - /pluss_web/build:share-volumen-pluss-web
-      - share-volumen-pluss-web:/usr/share/nginx/html:ro
-    environment:
-      - VIRTUAL_HOST=app.plusspop.com
-      # - LETSENCRYPT_HOST=app.plusspop.com
-      # - LETSENCRYPT_EMAIL=ccdelgadop@gmail.com
     depends_on:
       - pluss-web
+    volumes:
+      - share-volumen-pluss-web:/usr/share/nginx/html:ro
+      - ./Dockerfile:/etc/nginx/conf.d/pepe
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    # environment:
+      # - VIRTUAL_HOST=app.plusspop.com
+      # - LETSENCRYPT_HOST=app.plusspop.com
+      # - LETSENCRYPT_EMAIL=ccdelgadop@gmail.com
   # nginx-proxy
   # nginx-proxy:
   #   image: jwilder/nginx-proxy
