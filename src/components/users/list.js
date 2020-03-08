@@ -51,18 +51,20 @@ export class List extends Component {
                         tooltip: 'Eliminar usuario',
                         onClick: (event, rowData) => {
                           this.setState({
-                            showAlert: true,
+                            showAlert: {
+                              open: true,
+                              option: 'delete'
+                            },
                             selectRegister: rowData
                           })
-                          // this.props.selectDelete(rowData)                     
                         }
                     }
                   ]}
             />
 
             <AlertDialog
-                open={this.state.showAlert}
-                option={this.state.selectRegister && true}
+                open={this.state.showAlert.open}
+                option={this.state.showAlert.option}
                 close={() => this.setState({showAlert: !this.state.showAlert})}
                 confirm={() => this.props.selectDelete(this.state.selectRegister)}
             />

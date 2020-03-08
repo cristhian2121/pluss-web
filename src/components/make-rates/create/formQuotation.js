@@ -121,27 +121,9 @@ export const FormQuotation = (props) => {
   const updateQuotation = event => {
     const data = generateData()
     data.status = event
-    console.log('data updatequotation: ', data);
-
-    fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(async (response) => {
-      let resp = await response.json()
-
-      if (response.status === 200 || response.status == 201) {
-        setOpenAlert({
-          open: true,
-          message: 'La cotización se actualizo correctamente.',
-          type:'success'
-        })
-        // setOpenEmail && setRedirectList(true)  
-      }
-    })
-      .catch(error => console.log('Error: ', error))
+    data.id = idSelectUpdate
+    console.log('data updatequotation: ', data, idSelectUpdate);
+    props.updateQuotations(data)
   }
 
   const generatePDF = async () => {
@@ -229,10 +211,17 @@ export const FormQuotation = (props) => {
   }
 
   const confEmail = (dataEmail) => {
-    let data = dataEmail
-    let formQuotation = generateData()
-    data.client = formQuotation.client
-    props.endQuotation(data)
+    let data = generateData()
+    data.email = dataEmail
+    data.status = "Finalizado"
+    // data.client = formQuotation.client
+    // data.quotation = generateData()
+    // data.quotation.status = "En progreso"
+    data.id = idSelectUpdate
+    
+    idSelectUpdate ? props.updateQuotations(data) : props.eventCreateQuotation(data)
+
+    // props.endQuotation(data)
   }
 
   return (
@@ -317,14 +306,14 @@ export const FormQuotation = (props) => {
         </form>
 
         <div className="sub-title">
-          <span className="text">Agregar Unidades</span> 
+          <span className="text">Unidades</span> 
         </div>
 
         {/* Unidades */}
         <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
 
         <div className="sub-title">
-          <span className="text">Agregar productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
+          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
         </div>
 
         {/* Anadir producto */}
