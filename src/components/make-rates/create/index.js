@@ -165,18 +165,11 @@ class CreateQuotationHook extends Component {
           eventCreateQuotation={this.createQuotation}
           preQuotation={this.props.quotationReducer.quotation}
           eventSavePDF={this.eventSavePDF}
-<<<<<<< HEAD
           updateQuotation={this.props.location.state}
           // endQuotation = {this.endQuotation}
           updateQuotations = {this.updateQuotations}
         />          
         {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state:this.state.OpenAlert}}/>}
-=======
-          updateQuotation={this.props.location.state || {...this.state.productReducerAux}}
-          endQuotation={this.endQuotation}
-        />
-        {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state: this.state.openAlert }} />}
->>>>>>> development_cris
       </div>
     );
   }
