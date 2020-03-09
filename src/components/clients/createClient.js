@@ -20,36 +20,43 @@ export class CreateClient extends React.Component {
       address: props.clientUpdate ? props.clientUpdate.address : null,
       email: props.clientUpdate ? props.clientUpdate.email : null,
       phone_two: props.clientUpdate ? props.clientUpdate.phone_two : null,
+
+      errors: {
+        name: false,
+        nit: false
+      }
     }
   }
 
   addClient = (event) => {
     event.preventDefault()
-    let name = document.getElementById('name').value
-    let nit = document.getElementById('nit').value
-    let phone = document.getElementById('phone').value
-    let agent = document.getElementById('agent').value
-    let dependece = document.getElementById('dependece').value
-    let city = document.getElementById('city').value
-    let address = document.getElementById('address').value
-    let email = document.getElementById('email').value
-    let phone_two = document.getElementById('phone_two').value
-    // let data = this.generateData()
-    const validate = this.validator(name, nit)
+    // let name = document.getElementById('name').value
+    // let nit = document.getElementById('nit').value
+    // let phone = document.getElementById('phone').value
+    // let agent = document.getElementById('agent').value
+    // let dependece = document.getElementById('dependece').value
+    // let city = document.getElementById('city').value
+    // let address = document.getElementById('address').value
+    // let email = document.getElementById('email').value
+    // let phone_two = document.getElementById('phone_two').value
+    let data = this.generateData()
+    console.log('data: ', data);
+    const validate = this.validator(data)
     if(validate){
-      const client = {
-        name: name,
-        nit: nit,
-        phone: phone,
-        agent : agent,
-        city : city,
-        address: address,
-        email: email,
-        phone_two: phone_two,
-        dependece: dependece
-      }
+      console.log('validate: ', validate);
+      // const client = {
+      //   name: name,
+      //   nit: nit,
+      //   phone: phone,
+      //   agent : agent,
+      //   city : city,
+      //   address: address,
+      //   email: email,
+      //   phone_two: phone_two,
+      //   dependece: dependece
+      // }
       console.log("ok", this.state)
-      this.state.idClient ? this.props.updateClient(client) : this.props.saveClient(client)
+      // this.state.idClient ? this.props.updateClient(data) : this.props.saveClient(data)
     }else{
       console.log('faltan datos')
     }
@@ -68,12 +75,15 @@ export class CreateClient extends React.Component {
     return obj
   }
 
-  validator(name, phone, agent, city, address){
-     if(name != "" && phone != "" && agent != "" && city != "" && address != ""){
-      return true
-     }else{
-      return false
-    }
+  validator(data){
+    console.log('data: ', data);
+    let err = {}
+    // !data.name && err.name=true
+    !data.nit && this.setState({errors:{nit:true}})
+    console.log('err: ', err);
+    
+    return true
+     
   }
 
   clearForm = () => {
@@ -133,9 +143,25 @@ export class CreateClient extends React.Component {
           <div className="title-modal">
               {this.state.idClient ? 'Editar' : 'Crear' } Cliente
           </div>
-          <form noValidate id="clientForm">
-            <TextField id="name" name="name" label="Nombre empresa" value={this.state.name} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
-            <TextField id="nit" name="nit" label="Nit" value={this.state.nit} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
+          <form noValidate id="clientForm" className="row">
+            <div className="col-md-4 col-xs-12">
+              <TextField id="name" name="name" label="Nombre empresa" value={this.state.name} onChange={this.handleChange}/>
+              
+              {this.state.errors.name &&
+                <div class="lbl-error" >
+                  Este campo es obligatorio.
+                </div>
+              }
+            </div>
+            <div className="col-md-4 col-xs-12">
+              <TextField id="nit" name="nit" label="Nit" value={this.state.nit} onChange={this.handleChange} />
+              
+              {this.state.errors.nit &&
+                <div class="lbl-error" >
+                  Este campo es obligatorio.
+                </div>
+              }
+            </div>
             <TextField id="agent" name="agent" label="Nombre responsable" value={this.state.agent} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
             <TextField id="dependece" name="dependece" label="Area responsable" value={this.state.dependece} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>
             <TextField id="email" name="email" label="Correo electrónico" value={this.state.email} onChange={this.handleChange} className="col-md-4 col-xs-12" margin="normal"/>

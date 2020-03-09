@@ -90,13 +90,21 @@ export const Menu = ({ children }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [confirm, setConfirm] = useState(false)
+  const [confirm, setConfirm] = useState(false);
+  const [userSession, setUserSession] = useState(localStorage.getItem('name'))
+
+  // if (localStorage) {
+  //   console.log('localStorage: ', localStorage);
+  //   let aaa = localStorage.getItem('name')
+  //   setUserSession(localStorage.getItem('name'))
+  // }
 
   const handleDrawerClose = () => {
     open ? setOpen(false) : setOpen(true);
   };
 
   const logOut = (eeee) => {
+    localStorage.clear()
     setConfirm(true)
     
   }
@@ -121,10 +129,11 @@ export const Menu = ({ children }) => {
         }}
         open={open}
       >
-        <div className={classes.toolbar}>
+        <div className="popo">
           <IconButton onClick={handleDrawerClose}>
             {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
+          Hola {userSession}
         </div>
         <Divider />
         <List >
