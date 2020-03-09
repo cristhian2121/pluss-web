@@ -7,6 +7,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
+  validate,
 } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -50,6 +51,7 @@ export const FormQuotation = (props) => {
   const [openEmail, setOpenEmail] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
+  const [errors, setErrors] = useState({})
 
   useEffect(() => { 
     getClients()
@@ -113,7 +115,7 @@ export const FormQuotation = (props) => {
     data.status = status
     data.endQuotation = event
 
-    props.eventCreateQuotation(data)
+    validate(data) && props.eventCreateQuotation(data)
   }
 
   const updateQuotation = event => {
@@ -121,7 +123,7 @@ export const FormQuotation = (props) => {
     data.status = event
     data.id = idSelectUpdate
     console.log('data updatequotation: ', data, idSelectUpdate);
-    props.updateQuotations(data)
+    validate(data) && props.updateQuotations(data)
   }
 
   const generatePDF = async () => {
@@ -141,11 +143,11 @@ export const FormQuotation = (props) => {
         data.user = dataUsers[i]
       }
     }
-    // data.client = dataClients.filter(item => item.id == idClient)
-    // data.user = dataUsers.filter(item => item.user.id == idUser)
 
-    sessionStorage.setItem('quotation', JSON.stringify(data))
-    props.eventSavePDF(data)
+    if (validate(data)) {
+      sessionStorage.setItem('quotation', JSON.stringify(data))
+      props.eventSavePDF(data)
+    }
   }
 
   const generateData = () => {
@@ -204,22 +206,37 @@ export const FormQuotation = (props) => {
     setOpenEmail(e)
   }
 
-  const preEmail = () => {
-    setOpenEmail(true)
+  const preEmail = () => {    
+    let data = generateData()
+
+    validate(data) && setOpenEmail(true)
   }
 
   const confEmail = (dataEmail) => {
     let data = generateData()
     data.email = dataEmail
     data.status = "Finalizado"
-    // data.client = formQuotation.client
-    // data.quotation = generateData()
-    // data.quotation.status = "En progreso"
     data.id = idSelectUpdate
-    
-    idSelectUpdate ? props.updateQuotations(data) : props.eventCreateQuotation(data)
 
-    // props.endQuotation(data)
+    idSelectUpdate ? props.updateQuotations(data) : props.eventCreateQuotation(data)
+  }
+
+  const validate = (data) => {
+    console.log('data: ', data);
+    let error = []
+    !data.client && error.push('client')
+    !data.user && error.push('user')
+
+    if (error.length > 0) {
+      let errors = {}
+      for (let item of error) {
+        errors[item] = true
+      }
+      setErrors(errors)
+      
+      return false
+    }
+    else return true 
   }
 
   return (
@@ -250,39 +267,42 @@ export const FormQuotation = (props) => {
                 }}
               />
             </MuiPickersUtilsProvider>
-            <FormControl className="col-md-4 col-xs-12" margin="normal">
-              <InputLabel id="clients">Cliente</InputLabel>
-              <Select
-                labelId="client"
-                name="client"
-                onChange={getClients}
-                defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
-              >
-                {dataClients.map(clients => (
-                  <MenuItem
-                    value={clients.id}
-                  >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <TextField required
+              select
+              label="Cliente"
+              name="client"
+              onChange={getClients}
+              defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
+              className="col-md-4 col-xs-12"
+              margin="normal"
+              error={errors.client}
+              helperText={errors.client && 'Este campo es requerido.'}
+            >
+              {dataClients.map(clients => (
+                <MenuItem
+                  value={clients.id}
+                >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
+              ))}
+            </TextField>
 
             {/* segunda fila  */}
-
-            <FormControl className="col-md-4 col-xs-12" margin="normal">
-              <InputLabel id="users">Ejecutivo de ventas</InputLabel>
-              <Select
-                labelId="user"
-                name="user"
-                onChange={getUsers}
-                defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
-              >
-                {dataUsers.map(users => (
-                  <MenuItem
-                    value={users.id}
-                  >{users.user.first_name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <TextField required
+              select
+              label="Ejecutivo de ventas"
+              name="user"
+              onChange={getUsers}
+              defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
+              className="col-md-4 col-xs-12"
+              margin="normal"
+              error={errors.user}
+              helperText={errors.user && 'Este campo es requerido.'}
+            >
+              {dataUsers.map(users => (
+                <MenuItem
+                  value={users.id}
+                >{users.user.first_name}</MenuItem>
+              ))}
+            </TextField>
             <TextField
               id="pay_format"
               name="pay_format"

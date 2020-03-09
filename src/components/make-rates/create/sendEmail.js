@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
 // Material
 import TextField from '@material-ui/core/TextField';
@@ -6,12 +6,13 @@ import Button from '@material-ui/core/Button';
 
 
 export const SendEmail = (props) => {
+    const [errors, setErrors] = useState({})
 
     const sendEmail = () => {
         let data = generateData()
         data.status = "Finalizado"
 
-        props.sendEmail(data)
+        validate(validate) && props.sendEmail(data)
     }
 
     const generateData = () => {
@@ -23,6 +24,23 @@ export const SendEmail = (props) => {
         }
         return data
       }
+    
+    const validate = (data) => {
+        let error = []
+        !data.subject && error.push('subject')
+        !data.message && error.push('message')    
+    
+        if (error.length > 0) {
+          let errors = {}
+          for (let item of error) {
+            errors[item] = true
+          }
+          setErrors(errors)
+          
+          return false
+        }
+        else return true 
+    }
 
     return (
         <div className="create-update">
@@ -31,20 +49,22 @@ export const SendEmail = (props) => {
                     Enviar cotización
                 </div>
                 <form id="form-send-email">
-                    <TextField
+                    <TextField required
                         id="subject"
                         name="subject"
                         label="Asunto"
                         margin="normal"
                         className="col-md-6 col-xs-12"
-                        />
+                        error={errors.subject}
+                        helperText={errors.subject && 'Este campo es requerido.'}
+                    />
                     <TextField
                         id="send_copy"
                         name="send_copy"
                         label="Enviar copia"
                         margin="normal"
                         className="col-md-6 col-xs-12"
-                        />
+                    />
                     <TextField
                         id='message'
                         name='message'
@@ -53,6 +73,8 @@ export const SendEmail = (props) => {
                         label="Observaciones"
                         className="col-md-12 col-xs-12"
                         margin="normal"
+                        error={errors.message}
+                        helperText={errors.message && 'Este campo es requerido.'}
                     />
                     <div className="col-12 px-0 d-flex justify-content-end container-button">
                         <Button variant="contained" onClick={() => props.cancelEmail(false)}>
