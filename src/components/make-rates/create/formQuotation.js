@@ -114,12 +114,8 @@ export const FormQuotation = (props) => {
     const data = generateData()
     data.status = status
     data.endQuotation = event
-<<<<<<< HEAD
-    props.eventCreateQuotation(data)
-=======
 
     validate(data) && props.eventCreateQuotation(data)
->>>>>>> Modify: add alerts in clients, user, email, quotation
   }
 
   const updateQuotation = event => {
