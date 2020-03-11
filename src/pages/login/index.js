@@ -52,6 +52,8 @@ function IntegrationNotistack() {
   const [ loginRoot, setLoginRoot ] = useState(false)
 
   const login = () => {
+    console.log('login: entro aca y ni se');
+
     let data = generateData()
     fetch(`${conf.api_url}/login/`, {
       method: 'POST',
@@ -62,10 +64,11 @@ function IntegrationNotistack() {
     })
     .then(async function(response) {
       let resp = await response.json()
+      console.log('resp login: ', resp);
       if (resp['username']) { enqueueSnackbar(resp['username'], {variant: 'error'}) }
       if (resp['password']) { enqueueSnackbar(resp['password'], {variant: 'error'}) }
       if (response.status == 401) { enqueueSnackbar(resp['detail'], {variant: 'error'}) }
-      if (response.status == 200) { setLoginRoot(true) }
+      if (response.status == 200) { setPermissions(resp[0]) }
     })
     .catch(function(error) {
       enqueueSnackbar('Se generó un error en la autenticación.', {variant: 'error'});
@@ -79,6 +82,12 @@ function IntegrationNotistack() {
       data[item.name] = item.value;
     }
     return data
+  }
+
+  const setPermissions = (user) => {
+    console.log('user: ', user);
+    localStorage.name = user.first_name
+    setLoginRoot(true)
   }
 
   return (
@@ -116,6 +125,7 @@ function IntegrationNotistack() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onKeyPress={login}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
