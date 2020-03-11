@@ -11,7 +11,6 @@ services:
       - pluss-web
     volumes:
       - share-volumen-pluss-web:/usr/share/nginx/html:ro
-      - ./Dockerfile:/etc/nginx/conf.d/pepe
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     # environment:
       # - VIRTUAL_HOST=app.plusspop.com
