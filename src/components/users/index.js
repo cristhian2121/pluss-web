@@ -22,6 +22,7 @@ export class Create extends Component {
         message: '',
         type: '',
       },
+      errors: {},
       // dataGroups: [],
       showForm: true,
       idUser: props.selectUpdate.user ? props.selectUpdate.id : null,
@@ -35,33 +36,15 @@ export class Create extends Component {
       groups: props.selectUpdate.user ? props.selectUpdate.user.groups : []
     }
   }
-  // componentDidMount() {
-  //   this.getGroups()
-  // }
-  // getGroups = async () => {
-  //   try {
-  //     let response = await fetch(`${conf.api_url}/group/`)
-  //     let data = await response.json();
-  //     console.log('datadddddd: ', data.results);
-  //     this.setState({
-  //       dataGroups: data.results
-  //     })
-  //   } catch (error) {
-  //     console.log('error', error)
-  //   }
-  // }
-  
   
   addUser = (e) => {
     let data = this.generateData()
     data.groups = data.groups.split(',')
     console.log('this.data adduser: ', this.data);
-    if(this.validator) {
+
+    this.validator(data) && (
       this.state.idUser ? this.props.updateUser(data) : this.props.saveUser(data)
-    }else {
-      console.log('faltan campos')
-    }
-    
+    )
   }
 
   generateData = () => {
@@ -76,12 +59,32 @@ export class Create extends Component {
     return data
   }
 
-  validator = () => {
-    return true
+  validator(data) {
+    console.log('data nvalidatror: ', data.groups.length);
+    let error = []
+    !data.code && error.push('code')
+    !data.first_name && error.push('first_name')
+    !data.identification_number && error.push('identification_number')
+    !data.username && error.push('username')
+    !data.phone_number && error.push('phone_number')
+    data.groups[0] === "" && error.push('groups')
+    !data.password1 && error.push('password1')
+
+    if (error.length > 0) {
+      let errors = {}
+      for (let item of error) {
+        errors[item] = true
+      }
+      this.setState({errors: errors})
+      
+      return false
+    }
+    else return true   
   }
 
   clear = () => {
     this.data = {}
+    this.errors = {}
     document.getElementById("userForm").reset()
     this.setState({
       idUser: null,
@@ -132,122 +135,6 @@ export class Create extends Component {
     }
   }
 
-  // saveUsers = (evt) => {
-  //   this.data = this.generateData()
-  //   console.log('editando', this.data)
-  //   fetch(`${conf.api_url}/profile/`, {
-  //     method: 'POST',
-  //     body: JSON.stringify(this.data),
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   })
-  //     .then(async (response) => {
-  //       let resp = await response.json()
-  //       console.log('respresprespresp: ', resp);
-  //       if (response.status === 201) {
-  //         this.setState({ 
-  //           alert: {
-  //             open: true,
-  //             message: resp['detail'],
-  //             type:'success'
-  //           }
-  //         })
-
-  //         this.props.addUserList(this.data)
-  //         this.clear()
-  //       }
-  //       if (response.status === 400) {
-  //         this.setState({ 
-  //           alert: {
-  //             open: true,
-  //             message: resp['error'],
-  //             type:'error'
-  //           }
-  //         })
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //       this.setState({ 
-  //         alert: {
-  //           open: true,
-  //           message: 'Por favor valide los campos obligatorios',
-  //           type:'warning'
-  //         }
-  //       })
-  //     });
-  // };
-  // updateUsers = () => {
-  //   this.data = this.generateData()
-  //   this.data.groups = this.data.groups.split(',')
-  //   console.log('entro por el editar casi ue no', this.data, this.props.selectUpdate.id)
-
-  //   fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
-  //     method: 'PUT',
-  //     body: JSON.stringify(this.data),
-  //     headers: { 'Content-Type': 'application/json' }
-  //   })
-  //     .then(async (response) => {
-  //       let resp1 = await response.json()
-  //       console.log('response', resp1, response.status)
-
-  //       if (response.status === 200 ||  response.status === 201) {
-  //         fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
-  //           method: 'PUT',
-  //           body: JSON.stringify(this.data),
-  //           headers: { 'Content-Type': 'application/json' }
-  //         })
-  //           .then(async (response) => {
-  //             let resp = await response.json()
-  //             console.log('resp 2: ', resp);
-  //             if (response.status === 200 ||  response.status === 201) {
-  //               this.setState({ 
-  //                 alert: {
-  //                   open: true,
-  //                   message: 'El usuario se  actualizó correctamente',
-  //                   type:'success'
-  //                 }
-  //               })
-  //               this.clear()
-  //             }
-  //             if (response.status === 400 ) {
-  //               this.setState({ 
-  //                 alert: {
-  //                   open: true,
-  //                   message: 'No se pudo actualizar el usuario, por favor vuelva a intentarlo.',
-  //                   type:'error'
-  //                 }
-  //               })
-  //             }
-  //           })
-  //           .catch(err => {
-  //             console.log(err);
-  //           });
-  //       }
-  //       if (response.status === 400 ) {
-  //         this.setState({ 
-  //           alert: {
-  //             open: true,
-  //             message: resp1['error'],
-  //             type:'error'
-  //           }
-  //         })
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //       this.setState({ 
-  //         alert: {
-  //           open: true,
-  //           message: 'Por favor valide los campos obligatorios',
-  //           type:'warning'
-  //         }
-  //       })
-  //     });
-
-  // };
-
   render() {
     return (
       <div id="userForm-cu" className="create-update">
@@ -265,6 +152,8 @@ export class Create extends Component {
               label="Código"
               margin="normal"
               className="col-md-4 col-xs-4"
+              error={this.state.errors.code} 
+              helperText={this.state.errors.code && 'Este campo es requerido.'}
             />
             <TextField required
               name="first_name"
@@ -273,14 +162,18 @@ export class Create extends Component {
               onChange={this.handleChange}
               value={this.state.first_name}
               className="col-md-4 col-xs-8"
+              error={this.state.errors.first_name} 
+              helperText={this.state.errors.first_name && 'Este campo es requerido.'}
             />
-            <TextField
+            <TextField required
               name="identification_number"
               label="Documento"
               margin="normal"
               onChange={this.handleChange}
               value={this.state.identification_number}
               className="col-md-4 col-xs-4"
+              error={this.state.errors.identification_number} 
+              helperText={this.state.errors.identification_number && 'Este campo es requerido.'}
             />
             <TextField required
               name="username"
@@ -289,34 +182,37 @@ export class Create extends Component {
               onChange={this.handleChange}
               value={this.state.username}
               className="col-md-4 col-xs-8"
+              error={this.state.errors.username} 
+              helperText={this.state.errors.username && 'Este campo es requerido.'}
             />
-            <TextField
-              required
+            <TextField required
               name="phone_number"
               label="Teléfono"
               margin="normal"
               onChange={this.handleChange}
               value={this.state.phone_number}
               className="col-md-4 col-xs-6"
+              error={this.state.errors.phone_number} 
+              helperText={this.state.errors.phone_number && 'Este campo es requerido.'}
             />
-            <FormControl margin="normal" className="col-md-4 col-xs-6">
-              <InputLabel id="groups">Tipo usuario</InputLabel>
-              <Select
-                labelId="groups"
-                name="groups"
-                onChange={this.handleChange}
-                defaultValue={this.state.groups}
+            <TextField required
+              select
+              label="Tipo usuario"
+              name="groups"
+              onChange={this.handleChange}
+              defaultValue={this.state.groups}
+              margin="normal"
+              className="col-md-4 col-xs-6"
+              error={this.state.errors.groups}
+              helperText={this.state.errors.groups && 'Este campo es requerido.'}
               >
-                {this.props.dataGroups.map(groups => (
-                  <MenuItem
-                    value={groups.id}
-                  >{groups.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <TextField
-              required
+              {this.props.dataGroups.map(groups => (
+                <MenuItem value={groups.id} >
+                  {groups.name}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField required
               type="password"
               name="password1"
               label="Contraseña"
@@ -324,6 +220,8 @@ export class Create extends Component {
               onChange={this.handleChange}
               value={this.state.passwordConfirm}
               className="col-md-4 col-xs-6"
+              error={this.state.errors.password1} 
+              helperText={this.state.errors.password1 && 'Este campo es requerido.'}
             />
             <FormControl className="col-md-4 col-xs-6">
               <TextField
