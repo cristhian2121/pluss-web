@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { createHashHistory } from 'history'
 
 // Material
@@ -29,20 +29,55 @@ import conf from '../../../config'
 // css
 import '../../../styles/commons.css';
 
+/**
+ * assemble the obj of initialization
+ * @param {*} props 
+ */
+const setEditQuotation = (props) => {
+  if (props.updateQuotation && props.updateQuotation.selectUpdate) {
+    return {
+      selectUpdate: props.updateQuotation.selectUpdate,
+      client: props.updateQuotation.selectUpdate.client,
+      user: props.updateQuotation.selectUpdate.user,
+      idSelectUpdate: props.updateQuotation.selectUpdate.id,
+      units: props.updateQuotation.selectUpdate.units,
+      products: props.updateQuotation.selectUpdate.products
+    }
+  }
+  else if (props.preQuotation && props.preQuotation.selectUpdate && props.preQuotation.selectUpdate.products.length) {
+    return {
+      selectUpdate: props.preQuotation.selectUpdate,
+      client: props.preQuotation.selectUpdate.client,
+      user: props.preQuotation.selectUpdate.user,
+      idSelectUpdate: props.preQuotation.selectUpdate.id,
+      units: props.preQuotation.selectUpdate.units,
+      products: props.preQuotation.selectUpdate.products
+    }
+  }
+  else {
+    return {
+      selectUpdate: null,
+      client: null,
+      user: null,
+      idSelectUpdate: null,
+      units: [],
+      products: []
+    }
+  }
+}
+
 export const FormQuotation = (props) => {
-  console.log('props *****************: ', props);
+  const objectInitialization = setEditQuotation(props)
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
-  const [costUnit, SetCostUnit] = useState({})
-  const [units, SetUnits] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.units : [])
-  const [products, setProducts] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.products : [])
+  const [units, SetUnits] = useState(objectInitialization.units || [])
+  const [products, setProducts] = useState(objectInitialization.products || [])
   const [dataClients, setDataClients] = useState([])
   const [dataUsers, setDataUsers] = useState([])
   const [status, setStatus] = useState("En progreso")
-  console.log('props.updateQuotation: ', props.updateQuotation);
-  if(props.updateQuotation) console.log('SI',products);
+  if (props.updateQuotation) console.log('SI', products);
   else console.log('NO');
-  const [selectUpdate, setSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate : null)
+  const [selectUpdate, setSelectUpdate] = useState()
   const [clientSelectUpdate, setCientSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.client : null)
   const [userSelectUpdate, setUserSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.user : null)
   const [idSelectUpdate, setIdSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.id : null)
@@ -122,7 +157,6 @@ export const FormQuotation = (props) => {
     const data = generateData()
     data.status = event
     data.id = idSelectUpdate
-    console.log('data updatequotation: ', data, idSelectUpdate);
     validate(data) && props.updateQuotations(data)
   }
 
@@ -130,15 +164,14 @@ export const FormQuotation = (props) => {
     const data = generateData()
     let idClient = data.client
     let idUser = data.user
-    console.log('idUser: ', idUser);
 
-    for (let i = 0; i < dataClients.length; i++){
+    for (let i = 0; i < dataClients.length; i++) {
       if (dataClients[i].id == idClient) {
         data.client = dataClients[i]
       }
     }
 
-    for (let i=0; i < dataUsers.length; i++) {
+    for (let i = 0; i < dataUsers.length; i++) {
       if (dataUsers[i].id == idUser) {
         data.user = dataUsers[i]
       }
@@ -207,7 +240,7 @@ export const FormQuotation = (props) => {
     setOpenEmail(e)
   }
 
-  const preEmail = () => {    
+  const preEmail = () => {
     let data = generateData()
 
     validate(data) && setOpenEmail(true)
@@ -223,7 +256,6 @@ export const FormQuotation = (props) => {
   }
 
   const validate = (data) => {
-    console.log('data: ', data);
     let error = []
     !data.client && error.push('client')
     !data.user && error.push('user')
@@ -234,21 +266,21 @@ export const FormQuotation = (props) => {
         errors[item] = true
       }
       setErrors(errors)
-      
+
       return false
     }
-    else return true 
+    else return true
   }
 
   return (
     <div >
       <div>
-        { openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={confEmail}/> }
+        {openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={confEmail} />}
         <div className="title">
           Crear cotización
         </div>
         <div>
-
+          {/* 
         <form id="quotationForm" className="form-quotation" >
             <MuiPickersUtilsProvider  utils={DateFnsUtils}>
               <KeyboardDatePicker
@@ -284,10 +316,10 @@ export const FormQuotation = (props) => {
                   value={clients.id}
                 >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
               ))}
-            </TextField>
+            </TextField> */}
 
-            {/* segunda fila  */}
-            <TextField required
+          {/* segunda fila  */}
+          {/* <TextField required
               select
               label="Ejecutivo de ventas"
               name="user"
@@ -322,38 +354,38 @@ export const FormQuotation = (props) => {
               value={idSelectUpdate ? selectUpdate.delivery_time : null}
               onChange={handleChange}
             />
-        </form>
+        </form> */}
 
-        <div className="sub-title">
-          <span className="text">Unidades</span> 
-        </div>
+          <div className="sub-title">
+            <span className="text">Unidades</span>
+          </div>
 
-        {/* Unidades */}
-        <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={idSelectUpdate ? selectUpdate.units : props.preQuotation.units}/>
+          {/* Unidades */}
+          <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={units} />
 
-        <div className="sub-title">
-          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon/>  </Button>
-        </div>
+          <div className="sub-title">
+            <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon />  </Button>
+          </div>
 
-        {/* Anadir producto */}
-        { showproductForm &&
+          {/* Anadir producto */}
+          { showproductForm &&
             <>
                 <ProductForm units={units} productsE={products} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
             </>
         }
 
         </div>
-        {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert}}/>}
+        {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert }} />}
       </div>
       <div className="col-12 px-0 d-flex justify-content-end container-button">
         <Button variant="contained" color="secondary" type="submit" onClick={() => idSelectUpdate ? updateQuotation("En progreso") : saveQuotation("En progreso")}>
-            Guardar cotización
+          Guardar cotización
         </Button>
-          <Button variant="contained" onClick={generatePDF}>
-            Vista previa PDF <PictureAsPdfIcon />
+        <Button variant="contained" onClick={generatePDF}>
+          Vista previa PDF <PictureAsPdfIcon />
         </Button>
         <Button variant="contained" type="submit" onClick={preEmail}>
-            Finalizar
+          Finalizar
         </Button>
       </div>
     </div>

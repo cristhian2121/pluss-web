@@ -10,7 +10,7 @@ import { TotalCost } from './totalCost'
 import AlertDialog from '../../common/confirm'
 
 export const ProductForm = (props) => {
-    console.log('props aaaaaaa: ', props);
+    console.log('props ProductForm: ', props);
 
     const [products, setProducts] = useState(props.productsE ? props.productsE : [])
     const [newProduct, setNewProduct] = useState({})
@@ -105,7 +105,6 @@ export const ProductForm = (props) => {
     // }
 
     const handleChange = (event, index) => {
-        console.log('event.target.name: ', event.target.name);
         const value = parseInt(event.target.value)
         switch (event.target.name) {
             case 'discount':

@@ -13,6 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 
 export const ProductPDF = ({ product, removeProduct }) => {
+    console.log('product: ************', product);
 
     const formatCurrency = new Intl.NumberFormat('es-Co', {//"de-DE"
         style: 'currency',
@@ -53,8 +54,11 @@ export const ProductPDF = ({ product, removeProduct }) => {
                             <TableCell component="th" scope="row"> Precio </TableCell>
                             {product.units.map((unit, index) => (
                                 <TableCell component="th" scope="row">
-                                  {formatCurrency.format(product.prices[index])}
-                                {/* $ {product.prices[index]} */}
+                                    {
+                                        product.prices ?
+                                            formatCurrency.format(product.prices[index])
+                                            : '---'
+                                    }
                                 </TableCell>
                             ))}
                             </TableRow>
