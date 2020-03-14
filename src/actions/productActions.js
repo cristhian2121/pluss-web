@@ -40,7 +40,6 @@ export const getProducts = () => (dispatch) => {
     const epa = dispatch({
         type: GET_ALL
     })
-    console.log('epa: ', epa);
 }
 
 export const removeProduct = (productId) => (dispatch, productId) => {

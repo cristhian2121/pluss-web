@@ -10,7 +10,6 @@ import { TotalCost } from './totalCost'
 import AlertDialog from '../../common/confirm'
 
 export const ProductForm = (props) => {
-    console.log('props ProductForm: ', props);
 
     const [products, setProducts] = useState(props.productsE ? props.productsE : [])
     const [newProduct, setNewProduct] = useState({})

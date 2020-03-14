@@ -141,9 +141,7 @@ class CreateQuotationHook extends Component {
     
     fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(quotation),headers:{ 'Content-Type': 'application/json' } })
     .then(async (response) => {
-      console.log('response mail: ', response);
       let resp = response.json()
-      console.log('entro al senemail: ', resp);
     })
     .catch(e => console.log('no entro al send Email', e))
   }

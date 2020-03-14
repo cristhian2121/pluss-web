@@ -3,7 +3,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
 export const Aler = (open) => {
-    console.log('messagessssssssssss', open)
     // const [opens, setOpen] = React.useState(false);
     let show = false;
     const handleClose = (event, reason) => {
@@ -15,7 +14,6 @@ export const Aler = (open) => {
 
     return (
         <div>
-            {console.log('eeeeeeeeeeeeeeeeeeeee', open.open)}
             <Snackbar
                 anchorOrigin= {{ vertical: 'bottom', horizontal: 'left' }}
                 open={open.open}

@@ -9,7 +9,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { UnitsCost } from '../make-rates/create/unitsCost';
 
 export default function AlertDialog(props) {
-  console.log('props alert: ', props);
   const [content, setContent] = React.useState();
   let units = [];
   const UNITS_TEXT = 'units';

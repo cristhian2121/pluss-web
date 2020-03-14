@@ -18,7 +18,6 @@ export const SendEmail = (props) => {
     const generateData = () => {
         let elements = document.getElementById('form-send-email').elements;
         let data = {};
-        console.log('dataform', elements)
         for (let item of elements) {
           data[item.name] = item.value;
         }

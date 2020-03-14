@@ -9,10 +9,6 @@ export const ProductIndividual = (props) => {
 
     const EXTENSION_IMAGE = 'jpg'
     
-    props.selected && console.log('props: ', props);
-    // pasar objeto detalle al componente padre
-
-
     const productDetail = (obj) => props.productDetail(obj);
     const addProduct = (obj) => {
         // setColorViewIcon('red')
@@ -24,7 +20,6 @@ export const ProductIndividual = (props) => {
     // props.selected && setColorViewIcon('red')
     // useEffect(() => {
     //     if (props.selecteds && props.selecteds.length) {
-    //         console.log('emtrop');
     //         const color = props.selecteds.includes(props.product.referency_id) ? 'red' : '';
     //         setColorViewIcon(color)
     //     }

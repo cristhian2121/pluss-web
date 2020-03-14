@@ -1,11 +1,11 @@
 import React, { PureComponent } from "react";
+import { connect } from 'react-redux'
 
 import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
 
-import { connect } from 'react-redux'
 
 // services
 import { ProductsService } from '../../services/products';
@@ -109,7 +109,7 @@ class Products extends PureComponent {
       })
       this.props.addProducts(productsWithUnits);
       this.props.addUnits(_units);
-      // this.props.history.go('cotizaciones/crear#/')
+      this.props.history.push('/cotizaciones/crear')
     }
   }
 
