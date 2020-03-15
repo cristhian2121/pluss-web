@@ -5,6 +5,10 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { SnackbarProvider, useSnackbar } from 'notistack';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -50,6 +54,7 @@ function IntegrationNotistack() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [ loginRoot, setLoginRoot ] = useState(false)
+  const [ showPassword, setShowPassword] =  useState(false)
 
   const login = () => {
     console.log('login: entro aca y ni se');
@@ -68,7 +73,7 @@ function IntegrationNotistack() {
       if (resp['username']) { enqueueSnackbar(resp['username'], {variant: 'error'}) }
       if (resp['password']) { enqueueSnackbar(resp['password'], {variant: 'error'}) }
       if (response.status == 401) { enqueueSnackbar(resp['detail'], {variant: 'error'}) }
-      if (response.status == 200) { setPermissions(resp[0]) }
+      if (response.status == 200) { setPermissions(resp) }
     })
     .catch(function(error) {
       enqueueSnackbar('Se generó un error en la autenticación.', {variant: 'error'});
@@ -86,7 +91,8 @@ function IntegrationNotistack() {
 
   const setPermissions = (user) => {
     console.log('user: ', user);
-    localStorage.name = user.first_name
+    localStorage.name = user.name
+    localStorage.ldap = user.permission
     setLoginRoot(true)
   }
 
@@ -122,10 +128,22 @@ function IntegrationNotistack() {
             fullWidth
             name="password"
             label="Contraseña"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
             onKeyPress={login}
+            InputProps={{
+              endAdornment:(
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
