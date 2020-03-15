@@ -11,19 +11,19 @@ import PageNotFound from './components/common/page-not-found'
 import { Menu } from './components/common/nav-bar'
 import { Clients } from './components/clients/client'
 import { ProductComponent } from './pages/products'
-
+import { PrivateRoute } from './router/privateRoute'
 import "./App.css";
 
 function App() {
   const DefaultContainer = () => (
     <Menu >
       <Switch>
-        <Route exact path="/cotizaciones" component={MakeRate} />
-        <Route exact path="/usuarios" component={User} />
-        <Route exact path="/cotizaciones/crear" component={CreateQuotation} />
-        <Route exact path="/clientes" component={Clients} />
-        <Route exact path="/productos" component={ProductComponent} />
-        <Route component={PageNotFound} />
+        <PrivateRoute exact path="/cotizaciones" component={MakeRate} />
+        <PrivateRoute exact path="/usuarios" component={User} />
+        <PrivateRoute exact path="/cotizaciones/crear" component={CreateQuotation} />
+        <PrivateRoute exact path="/clientes" component={Clients} />
+        <PrivateRoute exact path="/productos" component={ProductComponent} />
+        <PrivateRoute component={PageNotFound} />
       </Switch>
     </Menu>
   )
@@ -34,9 +34,9 @@ function App() {
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/login" />} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/cotizacion" component={GeneratePDF} />
-          <Route exact path="/cotizacion/:id" component={GeneratePDF} />
-          <Route component={DefaultContainer} />
+          <PrivateRoute exact path="/cotizacion" component={GeneratePDF} />
+          <PrivateRoute exact path="/cotizacion/:id" component={GeneratePDF} />
+          <PrivateRoute component={DefaultContainer} />
         </Switch>
       </Router>
     </div>
