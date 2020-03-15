@@ -5,9 +5,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import config from '../../config';
 
-export const ProductIndividual = (props) => {
-
-    const EXTENSION_IMAGE = 'jpg'
+export const ProductIndividual = (props) => {    
     
     const productDetail = (obj) => props.productDetail(obj);
     const addProduct = (obj) => {
@@ -37,7 +35,7 @@ export const ProductIndividual = (props) => {
     return (
         <div className="pl-1 pr-1 pb-3 ">
             <div className="card" style={{ width: '16.5rem', height: '25rem' }}>
-                <img className="img-product" alt={props.product.name} src={`${config.api_products}${props.product.more_info.codigoProd}.${EXTENSION_IMAGE}`} />
+                <img className="img-product" alt={props.product.name} src={`${config.api_products}${props.product.more_info.codigoProd}.${config.EXTENSION_IMAGE}`} />
                 <div className="card-body card-body">
                     <div className="px-0 card-text text-common">
                         {props.product.detail}

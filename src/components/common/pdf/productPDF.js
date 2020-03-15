@@ -9,10 +9,13 @@ import TableRow from '@material-ui/core/TableRow';
 
 import Fab from '@material-ui/core/Fab';
 // import EditIcon from '@material-ui/icons/Edit';
+
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import config from '../../../config'
 
 
-export const ProductPDF = ({ product, removeProduct }) => {
+export const ProductPDF = ({ product, removeProduct, editProduct }) => {
     console.log('product: ************', product);
 
     const formatCurrency = new Intl.NumberFormat('es-Co', {//"de-DE"
@@ -25,18 +28,19 @@ export const ProductPDF = ({ product, removeProduct }) => {
         <><br/><div className="product-section-pdf col-12 px-0">
             <div className="action-add-product">
                 <div className="delete-product">
-                    {/* <Fab color="secondary" aria-label="edit">
+                    <Fab color="primary" aria-label="edit" onClick={() => editProduct(product)} >
                         <EditIcon />
-                    </Fab> */}
-                    <Fab color="primary" aria-label="edit" onClick={() => removeProduct(product)} >
+                    </Fab>
+                    <Fab color="primary" aria-label="delete" onClick={() => removeProduct(product)} >
                         <DeleteIcon />
                     </Fab>
                 </div>
             </div>
 
             <div className="col-4 product-pdf">
-                <img src={product.image} className="product-image-pdf img-fluid"
-                    height="auto" width="300px" />
+                <img src={`${config.api_products}${product.more_info.codigoProd}.
+                ${config.EXTENSION_IMAGE}`} className="product-image-pdf img-fluid"
+                    alt="" />
             </div>
             <div className="col-8 px-1">
                 <div className="col-12 text-center px-1">

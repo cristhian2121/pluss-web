@@ -370,7 +370,12 @@ export const FormQuotation = (props) => {
           {/* Anadir producto */}
           { showproductForm &&
             <>
-                <ProductForm units={units} productsE={products} addProduct={handleAddProduct} removeProduct={handleRemoveProduct} />
+                <ProductForm 
+                  units={units} 
+                  productsE={products} 
+                  addProduct={handleAddProduct}
+                  removeProduct={handleRemoveProduct}                  
+                />
             </>
         }
 
