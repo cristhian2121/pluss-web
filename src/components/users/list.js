@@ -23,7 +23,7 @@ export class List extends Component {
         ],
         dataUser: [],
         showAlert: false,
-        selectRegister: null,
+        selectRegisterDelete: null,
     };
 
     render () {
@@ -55,7 +55,7 @@ export class List extends Component {
                               open: true,
                               option: 'delete'
                             },
-                            selectRegister: rowData
+                            selectRegisterDelete: rowData.user.id
                           })
                         }
                     }
@@ -66,7 +66,7 @@ export class List extends Component {
                 open={this.state.showAlert.open}
                 option={this.state.showAlert.option}
                 close={() => this.setState({showAlert: !this.state.showAlert})}
-                confirm={() => this.props.selectDelete(this.state.selectRegister)}
+                confirm={() => this.props.selectDelete(this.state.selectRegisterDelete)}
             />
         </div>
       );
