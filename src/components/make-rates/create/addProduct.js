@@ -10,8 +10,10 @@ import { ProductPDF } from '../../common/pdf/productPDF'
 import { TotalCost } from './totalCost'
 import AlertDialog from '../../common/confirm'
 
+import config from '../../../config';
+
 export const ProductForm = (props) => {
-    console.log('props aaaaaaa: ', props);
+    console.log('props: *************', props);
 
     const [products, setProducts] = useState(props.productsE ? props.productsE : [])
     const [newProduct, setNewProduct] = useState({})
@@ -22,6 +24,8 @@ export const ProductForm = (props) => {
     const [costValue, setCostValue] = useState(0)
     const [showAlert, setShowAlert] = useState(false)
     const [selectRegister, setSelectRegister] = useState(null)
+
+    const [editProduct, setEditProduct] = useState(null);
 
     const calculateValue = () => {
 
@@ -106,7 +110,6 @@ export const ProductForm = (props) => {
     // }
 
     const handleChange = (event, index) => {
-        console.log('event.target.name: ', event.target.name);
         const value = parseInt(event.target.value)
         switch (event.target.name) {
             case 'discount':
@@ -142,6 +145,10 @@ export const ProductForm = (props) => {
         props.removeProduct(selectRegister)
     }
 
+    const handleEditProduct = (_product) => {
+        setEditProduct(_product)
+    }
+
     const showConfirmation = (product) => {
         setSelectRegister(product)
         setShowAlert({open:true, option:'delete'})
@@ -162,6 +169,9 @@ export const ProductForm = (props) => {
                 label="Url imagen"
                 className="col-md-3 col-xs-12"
                 margin="normal"
+                value={editProduct ? 
+                    `${config.api_products}${editProduct.more_info.codigoProd}.${config.EXTENSION_IMAGE}`:
+                    ''}
             />
             <TextField
                 id='name'
@@ -169,6 +179,9 @@ export const ProductForm = (props) => {
                 label="Nombre"
                 className="col-md-3 col-xs-12"
                 margin="normal"
+                value={editProduct ? 
+                        `${editProduct.name}`:
+                        ''}
             />
             <TextField
                 id='size'
@@ -304,7 +317,7 @@ export const ProductForm = (props) => {
             {/* Ver productos */}
             <div>{products.map((product, index) => (
                 <div id="new-product" className="add-product" key={index}>
-                    {<ProductPDF product={product} removeProduct={showConfirmation}/>}
+                    {<ProductPDF product={product} removeProduct={showConfirmation} editProduct={handleEditProduct}/>}
                 </div>
                 // <Product key={product} number={product} />
             ))}</div>

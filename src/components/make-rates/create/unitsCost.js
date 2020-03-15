@@ -5,15 +5,12 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Chip from '@material-ui/core/Chip';
 
 export const UnitsCost = (props) => {
-    console.log('props: ', props);
 
     const [units, setUnits] = useState(() => props.preUnits || [])
-    // const [oblUnit, setOblUnit] = useState(false)
     const [errors, setErrors] = useState(false)
 
     const handleAddUnits = () => {
         const $unit = document.querySelector(`#unit`)
-        console.log('$unit: ', $unit.value);
 
         setErrors(false)
 

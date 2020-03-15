@@ -55,7 +55,6 @@ export class Create extends Component {
   generateData = () => {
     let elements = document.getElementById('userForm').elements;
     let data = {};
-    console.log('dataform', elements)
     for (let item of elements) {
       data[item.name] = item.value;
     }
@@ -65,7 +64,6 @@ export class Create extends Component {
   }
 
   validator(data) {
-    console.log('data nvalidatror: ', data.groups.length);
     let error = []
     !data.code && error.push('code')
     !data.first_name && error.push('first_name')

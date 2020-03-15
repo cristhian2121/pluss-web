@@ -3,12 +3,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
-export const ProductIndividual = (props) => {
+import config from '../../config';
+
+export const ProductIndividual = (props) => {    
     
-    props.selected && console.log('props: ', props);
-    // pasar objeto detalle al componente padre
-
-
     const productDetail = (obj) => props.productDetail(obj);
     const addProduct = (obj) => {
         // setColorViewIcon('red')
@@ -20,7 +18,6 @@ export const ProductIndividual = (props) => {
     // props.selected && setColorViewIcon('red')
     // useEffect(() => {
     //     if (props.selecteds && props.selecteds.length) {
-    //         console.log('emtrop');
     //         const color = props.selecteds.includes(props.product.referency_id) ? 'red' : '';
     //         setColorViewIcon(color)
     //     }
@@ -38,7 +35,7 @@ export const ProductIndividual = (props) => {
     return (
         <div className="pl-1 pr-1 pb-3 ">
             <div className="card" style={{ width: '16.5rem', height: '25rem' }}>
-                <img className="img-product" alt={props.product.name} src="https://www.online-image-editor.com/styles/2019/images/power_girl_editor.png" />
+                <img className="img-product" alt={props.product.name} src={`${config.api_products}${props.product.more_info.codigoProd}.${config.EXTENSION_IMAGE}`} />
                 <div className="card-body card-body">
                     <div className="px-0 card-text text-common">
                         {props.product.detail}

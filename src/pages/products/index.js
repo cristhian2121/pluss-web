@@ -1,11 +1,11 @@
 import React, { PureComponent } from "react";
+import { connect } from 'react-redux'
 
 import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
 
-import { connect } from 'react-redux'
 
 // services
 import { ProductsService } from '../../services/products';
@@ -33,7 +33,6 @@ class Products extends PureComponent {
 
   constructor(props) {
     super(props)
-    console.log('Init');
     this.state = {
       dataProducts: [],
       detailProducts: {},
@@ -48,7 +47,6 @@ class Products extends PureComponent {
     this.addProduct = this.addProduct.bind(this);
 
     // store.subscribe(() => {
-    //   console.log('paso');
     //   this.setState({
     //     productDetail: store.getProducts()
     //   })
@@ -74,12 +72,10 @@ class Products extends PureComponent {
         loader: false
       })
     }
-    console.log('data', this.state.dataProducts);
   }
 
   productDetail = (dataProduct) => {
     if (dataProduct) {
-      console.log('dataProduct: ', dataProduct);
       // this.setState({
       //   open: true,
       //   detailProducts: dataProduct
@@ -88,18 +84,14 @@ class Products extends PureComponent {
   }
 
   addProduct = (dataProduct) => {
-    console.log('dataProduct: ', dataProduct);
-    // this.props.addProduct(dataProduct);
-    console.log('dataProduct.id: ', dataProduct.id);
+    this.props.addProduct(dataProduct);
     this.productsAux.push(dataProduct)
     this.setState({ productsSelecteds: [...this.state.productsSelecteds, dataProduct.id] });
   }
 
   goToCreateQuotation = () => {
-    console.log('***');
     if (!this.state.units.length) {
-      this.props.addProduct(this.state.prod);
-      console.log('xasd');
+      // this.props.addProduct(this.state.prod);
       this.setState({
         showDialogUnits: {
           open: true,
@@ -110,14 +102,14 @@ class Products extends PureComponent {
   }
 
   addUnits = (_units) => {
-    console.log('_units', _units);
     if (this.productsAux.length) {
       const productsWithUnits = this.productsAux.map(_ => {
         _.units = _units
         return _
       })
-      this.props.addProduct(productsWithUnits);
+      this.props.addProducts(productsWithUnits);
       this.props.addUnits(_units);
+      this.props.history.push('/cotizaciones/crear')
     }
   }
 
@@ -152,7 +144,6 @@ class Products extends PureComponent {
                 <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
                   {this.state.dataProducts.map(product => {
                     let selected = this.state.productsSelecteds.indexOf(product.id) < 0 ? false : true;
-                    console.log('selected: ', selected);
                     return (
                       <ProductIndividual
                         key={product.id}

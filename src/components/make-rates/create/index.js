@@ -25,14 +25,14 @@ class CreateQuotationHook extends Component {
       preView: false,
       OpenAlert: null,
       redirectList: false,
+      // Create for pass product from products
       productReducerAux: {
         selectUpdate: {
           products: this.props.productReducer.products,
           units: this.props.productReducer.units,
         }
-      } // Create for pass product from products
+      }
     }
-    console.log('this.props.location.state: ', this.props.location.state);
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
     this.endQuotation = this.endQuotation.bind(this)
@@ -41,7 +41,6 @@ class CreateQuotationHook extends Component {
   }
 
   componentDidMount() {
-    console.log('************************************************************************');
     if (this.props.productReducer.products.length) {
       this.setState({
         productReducerAux: {
@@ -56,7 +55,6 @@ class CreateQuotationHook extends Component {
   }
 
   eventSavePDF(quotation) {
-    console.log('quotation: ', quotation);
     window.open('/cotizacion', '_blank', '', true)
   }
 
@@ -67,7 +65,6 @@ class CreateQuotationHook extends Component {
   }
 
   createQuotation(data) {
-    console.log('data: ', data);
     this.props.createQuotation({ ...data })
     let dataEmail = data.email
 
@@ -83,7 +80,6 @@ class CreateQuotationHook extends Component {
           if (dataEmail) {
             dataEmail.client = resp.client
             dataEmail.url = `${window.origin}/cotizacion/${resp.id}`
-            console.log('dataEmail: ', dataEmail);
   
             this.endQuotation(dataEmail)
           }else{
@@ -101,7 +97,6 @@ class CreateQuotationHook extends Component {
   }
 
   updateQuotations (data) {
-    console.log('data update index: ', data);
     let idSelectUpdate = data.id
     let dataEmail = data.email
 
@@ -113,14 +108,12 @@ class CreateQuotationHook extends Component {
       }
     }).then(async (response) => {
       let resp = await response.json()
-      console.log('resp update: ', resp);
 
       if (response.status === 200 ||  response.status == 201){
 
         if (dataEmail) {
           dataEmail.client = resp.client
           dataEmail.url = `${window.origin}/cotizacion/${resp.id}`
-          console.log('dataEmail: ', dataEmail);
 
           this.endQuotation(dataEmail)
         }else{
@@ -132,7 +125,6 @@ class CreateQuotationHook extends Component {
             }
           })
         }
-        console.log('this.state.OpenAlert: ', this.state.OpenAlert);
         // this.state.OpenAlert && this.setState({redirectList: true})  
       }
     })
@@ -140,20 +132,16 @@ class CreateQuotationHook extends Component {
   }
 
   endQuotation(quotation) {
-    console.log('data email: ', quotation)
 
     // quotation.quotation.id ? this.updateQuotations(quotation.quotation) : this.createQuotation(quotation)
     // let data = quotation
     // data.url = window.origin
     // // let data.url = origin
     // data.id = this.state.dataQuo
-    // console.log('data llega al index: ', data);
     
     fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(quotation),headers:{ 'Content-Type': 'application/json' } })
     .then(async (response) => {
-      console.log('response mail: ', response);
       let resp = response.json()
-      console.log('entro al senemail: ', resp);
     })
     .catch(e => console.log('no entro al send Email', e))
   }
@@ -163,7 +151,7 @@ class CreateQuotationHook extends Component {
       <div>
         <FormQuotation
           eventCreateQuotation={this.createQuotation}
-          preQuotation={this.props.quotationReducer.quotation}
+          preQuotation={this.state.productReducerAux}
           eventSavePDF={this.eventSavePDF}
           updateQuotation={this.props.location.state}
           // endQuotation = {this.endQuotation}
