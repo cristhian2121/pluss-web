@@ -57,7 +57,7 @@ export class User extends Component {
       if (data !== '' || data!== null) {
         this.showForm('update')
         this.setState({
-          dataUser: true,
+          // dataUser: true,
           dataFormUpdate: data
         })
       }
@@ -85,12 +85,10 @@ export class User extends Component {
     }
 
     deleteUser = (user) => {
-      fetch(`${conf.api_url}/profile/${user.id}`, { method: 'DELETE' })
+      fetch(`${conf.api_url}/user/${user}`, { method: 'DELETE' })
       .then(response => {
-        console.log('response delete: ', response);
         if (response.status === 204) {
-          let users = this.state.dataUser.filter(item => item.id != user.id)
-          console.log('users: ', users);
+          let users = this.state.dataUser.filter(item => item.user.id != user)
           this.setState({
             dataUser: users,
             alert: {
@@ -114,7 +112,6 @@ export class User extends Component {
           dataFormUpdate: {},
         })
       }
-      // documnt.getElementById("userForm-cu").style.display = 'block'
     }
 
     saveUser = (user) => {
@@ -129,12 +126,12 @@ export class User extends Component {
         .then(async (response) => {
           let resp = await response.json()
           console.log('respresprespresp: ', resp);
-          if (response.status === 201) {
+          if (response.status === 200) {
             this.setState({ 
-              dataUser: [...this.state.dataUser, user],
+              dataUser: [...this.state.dataUser, resp],
               alert: {
                 open: true,
-                message: resp['detail'],
+                message: 'el Usuario se creo correctamente',
                 type:'success'
               }
             })
@@ -166,58 +163,33 @@ export class User extends Component {
 
     updateUser = (user) => {
       console.log('entro por el editar casi ue no', user)
-      let idUser = this.state.dataFormUpdate.id
-      console.log('idUser: ', idUser);
-  
-      fetch(`${conf.api_url}/user/${idUser}/`, {
+      let idUser = this.state.dataFormUpdate.id  
+      fetch(`${conf.api_url}/profile/${idUser}/`, {
         method: 'PUT',
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' }
       })
         .then(async (response) => {
-          let resp1 = await response.json()
-          console.log('response', resp1, response.status)
-  
+          let resp = await response.json()
+          
           if (response.status === 200 ||  response.status === 201) {
-            fetch(`${conf.api_url}/profile/${idUser}/`, {
-              method: 'PUT',
-              body: JSON.stringify(user),
-              headers: { 'Content-Type': 'application/json' }
+            let users = this.state.dataUser.filter(item => item.id != resp.id)
+            this.setState({
+              dataUser: [...users, resp],
+              alert: {
+                open: true,
+                message: 'El usuario se  actualizo correctamente',
+                type:'success'
+              }
             })
-              .then(async (response) => {
-                let resp = await response.json()
-                console.log('resp 2: ', resp);
-                if (response.status === 200 ||  response.status === 201) {
-                  this.setState({
-                    dataUser: [...this.state.dataUser, resp],
-                    alert: {
-                      open: true,
-                      message: 'El usuario se  actualizo correctamente',
-                      type:'success'
-                    }
-                  })
-                  // this.clear()
-                  this.showForm() 
-                }
-                if (response.status === 400 ) {
-                  this.setState({ 
-                    alert: {
-                      open: true,
-                      message: 'No se pudo actualizar el usuario, por favor vuelva a intentarlo.',
-                      type:'error'
-                    }
-                  })
-                }
-              })
-              .catch(err => {
-                console.log(err);
-              });
+            this.showForm() 
           }
+
           if (response.status === 400 ) {
             this.setState({ 
               alert: {
                 open: true,
-                message: resp1['error'],
+                message: resp['error'],
                 type:'error'
               }
             })
@@ -244,7 +216,7 @@ export class User extends Component {
               </div>
               <div className="action-title col-md-6 col-xs-12">
                 <span className="text" onClick={this.showForm}>
-                  {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {/*this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> */}
+                  {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario
                   <Button className="button-more" onClick={this.showForm}> <AddCircleIcon/>  </Button>
                 </span>
               </div>
