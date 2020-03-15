@@ -73,7 +73,7 @@ export class Create extends Component {
     !data.username && error.push('username')
     !data.phone_number && error.push('phone_number')
     !data.groups && error.push('groups')
-    //// !data.password1 && error.push('password1')
+    !this.state.idUser && !data.password1 && error.push('password1')
 
     if (error.length > 0) {
       let errors = {}

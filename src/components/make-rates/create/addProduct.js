@@ -3,6 +3,7 @@ import React, { useState, Fragment } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 // Components
 import { ProductPDF } from '../../common/pdf/productPDF'
@@ -211,6 +212,9 @@ export const ProductForm = (props) => {
                 onChange={event => handleChange(event, 0)}
                 className="col-md-3 col-xs-12"
                 margin="normal"
+                InputProps = {{
+                    startAdornment: (<InputAdornment position="start">$</InputAdornment>)
+                }}
             />
             <TextField
                 id='description'
@@ -241,9 +245,12 @@ export const ProductForm = (props) => {
                     <TextField
                         id={`discount${index}`}
                         name={`discount`}
-                        label="% Descuento"
+                        label="Descuento"
                         onChange={event => handleChange(event, index)}
                         className="col-md-1 col-xs-12"
+                        InputProps = {{
+                            startAdornment: (<InputAdornment position="start">%</InputAdornment>)
+                        }}
                     />
                     <TextField
                         id={`mark${index}`}
@@ -251,13 +258,19 @@ export const ProductForm = (props) => {
                         label="Precio de marcación (Unidad)"
                         onChange={event => handleChange(event, index)}
                         className="col-md-3 col-xs-12"
+                        InputProps = {{
+                            startAdornment: (<InputAdornment position="start">$</InputAdornment>)
+                        }}
                     />
                     <TextField
                         id={`profitableness${index}`}
                         name={`profitableness`}
-                        label="% Rentabilidad"
+                        label="Rentabilidad"
                         onChange={event => handleChange(event, index)}
-                        className="col-md-2 col-xs-12"
+                        className="col-md-1 col-xs-12"
+                        InputProps = {{
+                            startAdornment: (<InputAdornment position="start">%</InputAdornment>)
+                        }}
                     />
                     <TextField
                         id={`transport${index}`}
@@ -265,9 +278,12 @@ export const ProductForm = (props) => {
                         label="Transporte unitario"
                         onChange={event => handleChange(event, index)}
                         className="col-md-2 col-xs-12"
+                        InputProps = {{
+                            startAdornment: (<InputAdornment position="start">$</InputAdornment>)
+                        }}
                     />
                     <TotalCost
-                        className="col-md-3 col-xs-12"
+                        className="col-md-4 col-xs-12"
                         transport={transportValue[index]}
                         profitableness={profitablenessValue[index]}
                         mark={markValue[index]}
