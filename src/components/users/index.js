@@ -9,11 +9,15 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
 import conf from '../../config'
 
 export class Create extends Component {
   constructor(props) {
-    console.log('props usaurios: ', props);
     super(props)
     this.data = {}
     this.state = {
@@ -23,7 +27,8 @@ export class Create extends Component {
         type: '',
       },
       errors: {},
-      // dataGroups: [],
+      showPassword: false,
+      showConfirmPassword: false,
       showForm: true,
       idUser: props.selectUpdate.user ? props.selectUpdate.id : null,
       code: props.selectUpdate.user ? props.selectUpdate.code : null,
@@ -31,15 +36,16 @@ export class Create extends Component {
       identification_number: props.selectUpdate.identification_number,
       username: props.selectUpdate.user ? props.selectUpdate.user.username : null,
       phone_number: props.selectUpdate ? props.selectUpdate.phone_number : null,
-      password: props.selectUpdate.user ? props.selectUpdate.user.password : null,
-      passwordConfirm: props.selectUpdate.user ? props.selectUpdate.user.password : null,
-      groups: props.selectUpdate.user ? props.selectUpdate.user.groups : []
+      password: null,
+      passwordConfirm: null,
+      groups: props.selectUpdate.user ? [`${props.selectUpdate.user.groups}`] : []
     }
   }
   
   addUser = (e) => {
     let data = this.generateData()
-    data.groups = data.groups.split(',')
+    // data.groups = data.groups.split(',')
+    console.log('this.data adduser: ', this.data);
 
     this.validator(data) && (
       this.state.idUser ? this.props.updateUser(data) : this.props.saveUser(data)
@@ -64,8 +70,8 @@ export class Create extends Component {
     !data.identification_number && error.push('identification_number')
     !data.username && error.push('username')
     !data.phone_number && error.push('phone_number')
-    data.groups[0] === "" && error.push('groups')
-    !data.password1 && error.push('password1')
+    !data.groups && error.push('groups')
+    //// !data.password1 && error.push('password1')
 
     if (error.length > 0) {
       let errors = {}
@@ -210,26 +216,49 @@ export class Create extends Component {
               ))}
             </TextField>
             <TextField required
-              type="password"
+              type={this.state.showPassword ? "text" : "password"}
               name="password1"
               label="Contraseña"
               margin="normal"
               onChange={this.handleChange}
               value={this.state.passwordConfirm}
-              className="col-md-4 col-xs-6"
+              className="col-md-6 col-xs-6"
               error={this.state.errors.password1} 
               helperText={this.state.errors.password1 && 'Este campo es requerido.'}
+              InputProps={{
+                endAdornment:(
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => this.setState({showPassword:!this.state.showPassword})}
+                    >
+                      {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
-            <FormControl className="col-md-4 col-xs-6">
+            <FormControl className="col-md-6 col-xs-6">
               <TextField
                 required
-                type="password"
+                type={this.state.showConfirmPassword ? "text" : "password"}
                 name="password"
                 label="Confirme contraseña"
                 margin="normal"
                 onChange={this.handleChange}
                 value={this.state.password}
-                
+                InputProps={{
+                  endAdornment:(
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => this.setState({showConfirmPassword:!this.state.showConfirmPassword})}
+                      >
+                        {this.state.showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
               />
               {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
             </FormControl>
