@@ -22,7 +22,8 @@ import '../../styles/product.css'
 
 // Component
 import { ProductIndividual } from './product-individual';
-import AlertDialog from '../../components/common/confirm'
+import AlertDialog from '../../components/common/confirm';
+import { FiltersComponent } from '../../components/common/filters/filter-component' 
 
 
 class Products extends PureComponent {
@@ -129,7 +130,22 @@ class Products extends PureComponent {
             </div>
           </div>
         </div>
-        <br /><br />
+        <br />
+        <FiltersComponent fields={[
+          {
+            id: 'productId',
+            type: 'input',
+            name: 'productId',
+            placeHolder: 'codigo del producto',
+          },
+          {
+            id: 'name',
+            type: 'input',
+            name: 'name',
+            placeHolder: 'Nombre del producto'
+          }
+        ]}/>
+        <br />
 
         <div className="col-12 px-0">
           {
