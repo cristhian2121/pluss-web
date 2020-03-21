@@ -18,7 +18,6 @@ export class FiltersComponent extends PureComponent {
 
     initializefilter = (arrayForm) => {
         const formElements = []
-
         for (let item of arrayForm) {
             switch (item.type) {
                 case 'input':
@@ -41,23 +40,56 @@ export class FiltersComponent extends PureComponent {
         this.setState({ formElements: formElements })
     }
 
-    renderInput = (id, name, placeHolder, required = false, regex = false) => {
+    renderInput = (id, name, placeHolder, regex = false) => {
         console.log('placeHolder: ', placeHolder);
         return (
             // regex={regex}
-            <input id={id} name={name} placeholder={placeHolder} required/>
+            <input id={id} name={name} placeholder={placeHolder} />
         )
     }
 
-    filterData = () => {
-        const form = document.getElementById('formFielter')
-        form.submit()
-        this.state.formElements.forEach(item => {
+    filterData = async () => {
+        let data = this.props.data
+        for (let item of this.state.formElements) {
             const element = document.getElementById(item.props.id)
-            console.log('element: ', element.value);
-             
+            if (element.value) {
+                if (this.props.external) {
+                    data = await this.filterExternal(element.name, element.value)
+                } else {
+                    data = data.filter(item => {
+                        let product = item[element.name] || ''
+                        let characteristic = product.toString()
+                        characteristic = characteristic.toLowerCase()
+                        return characteristic == element.value.toLowerCase()
+                    })
+                }
+                console.log('data filtered: ', data);
+            }
+        }
+        this.props.dataFiltered(data)
+    }
 
-        })
+    filterExternal = async (elementName, elementValue) => {
+        const field = this.props.fields.find(_ => _.name == elementName)
+        let data;
+        if (field.query) {
+            try {
+                const rawResponse = await fetch(field.query.replace(`_${elementName}`, elementValue))
+                data = await rawResponse.json();
+            }
+            catch (error) {
+                // this.buildResponseError(error)
+                console.log('error', error)
+            }
+            console.log('rowData: ', data);
+        }
+        return data
+    }
+
+    clearFilters = () => {
+        const form = document.getElementById('formFielter')
+        form.reset()
+        this.props.dataFiltered(this.props.data)
     }
 
     render() {
@@ -69,7 +101,8 @@ export class FiltersComponent extends PureComponent {
                     </div>
                 ))}
                 <br />
-                <input type="button" value="Filtrar" onClick={this.filterData}/>
+                <p><input type="button" value="Filtrar" onClick={this.filterData} /></p>
+                <p><input type="button" value="Limpiar filtros" onClick={this.clearFilters} /></p>
             </form>
         )
     }
