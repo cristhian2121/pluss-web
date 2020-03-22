@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import conf from '../../config';
 import Copyright from '../../components/common/copyright'
-import {Redirect} from 'react-router-dom' 
+import { Redirect } from 'react-router-dom'
 import Logo from '../../static/logo_pop_litle.png'
 
 const useStyles = makeStyles(theme => ({
@@ -53,39 +53,40 @@ export default function Login() {
 function IntegrationNotistack() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [ loginRoot, setLoginRoot ] = useState(false)
-  const [ showPassword, setShowPassword] =  useState(false)
+  const [loginRoot, setLoginRoot] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
-  const login = () => {
-    console.log('login: entro aca y ni se');
-
+  const login = (event) => {
+    event.preventDefault()
     let data = generateData()
+    console.log('data: ', data);
     fetch(`${conf.api_url}/login/`, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       }
     })
-    .then(async function(response) {
-      let resp = await response.json()
-      console.log('resp login: ', resp);
-      if (resp['username']) { enqueueSnackbar(resp['username'], {variant: 'error'}) }
-      if (resp['password']) { enqueueSnackbar(resp['password'], {variant: 'error'}) }
-      if (response.status == 401) { enqueueSnackbar(resp['detail'], {variant: 'error'}) }
-      if (response.status == 200) { setPermissions(resp) }
-    })
-    .catch(function(error) {
-      enqueueSnackbar('Se generó un error en la autenticación.', {variant: 'error'});
-    });
+      .then(async function (response) {
+        console.log('MELO');
+        let resp = await response.json()
+        console.log('resp login: ', resp);
+        if (resp['username']) { enqueueSnackbar(resp['username'], { variant: 'error' }) }
+        if (resp['password']) { enqueueSnackbar(resp['password'], { variant: 'error' }) }
+        if (response.status == 401) { enqueueSnackbar(resp['detail'], { variant: 'error' }) }
+        if (response.status == 200) { setPermissions(resp) }
+      })
+      .catch(function (error) {
+        console.log('error: ', error);
+        enqueueSnackbar('Se generó un error en la autenticación.', { variant: 'error' });
+      });
   }
 
   const generateData = () => {
-    let elements = document.getElementById('loginForm').elements;
+    const elements = document.getElementById('loginForm').elements;
     let data = {};
-    for (let item of elements) {
-      data[item.name] = item.value;
-    }
+    data.username = elements.username.value.trim()
+    data.password = elements.password.value.trim()
     return data
   }
 
@@ -104,7 +105,7 @@ function IntegrationNotistack() {
           <LockOutlinedIcon />
         </Avatar> */}
         <Typography component="h1" variant="h5">
-        <img src={Logo} className="image-logo-pdf" />
+          <img src={Logo} className="image-logo-pdf" />
         </Typography>
         <Typography component="h1" variant="h5">
           Ingresa tus credenciales
@@ -131,9 +132,8 @@ function IntegrationNotistack() {
             type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
-            onKeyPress={login}
             InputProps={{
-              endAdornment:(
+              endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
@@ -150,7 +150,7 @@ function IntegrationNotistack() {
             label="Remember me"
           /> */}
           <Button
-            type="button"
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
@@ -164,7 +164,7 @@ function IntegrationNotistack() {
       <Box mt={8}>
         <Copyright />
       </Box>
-      {loginRoot ?  <Redirect to='/cotizaciones'/> : ''}
+      {loginRoot ? <Redirect to='/cotizaciones' /> : ''}
     </Container>
   );
 }
