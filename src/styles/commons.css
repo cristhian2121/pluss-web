@@ -68,6 +68,16 @@ button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorInherit:hover sp
     width: 31px;
     height: 31px;
 }
+/*Alertas*/
+.MuiFormHelperText-root.Mui-error {
+    color: #f44336;
+    background: #f9d8d8;
+    padding: 5px !important;
+    margin: 0 !important;
+    font-size: 11.5px;
+    text-align: center;
+    width: initial;
+}
 
 /***** envio de emails ***********/
 .create-update {
