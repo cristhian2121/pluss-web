@@ -22,7 +22,8 @@ import '../../styles/product.css'
 
 // Component
 import { ProductIndividual } from './product-individual';
-import AlertDialog from '../../components/common/confirm'
+import AlertDialog from '../../components/common/confirm';
+import { FiltersComponent } from '../../components/common/filters/filter-component'
 
 
 class Products extends PureComponent {
@@ -30,11 +31,37 @@ class Products extends PureComponent {
   productsService = new ProductsService()
   longitud = 0
   productsAux = [];
+  externalQuery = true
+
+  fieldsFilter = [
+    {
+      id: 'referency_id',
+      type: 'input',
+      name: 'referency_id',
+      placeHolder: 'Referencia del producto',
+      query: `${conf.api_url}/product?referency_id=_referency_id`
+    },
+    {
+      id: 'colors',
+      type: 'input',
+      name: 'colors',
+      placeHolder: 'Color',
+      // query: `${conf.api_url}/product?referency_id`
+    },
+    {
+      id: 'name',
+      type: 'input',
+      name: 'name',
+      placeHolder: 'Nombre del producto',
+      query: `${conf.api_url}/product?name=_name`
+    }
+  ]
 
   constructor(props) {
     super(props)
     this.state = {
       dataProducts: [],
+      dataProductsDisplay: [],
       detailProducts: {},
       open: false,
       count: 0,
@@ -68,6 +95,7 @@ class Products extends PureComponent {
     if (res.state) {
       this.setState({
         dataProducts: res.data.results,
+        dataProductsDisplay: res.data.results,
         count: res.data.count,
         loader: false
       })
@@ -113,6 +141,15 @@ class Products extends PureComponent {
     }
   }
 
+  afterFiltered = (newData) => {
+    console.log('newData: ', newData);
+    if (newData.results) {
+      this.setState({ dataProductsDisplay: newData.results })  
+    } else{
+      this.setState({ dataProductsDisplay: newData })
+    }
+  }
+
   render() {
     return (
       <div>
@@ -129,7 +166,12 @@ class Products extends PureComponent {
             </div>
           </div>
         </div>
-        <br /><br />
+        <br />
+        <FiltersComponent fields={this.fieldsFilter}
+          data={this.state.dataProducts}
+          external={this.externalQuery}
+          dataFiltered={this.afterFiltered} />
+        <br />
 
         <div className="col-12 px-0">
           {
@@ -142,7 +184,7 @@ class Products extends PureComponent {
               :
               (
                 <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
-                  {this.state.dataProducts.map(product => {
+                  {this.state.dataProductsDisplay.map(product => {
                     let selected = this.state.productsSelecteds.indexOf(product.id) < 0 ? false : true;
                     return (
                       <ProductIndividual
@@ -165,11 +207,11 @@ class Products extends PureComponent {
           <Detail selectDetail={this.state.detailProducts} />
         </Dialog>
         {this.state.showDialogUnits &&
-          <AlertDialog 
-          option={this.state.showDialogUnits.option} 
-          open={this.state.showDialogUnits.open} 
-          close={() => this.setState({ showDialogUnits: false })} 
-          confirm={this.addUnits}
+          <AlertDialog
+            option={this.state.showDialogUnits.option}
+            open={this.state.showDialogUnits.open}
+            close={() => this.setState({ showDialogUnits: false })}
+            confirm={this.addUnits}
           />}
       </div>
     )
