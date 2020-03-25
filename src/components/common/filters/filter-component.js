@@ -1,10 +1,18 @@
 import React, { PureComponent } from 'react'
 
+import Button from '@material-ui/core/Button';
+
+import '../../../styles/filters.css'
+
+/**
+ * Create dynamic forms
+ * @input : id, name placeHolder, query 
+ * @Select : id, name placeHolder, data:array<value,text>, query
+ */
 export class FiltersComponent extends PureComponent {
 
     constructor(props) {
         super(props)
-
         this.state = {
             formElements: []
         }
@@ -32,6 +40,14 @@ export class FiltersComponent extends PureComponent {
                     )
                     break;
                 case 'select':
+                    formElements.push(
+                        this.renderSelect(
+                            item.id,
+                            item.name,
+                            item.placeHolder,
+                            item.data
+                        )
+                    )
                     break;
                 default:
                     break;
@@ -41,26 +57,40 @@ export class FiltersComponent extends PureComponent {
     }
 
     renderInput = (id, name, placeHolder, regex = false) => {
-        console.log('placeHolder: ', placeHolder);
         return (
-            // regex={regex}
             <input id={id} name={name} placeholder={placeHolder} />
         )
     }
 
+    renderSelect = (id, name, placeHolder, data = []) => {
+        return (
+            <select id={id} name={name} placeHolder={placeHolder}>
+                {
+                    data.map(option => <option value={option.value} >{option.text}</option>)
+                }
+            </select>
+        )
+    }
+
     filterData = async () => {
+        console.log('to filter');
         let data = this.props.data
         for (let item of this.state.formElements) {
             const element = document.getElementById(item.props.id)
-            if (element.value) {
+            let elementValue = element.value
+            if (element.type === 'select-one') {
+                const valueAux = element.options[element.selectedIndex].value
+                elementValue = valueAux == '0' ? 0 : valueAux
+            }
+            if (elementValue) {
                 if (this.props.external) {
-                    data = await this.filterExternal(element.name, element.value)
+                    data = await this.filterExternal(element.name, elementValue)
                 } else {
                     data = data.filter(item => {
                         let product = item[element.name] || ''
                         let characteristic = product.toString()
                         characteristic = characteristic.toLowerCase()
-                        return characteristic == element.value.toLowerCase()
+                        return characteristic == elementValue.toLowerCase()
                     })
                 }
                 console.log('data filtered: ', data);
@@ -71,6 +101,7 @@ export class FiltersComponent extends PureComponent {
 
     filterExternal = async (elementName, elementValue) => {
         const field = this.props.fields.find(_ => _.name == elementName)
+        console.log('field: ', field);
         let data;
         if (field.query) {
             try {
@@ -94,16 +125,24 @@ export class FiltersComponent extends PureComponent {
 
     render() {
         return (
-            <form id='formFielter'>
-                {this.state.formElements.map(item => (
-                    <div className={item.className ? item.className : ''}>
-                        {item}
-                    </div>
-                ))}
-                <br />
-                <p><input type="button" value="Filtrar" onClick={this.filterData} /></p>
-                <p><input type="button" value="Limpiar filtros" onClick={this.clearFilters} /></p>
-            </form>
+            <div>
+                <input type="checkBox" className="checkboxFilter" id="checkFilter" />
+                <label className="menuFilter" for="checkFilter">|||</label>
+                <div className="rigth-panel">
+                    <form id='formFielter'>
+                        {this.state.formElements.map(item => (
+                            <div className={item.className ? item.className : ''}>
+                                {item}
+                            </div>
+                        ))}
+                        <br />
+                        <div className="button-actions-filters">
+                            <input type="button" value="Filtrar" onClick={this.filterData} />
+                            <input type="button" value="Limpiar filtros" onClick={this.clearFilters} />
+                        </div>
+                    </form>
+                </div>
+            </div>
         )
     }
 
