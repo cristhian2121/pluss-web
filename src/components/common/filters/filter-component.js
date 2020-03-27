@@ -58,7 +58,9 @@ export class FiltersComponent extends PureComponent {
 
     renderInput = (id, name, placeHolder, regex = false) => {
         return (
-            <input id={id} name={name} placeholder={placeHolder} />
+            <div className="div-input-filter input-underline">
+                <input id={id} name={name} className="input-filter input-f" placeholder={placeHolder} />
+            </div>
         )
     }
 
@@ -127,9 +129,14 @@ export class FiltersComponent extends PureComponent {
         return (
             <div>
                 <input type="checkBox" className="checkboxFilter" id="checkFilter" />
-                <label className="menuFilter" for="checkFilter">|||</label>
+                <label className="menuFilter" for="checkFilter">
+                    <span class="material-icons">
+                        filter_list
+                    </span>
+                </label>
                 <div className="rigth-panel">
                     <form id='formFielter'>
+                    <div className="title-filter">Filtrar {this.props.nameFilter}</div>
                         {this.state.formElements.map(item => (
                             <div className={item.className ? item.className : ''}>
                                 {item}
