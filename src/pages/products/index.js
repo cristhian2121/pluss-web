@@ -63,13 +63,6 @@ class Products extends PureComponent {
       query: `${conf.api_url}/product?provier_name=_provier_name`
     },
     {
-      id: 'colors',
-      type: 'input',
-      name: 'colors',
-      placeHolder: 'Color',
-      // query: `${conf.api_url}/product?referency_id`
-    },
-    {
       id: 'name',
       type: 'input',
       name: 'name',
@@ -189,6 +182,7 @@ class Products extends PureComponent {
         <br />
         <FiltersComponent fields={this.fieldsFilter}
           data={this.state.dataProducts}
+          nameFilter={'produtos'}
           external={this.externalQuery}
           dataFiltered={this.afterFiltered} />
         <br />
