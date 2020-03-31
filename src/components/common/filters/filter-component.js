@@ -58,15 +58,13 @@ export class FiltersComponent extends PureComponent {
 
     renderInput = (id, name, placeHolder, regex = false) => {
         return (
-            <div className="div-input-filter input-underline">
-                <input id={id} name={name} className="input-filter input-f" placeholder={placeHolder} />
-            </div>
+            <input id={id} name={name} className="base-input-filter" placeholder={placeHolder} />
         )
     }
 
     renderSelect = (id, name, placeHolder, data = []) => {
         return (
-            <select id={id} name={name} placeHolder={placeHolder}>
+            <select id={id} name={name} placeHolder={placeHolder} className="base-input-filter">
                 {
                     data.map(option => <option value={option.value} >{option.text}</option>)
                 }
@@ -136,16 +134,22 @@ export class FiltersComponent extends PureComponent {
                 </label>
                 <div className="rigth-panel">
                     <form id='formFielter'>
-                    <div className="title-filter">Filtrar {this.props.nameFilter}</div>
+                        <div className="title-filter">Filtrar {this.props.nameFilter}</div>
                         {this.state.formElements.map(item => (
                             <div className={item.className ? item.className : ''}>
-                                {item}
+                                <div className="input-filter-underline input-filter-root select-input-filter">
+                                    {item}
+                                </div>
                             </div>
                         ))}
                         <br />
                         <div className="button-actions-filters">
-                            <input type="button" value="Filtrar" onClick={this.filterData} />
-                            <input type="button" value="Limpiar filtros" onClick={this.clearFilters} />
+                            <div className="button-base-root button-root button-contained button-containedSecondary">
+                                <input className="button-label button-label-secondary" type="button" value="Filtrar" onClick={this.filterData} />
+                            </div>
+                            <div className="button-base-root button-root button-contained">
+                                <input className="button-label" type="button" value="Limpiar filtros" onClick={this.clearFilters} />
+                            </div>
                         </div>
                     </form>
                 </div>
