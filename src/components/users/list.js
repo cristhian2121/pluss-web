@@ -51,6 +51,10 @@ export class List extends Component {
     selectRegisterDelete: null,
   };
 
+  handleChangePage = (forward) => {
+    this.props.changePage(forward)
+  }
+
   render() {
     return (
       <div>
@@ -66,6 +70,8 @@ export class List extends Component {
           actions={this.actions}
           editItem={this.props.selectUpdate}
           deleteItem={this.showConfirmation}
+          changePage={this.handleChangePage}
+          count={this.props.count}
         />
         {/* <MaterialTable
           title=""
