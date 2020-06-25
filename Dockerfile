@@ -5,7 +5,6 @@ RUN npm install
 RUN ls
 COPY . /pluss_web
 RUN npm run build
-RUN ls
-
+RUN pwd
 # CMD ["npm","start"]
 
