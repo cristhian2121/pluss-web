@@ -1,6 +1,7 @@
 import React from "react";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import config from '../../config'
 
 export class CreateClient extends React.Component {
 
@@ -43,7 +44,7 @@ export class CreateClient extends React.Component {
   }
 
   addClient(client){
-    fetch('http://174.138.41.183:8000/api/client/',{
+    fetch(`${config}/client/`,{
       method: 'POST',
       body: JSON.stringify(client),
       headers:{

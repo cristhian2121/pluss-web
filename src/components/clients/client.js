@@ -1,6 +1,7 @@
 import React from "react"
 import { CreateClient } from './createClient'
 import { ClientList } from './clientList'
+import config from '../../config'
 export class Clients extends React.Component {
 
   constructor(props) {
@@ -19,7 +20,7 @@ export class Clients extends React.Component {
   }
 
   getClient() {
-    fetch('http://174.138.41.183:8000/api/client/')
+    fetch(`${config}/client/`)
       .then(response => {
         console.log('Response: ', response)
         return response.json()
