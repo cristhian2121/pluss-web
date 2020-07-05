@@ -54,6 +54,7 @@ export class ClientList extends React.Component {
     }
 
     handleChangePage = (forward) => {
+        console.log('forward: ', forward);
         this.props.changePage(forward)
     }
 
@@ -70,10 +71,10 @@ export class ClientList extends React.Component {
                     columns={this.state.columns}
                     data={this.props.clientList}
                     actions={this.actions}
-                    changePage={this.handleChangePage}
                     editItem={this.props.selectUpdate}
                     deleteItem={this.showConfirmation}
                     duplicateItem={this.props.duplicateClient}
+                    changePage={this.handleChangePage}
                     count={this.props.count}
 
                 />

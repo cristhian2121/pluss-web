@@ -19,7 +19,7 @@ export const TableGeneric = (props) => {
     //     }
     // })
     const [page, setPage] = useState(0)
-    const [pageForPage, setPageForPage] = useState(10)
+    const [pageForPage, setPageForPage] = useState(5)
     // const [_data, set_data] = useState()
 
     // console.log('_data: ', _data);
@@ -86,7 +86,7 @@ export const TableGeneric = (props) => {
                                 <TablePagination
                                     {...propsPaginator}
                                     rowsPerPage={pageForPage}
-                                    rowsPerPageOptions={[]}
+                                    // rowsPerPageOptions={[5]}
                                     onChangePage={handleChangePage}
                                     // backIconButtonText={backIconButtonText} // name button
                                     // nextIconButtonText={'Siguiente'} // text button

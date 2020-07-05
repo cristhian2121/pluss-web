@@ -13,7 +13,10 @@ import Alert from '@material-ui/lab/Alert';
 
 import { Menu } from '../../components/common/nav-bar'
 
+import { assembleUrlPage } from '../../utils/pagination-utils'
+
 import conf from '../../config'
+
  
 
 export class User extends Component {
@@ -24,12 +27,15 @@ export class User extends Component {
             open: false,
             message: '',
             type: '',
+            usersCount: 0
           },
           dataFormUpdate: {},
           dataUser: [],
           openCreateUpdate: false,
           dataGroups: []
         }
+        this.previousPage = null
+        this.nextPage = null
         // this.insertUser = this.insertUser.bind(this)
         this.saveUser = this.saveUser.bind(this)
         this.updateUser = this.updateUser.bind(this)
@@ -63,13 +69,15 @@ export class User extends Component {
       }
     }
 
-    getDataUsers = async () => {
+    getDataUsers = async (params = '') => {
       try {
-          let response = await fetch(`${conf.api_url}/profile/`)
+          let response = await fetch(`${conf.api_url}/profile${params}`)
           let data = await response.json()
-      
+          this.previousPage = data.previous
+          this.nextPage = data.next
           this.setState({
-              dataUser: data.results
+              dataUser: data.results,
+              usersCount: data.count
           })
       } catch (error) {
           console.log('error', error)
@@ -207,6 +215,11 @@ export class User extends Component {
         })
     }
 
+    handleChangePage = (forward) => {
+      const params = assembleUrlPage(forward, this.nextPage, this.previousPage)
+      this.getClient(params)
+    }
+
     render() {
         return (
           <div>
@@ -231,7 +244,12 @@ export class User extends Component {
               selectUpdate={this.state.dataFormUpdate}
               cancelForm={this.showForm} />
             }
-            <List selectDelete={this.deleteUser} userList={this.state.dataUser} selectUpdate={this.dataUpdate}/>
+            <List 
+              selectDelete={this.deleteUser}
+              userList={this.state.dataUser}
+              selectUpdate={this.dataUpdate} 
+              changePage={this.handleChangePage}
+              count={this.state.usersCount} />
 
             <Snackbar
             open={this.state.alert.open}
