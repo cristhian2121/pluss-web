@@ -6,39 +6,51 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+import { TableGeneric } from '../common/table/table-component'
+import AlertDialog from '@material-ui/core/Dialog';
+// or
+import { Dialog } from '@material-ui/core';
+
 export class ClientList extends React.Component {
 
-    constructor(props) {
-        super(props)        
-    }    
+    handleChangePage = (forward) => {
+        console.log('forward: ', forward);
+        this.props.changePage(forward)
+    }
 
     render() {
         return (
-                <Paper>
-                    <Table aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="right">Nombre</TableCell>
-                                <TableCell align="right">Teléfono</TableCell>
-                                <TableCell align="right">Asesor de venta</TableCell>
-                                <TableCell align="right">Ciudad</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {this.props.clientList.map(client => (
-                                <TableRow key={client.id}>
-                                    <TableCell component="th" scope="row">
-                                        {client.name}
-                                    </TableCell>
-                                    <TableCell align="right">{client.phone}</TableCell>
-                                    <TableCell align="right">{client.agent.name}</TableCell>
-                                    <TableCell align="right">{client.city}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </Paper>
-        )
+            <div>
+                <div className="sub-title">
+                    <span className="text">
+                        Lista de Clientes
+                </span>
+                </div>
+                <TableGeneric
+                    title=""
+                    columns={this.state.columns}
+                    data={this.props.clientList}
+                    actions={this.actions}
+                    editItem={this.props.selectUpdate}
+                    deleteItem={this.showConfirmation}
+                    duplicateItem={this.props.duplicateClient}
+                    changePage={this.handleChangePage}
+                    count={this.props.count}
+
+                />
+                {/* <MaterialTable
+                    title=""
+                    columns={this.state.columns}
+                    data={this.props.clientList} /> */}
+
+                <AlertDialog
+                    open={this.state.showAlert.open}
+                    option={this.state.showAlert.option}
+                    close={() => this.setState({ showAlert: !this.state.showAlert })}
+                    confirm={() => this.props.selectDelete(this.state.selectRegister)}
+                />
+            </div>
+        );
     }
 
 }

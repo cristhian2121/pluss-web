@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 
 import MaterialTable from 'material-table';
+import AlertDialog from '@material-ui/core/Dialog';
 import conf from '../../config'
+import { TableGeneric } from '../common/table/table-component'
 
 export class List extends Component {
 
@@ -37,28 +39,42 @@ export class List extends Component {
         }    
     }
 
-    render () {
-      return (
-        <div>
-            
-            <br/>
-            <MaterialTable
-                title={<div className="sub-title">
-                Lista de usuarios
-                </div>}
-                columns={this.state.columns}
-                data={this.state.dataUser}
-                actions={[
-                    {
-                      icon: 'edit',
-                      tooltip: 'Editar usuario',
-                      onClick: (event, rowData) => {
-                        this.props.selectUpdate(rowData)
-                      }
-                    }
-                  ]}
-                /> 
+  handleChangePage = (forward) => {
+    this.props.changePage(forward)
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="sub-title">
+          <span className="text">
+            Lista de usuarios
+          </span>
         </div>
-      );
-    }
+        <TableGeneric
+          title=''
+          columns={this.state.columns}
+          data={this.props.userList}
+          actions={this.actions}
+          editItem={this.props.selectUpdate}
+          deleteItem={this.showConfirmation}
+          changePage={this.handleChangePage}
+          count={this.props.count}
+        />
+        {/* <MaterialTable
+          title=""
+          columns={this.state.columns}
+          data={this.props.userList}
+          actions={}
+        /> */}
+
+        <AlertDialog
+          open={this.state.showAlert.open}
+          option={this.state.showAlert.option}
+          close={() => this.setState({ showAlert: !this.state.showAlert })}
+          confirm={() => this.props.selectDelete(this.state.selectRegisterDelete)}
+        />
+      </div>
+    );
+  }
 }
