@@ -1,6 +1,5 @@
 
 export const getAllQuotation = () => (dispatch) => {
-    console.log('Actions');
     dispatch({
         type: 'get_quotation',
         payload: 'store.quotation'

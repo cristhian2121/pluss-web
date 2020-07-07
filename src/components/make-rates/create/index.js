@@ -6,97 +6,180 @@ import {
 
 // components
 import { FormQuotation } from './formQuotation'
-import { GeneratePDF } from '../../common/pdf'
-import { Menu } from '../../common/nav-bar'
+import conf from '../../../config'
 
 // redux
 import { connect } from 'react-redux'
+import * as productActions from '../../../actions/productActions'
 import * as quotationActions from '../../../actions/quotationActions'
-import { getQuotationActive } from '../../../actions/quotationActions'
 
 class CreateQuotationHook extends Component {
 
   preViewPDF = false;
 
   constructor(props) {
+    console.log('props llegando 1: ', props);
     super(props)
     this.state = {
       downloadPDF: false,
-      preView: false
+      preView: false,
+      OpenAlert: null,
+      redirectList: false,
+      // Create for pass product from products
+      productReducerAux: {
+        selectUpdate: {
+          products: this.props.productReducer.products,
+          units: this.props.productReducer.units,
+        }
+      }
     }
     this.createQuotation = this.createQuotation.bind(this)
     this.eventSavePDF = this.eventSavePDF.bind(this)
+    this.endQuotation = this.endQuotation.bind(this)
+    this.updateQuotations = this.updateQuotations.bind(this)
     // this.generatePDF = this.generatePDF.bind(this)
   }
 
   componentDidMount() {
-    const quotation = this.props.quotation;
-    console.log('quotation: ', quotation);
-    // const $navBar = document.querySelector('#nav-var-pluss')
-    // $navBar.style.visibility = 'visible'
+    if (this.props.productReducer.products.length) {
+      this.setState({
+        productReducerAux: {
+          selectUpdate: {
+            products: this.props.productReducer.products,
+            units: this.props.productReducer.units,
+            selectUpdate: 1
+          }
+        }
+      })
+    }
   }
 
   eventSavePDF(quotation) {
-    console.log('quotation: ', quotation);
-    // this.props.createQuotation(quotation);
-    // this.setState({ preView: true })
-    // this.preViewPDF = true
-    // this.redirectToPDF()
-    // const $link = document.querySelector('#new-tap');
-    // $link.print()
-    // this.amor($link)
-    window.open('/cotizacion', '_blank','',true)
+    window.open('/cotizacion', '_blank', '', true)
   }
-
-  // amor($link) {
-  //   let mywindow = window.open('', 'PRINT', 'height=400,width=600');
-
-  //   mywindow.document.appendChild(
-  //     $link
-  //   )
-
-  //   mywindow.document.close(); // necessary for IE >= 10
-  //   mywindow.focus(); // necessary for IE >= 10*/
-
-  //   mywindow.print();
-  //   mywindow.close();
-  // }
 
   redirectToPDF() {
     if (this.preViewPDF) {
-      // return <Redirect to='/cotizacion' push={true} />
-      
       this.props.history.push('/cotizacion')
     }
   }
 
   createQuotation(data) {
     this.props.createQuotation({ ...data })
+    let dataEmail = data.email
+
+    fetch(`${conf.api_url}/quotation/`, {
+      method: 'POST', body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(async (response) => {
+        let resp = await response.json()
+
+        if (response.status === 200 ||  response.status == 201){
+          
+          if (dataEmail) {
+            dataEmail.client = resp.client
+            dataEmail.url = `${window.origin}/cotizacion/${resp.id}`
+  
+            this.endQuotation(dataEmail)
+          }else{
+            this.setState({
+              OpenAlert: {
+                open: true,
+                message: 'La cotización se creo correctamente.',
+                type:'success'
+              }
+            })
+          }
+        }
+    })
+    .catch(error => console.log('Error: ', error))
+  }
+
+  updateQuotations (data) {
+    let idSelectUpdate = data.id
+    let dataEmail = data.email
+
+    fetch(`${conf.api_url}/quotation/${idSelectUpdate}/`,{
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(async (response) => {
+      let resp = await response.json()
+
+      if (response.status === 200 ||  response.status == 201){
+
+        if (dataEmail) {
+          dataEmail.client = resp.client
+          dataEmail.url = `${window.origin}/cotizacion/${resp.id}`
+
+          this.endQuotation(dataEmail)
+        }else{
+          this.setState({
+            OpenAlert: {
+              open: true,
+              message: 'La cotización se actualizo correctamente.',
+              type:'success'
+            }
+          })
+        }
+        // this.state.OpenAlert && this.setState({redirectList: true})  
+      }
+    })
+    .catch(error => console.log('Error: ', error))
+  }
+
+  endQuotation(quotation) {
+
+    // quotation.quotation.id ? this.updateQuotations(quotation.quotation) : this.createQuotation(quotation)
+    // let data = quotation
+    // data.url = window.origin
+    // // let data.url = origin
+    // data.id = this.state.dataQuo
+    
+    fetch(`${conf.api_url}/quotation/send_email/`,{ method: 'POST', body: JSON.stringify(quotation),headers:{ 'Content-Type': 'application/json' } })
+    .then(async (response) => {
+      let resp = response.json()
+    })
+    .catch(e => console.log('no entro al send Email', e))
   }
 
   render() {
-    console.log('***', this.props)
     return (
       <div>
-        {/* <Menu /> */}
         <FormQuotation
           eventCreateQuotation={this.createQuotation}
-          preQuotation={this.props.quotation} eventSavePDF={this.eventSavePDF}/>
-          
-        {/* {this.redirectToPDF()} */}
+          preQuotation={this.state.productReducerAux}
+          eventSavePDF={this.eventSavePDF}
+          updateQuotation={this.props.location.state}
+          // endQuotation = {this.endQuotation}
+          updateQuotations = {this.updateQuotations}
+        />          
+        {this.state.OpenAlert && <Redirect to={{ pathname: '/cotizaciones', state:this.state.OpenAlert}}/>}
       </div>
     );
   }
 }
 
-// pass state to props (console.log(pros)) end i selected the into return
+const mapStateToProps = reducers => {
+  return {
+    productReducer: reducers.productReducer,
+    quotationReducer: reducers.quotationReducer
+  }
 
-const mapStateToProps = (reducers) => {
-  return reducers.quotationReducer;
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    productActions,
+    quotationActions
+  }
+}
+
 // connect reducer to component
-const CreateQuotation = connect(mapStateToProps, quotationActions)(CreateQuotationHook);
+const CreateQuotation = connect(mapStateToProps, mapDispatchToProps)(CreateQuotationHook);
 export {
   CreateQuotation
 }

@@ -5,12 +5,16 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { SnackbarProvider, useSnackbar } from 'notistack';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import conf from '../../config';
 import Copyright from '../../components/common/copyright'
-import {Redirect} from 'react-router-dom' 
+import { Redirect } from 'react-router-dom'
 import Logo from '../../static/logo_pop_litle.png'
 
 const useStyles = makeStyles(theme => ({
@@ -49,36 +53,48 @@ export default function Login() {
 function IntegrationNotistack() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [ loginRoot, setLoginRoot ] = useState(false)
+  const [loginRoot, setLoginRoot] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
-  const login = () => {
+  const login = (event) => {
+    event.preventDefault()
     let data = generateData()
+    console.log('data: ', data);
     fetch(`${conf.api_url}/login/`, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       }
     })
-    .then(async function(response) {
-      let resp = await response.json()
-      if (resp['username']) { enqueueSnackbar(resp['username'], {variant: 'error'}) }
-      if (resp['password']) { enqueueSnackbar(resp['password'], {variant: 'error'}) }
-      if (response.status == 401) { enqueueSnackbar(resp['detail'], {variant: 'error'}) }
-      if (response.status == 200) { setLoginRoot(true) }
-    })
-    .catch(function(error) {
-      enqueueSnackbar('Se generó un error en la autenticación.', {variant: 'error'});
-    });
+      .then(async function (response) {
+        console.log('MELO');
+        let resp = await response.json()
+        console.log('resp login: ', resp);
+        if (resp['username']) { enqueueSnackbar(resp['username'], { variant: 'error' }) }
+        if (resp['password']) { enqueueSnackbar(resp['password'], { variant: 'error' }) }
+        if (response.status == 401) { enqueueSnackbar(resp['detail'], { variant: 'error' }) }
+        if (response.status == 200) { setPermissions(resp) }
+      })
+      .catch(function (error) {
+        console.log('error: ', error);
+        enqueueSnackbar('Se generó un error en la autenticación.', { variant: 'error' });
+      });
   }
 
   const generateData = () => {
-    let elements = document.getElementById('loginForm').elements;
+    const elements = document.getElementById('loginForm').elements;
     let data = {};
-    for (let item of elements) {
-      data[item.name] = item.value;
-    }
+    data.username = elements.username.value.trim()
+    data.password = elements.password.value.trim()
     return data
+  }
+
+  const setPermissions = (user) => {
+    console.log('user: ', user);
+    localStorage.name = user.name
+    localStorage.ldap = user.permission
+    setLoginRoot(true)
   }
 
   return (
@@ -89,7 +105,7 @@ function IntegrationNotistack() {
           <LockOutlinedIcon />
         </Avatar> */}
         <Typography component="h1" variant="h5">
-        <img src={Logo} className="image-logo-pdf" />
+          <img src={Logo} className="image-logo-pdf" />
         </Typography>
         <Typography component="h1" variant="h5">
           Ingresa tus credenciales
@@ -113,16 +129,28 @@ function IntegrationNotistack() {
             fullWidth
             name="password"
             label="Contraseña"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           /> */}
           <Button
-            type="button"
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
@@ -131,24 +159,12 @@ function IntegrationNotistack() {
           >
             Ingresar
           </Button>
-          {/* <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid> */}
         </form>
       </div>
       <Box mt={8}>
         <Copyright />
       </Box>
-      {loginRoot ?  <Redirect to='/cotizaciones'/> : ''}
+      {loginRoot ? <Redirect to='/cotizaciones' /> : ''}
     </Container>
   );
 }

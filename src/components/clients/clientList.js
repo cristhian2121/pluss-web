@@ -1,17 +1,60 @@
 import React from 'react'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import MaterialTable from 'material-table';
 
-import { TableGeneric } from '../common/table/table-component'
-import AlertDialog from '@material-ui/core/Dialog';
+import {
+    AlertDialog,
+    TableGeneric
+} from '../common/common'
+
 // or
 import { Dialog } from '@material-ui/core';
 
 export class ClientList extends React.Component {
+    constructor(props) {        
+        super(props)
+    }
+
+    state = {
+        alert: {
+            open: false
+        },
+        columns: [
+            { title: 'Nit', field: 'nit' },
+            { title: 'Nombre', field: 'name' },
+            { title: 'Teléfono', field: 'phone' },
+            { title: 'Asesor de venta', field: 'agent' },
+            { title: 'Ciudad', field: 'city' },
+            { title: 'id', field: 'id' }
+        ],
+        dataUser: [],
+        showAlert: false,
+        selectRegister: null,
+    };
+
+    actions = [
+        {
+            type: 'edit',
+            title: 'Editar cliente',
+        },
+        {
+            type: 'file_copy',
+            title: 'Duplicar cliente',
+        },
+        {
+            type: 'delete',
+            title: 'Eliminar cliente',
+        }
+    ]
+
+    showConfirmation = (rowData) => {
+        this.setState({
+            showAlert: {
+                open: true,
+                option: 'delete'
+            },
+            selectRegister: rowData
+        })
+    }
 
     handleChangePage = (forward) => {
         console.log('forward: ', forward);
@@ -52,5 +95,4 @@ export class ClientList extends React.Component {
             </div>
         );
     }
-
 }

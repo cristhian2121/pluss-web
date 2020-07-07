@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, Fragment } from 'react';
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -15,7 +15,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Tooltip from '@material-ui/core/Tooltip';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import {Redirect} from "react-router-dom";
+
+import AlertDialog from "../confirm"
 import PageNotFound from "../page-not-found";
 import { User } from "../../../pages/users/index";
 import { CreateQuotation } from "../../make-rates/create";
@@ -24,7 +29,7 @@ import { GeneratePDF } from '../pdf'
 import ListItemText from '@material-ui/core/ListItemText';
 
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,10 +74,11 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen
     }),
     overflowX: "hidden",
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1
-    }
+    width: 50,
+    // theme.spacing(7) + 1,
+    // [theme.breakpoints.up("sm")]: {
+    //   width: theme.spacing(9) + 1
+    // }
   },
   content: {
     flexGrow: 1,
@@ -82,11 +88,30 @@ const useStyles = makeStyles(theme => ({
 
 export const Menu = ({ children }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [userSession, setUserSession] = useState(localStorage.getItem('name'))
+
+  // if (localStorage) {
+  //   console.log('localStorage: ', localStorage);
+  //   let aaa = localStorage.getItem('name')
+  //   setUserSession(localStorage.getItem('name'))
+  // }
 
   const handleDrawerClose = () => {
     open ? setOpen(false) : setOpen(true);
   };
+
+  const logOut = (eeee) => {
+    localStorage.clear()
+    setConfirm(true)
+    
+  }
+
+  const closeConfirmation = () => {
+    setShowAlert(!showAlert)
+  }
 
   return (
     <div className={classes.root} id="nav-var-pluss">
@@ -104,13 +129,14 @@ export const Menu = ({ children }) => {
         }}
         open={open}
       >
-        <div className={classes.toolbar}>
+        <div className="popo">
           <IconButton onClick={handleDrawerClose}>
             {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
+          Hola {userSession}
         </div>
         <Divider />
-        <List>
+        <List >
           {[
             {
               text: "Usuarios",
@@ -138,22 +164,32 @@ export const Menu = ({ children }) => {
               path: "/clientes"
             }
           ].map((section, index) => (
-            <ListItem button key={section.text}>
-              <Tooltip title={section.text}>
-                <Link to={section.path}>
+            <ListItem button key={section.text} className='nav-bar-items'>
+              <Tooltip title={section.text} placement="right-start" variant="regular" className='row nav-bar-text'>
+                <Link to={section.path} >
                   <ListItemIcon>{section.icon}</ListItemIcon>
-                  {/* <ListItemText primary={section.text} /> */}
+                  {open && <p>{section.text}</p>}
                 </Link>
               </Tooltip>
             </ListItem>
           ))}
         </List>
         <Divider />
+        <div >
+          <Tooltip title="Cerrar sesión" placement="right-start" variant="regular">
+            <IconButton onClick={() => setShowAlert({open:true, option:'logout'})}>
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>            
+        </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {children}
       </main>
+
+      <AlertDialog open={showAlert.open} option={showAlert.option} close={closeConfirmation} confirm={logOut} />
+      {confirm && <Redirect to='/'/>}
     </div>
   );
 }

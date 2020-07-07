@@ -1,43 +1,55 @@
 import React, { Component } from "react";
 
 import MaterialTable from 'material-table';
-import AlertDialog from '@material-ui/core/Dialog';
+
+import {
+  TableGeneric,
+  AlertDialog
+} from '../common/common'
+
 import conf from '../../config'
-import { TableGeneric } from '../common/table/table-component'
 
 export class List extends Component {
+  constructor(props) {
+    super(props)
+  }
 
-    constructor(props){
-        super(props)
+  actions = [
+    {
+      type: 'edit',
+      title: 'Editar usuario'
+    },
+    {
+      type: 'delete',
+      title: 'Eliminar usuario'
     }
+  ]
 
-    state = {
-        columns: [
-            { title: 'codigo', field: 'code' },
-            { title: 'Nombre', field: 'user.first_name' },
-            { title: 'Correo electrónico', field: 'user.email' },
-            { title: 'Documento', field: 'identification_number' },
-            { title: 'Teléfono', field: 'phone_number'},
-            { title: 'Estado', field: 'user.is_active'}
-        ],
-        dataUser: []
-    };
+  showConfirmation = (rowData) => {
+    this.setState({
+      showAlert: {
+        open: true,
+        option: 'delete'
+      },
+      selectRegisterDelete: rowData.user.id
+    })
+  }
 
-    componentDidMount () {
-        this.getDataUsers()
-    }
-    getDataUsers = async () => {
-        try {
-            let response = await fetch(`${conf.api_url}/profile/`)
-            let data = await response.json()
-        
-            this.setState({
-                dataUser: data
-            })
-        } catch (error) {
-            console.log('error', error)
-        }    
-    }
+  state = {
+    alert: {
+      open: false
+    },
+    columns: [
+      { title: 'codigo', field: 'code' },
+      { title: 'Nombre', field: 'user.first_name' },
+      { title: 'Correo electrónico', field: 'user.username' },
+      { title: 'Documento', field: 'identification_number' },
+      { title: 'Teléfono', field: 'phone_number' }
+    ],
+    dataUser: [],
+    showAlert: false,
+    selectRegisterDelete: null,
+  };
 
   handleChangePage = (forward) => {
     this.props.changePage(forward)

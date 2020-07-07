@@ -1,52 +1,99 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
+import { createHashHistory } from 'history'
 
 // Material
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
+  validate,
 } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-
-// PDF
-// import pdfMake from "pdfmake/build/pdfmake";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
-
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 // Icons
-import ExpandLessIcon from '@material-ui/icons/ExpandMore';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import { Link } from "react-router-dom"
-
 // component
 import { ProductForm } from './addProduct'
-
-// utils
-// import { generateTemplatePDF } from '../../common/pdf/templatePDF'
-
-
+import { SendEmail } from './sendEmail'
 import { UnitsCost } from './unitsCost'
+import conf from '../../../config'
 
 // css
 import '../../../styles/commons.css';
-import { da } from "date-fns/locale";
 
-import conf from '../../../config'
-
-
+/**
+ * assemble the obj of initialization
+ * @param {*} props 
+ */
+const setEditQuotation = (props) => {
+  if (props.updateQuotation && props.updateQuotation.selectUpdate) {
+    return {
+      selectUpdate: props.updateQuotation.selectUpdate,
+      client: props.updateQuotation.selectUpdate.client,
+      user: props.updateQuotation.selectUpdate.user,
+      idSelectUpdate: props.updateQuotation.selectUpdate.id,
+      units: props.updateQuotation.selectUpdate.units,
+      products: props.updateQuotation.selectUpdate.products
+    }
+  }
+  else if (props.preQuotation && props.preQuotation.selectUpdate && props.preQuotation.selectUpdate.products.length) {
+    return {
+      selectUpdate: props.preQuotation.selectUpdate,
+      client: props.preQuotation.selectUpdate.client,
+      user: props.preQuotation.selectUpdate.user,
+      idSelectUpdate: props.preQuotation.selectUpdate.id,
+      units: props.preQuotation.selectUpdate.units,
+      products: props.preQuotation.selectUpdate.products
+    }
+  }
+  else {
+    return {
+      selectUpdate: null,
+      client: null,
+      user: null,
+      idSelectUpdate: null,
+      units: [],
+      products: []
+    }
+  }
+}
 
 export const FormQuotation = (props) => {
-  //   constructor() {}
+  const objectInitialization = setEditQuotation(props)
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
-  const [costUnit, SetCostUnit] = useState({})
-  const [units, SetUnits] = useState([])
-  const [products, setProducts] = useState([])
+  const [units, SetUnits] = useState(objectInitialization.units || [])
+  const [products, setProducts] = useState(objectInitialization.products || [])
+  const [dataClients, setDataClients] = useState([])
+  const [dataUsers, setDataUsers] = useState([])
+  const [status, setStatus] = useState("En progreso")
+  if (props.updateQuotation) console.log('SI', products);
+  else console.log('NO');
+  const [selectUpdate, setSelectUpdate] = useState()
+  const [clientSelectUpdate, setCientSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.client : null)
+  const [userSelectUpdate, setUserSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.user : null)
+  const [idSelectUpdate, setIdSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.id : null)
+  const [redirectList, setRedirectList] = useState(false)
+  const [openAlert, setOpenAlert] = useState({})
+  const [openEmail, setOpenEmail] = useState(false)
+  const [messageAlert, setMessageAlert] = useState('')
+  const [typeAlert, setTypeAlert] = useState('')
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => {
+    getClients()
+    getUsers()
+  }, []);
+
+  const history = createHashHistory()
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -58,22 +105,17 @@ export const FormQuotation = (props) => {
     setshowUnitForm(!showUnitForm)
   }
 
-  // const calculateValue = (event) => {
-  //   const eventAux = { ...event }
-  //   console.log(eventAux.target.value);
-  //   SetCostUnit(costUnit => {
-  //     return { ...costUnit, discount: eventAux.target.value }
-  //   })
-  // }
-
   const handleAddUnit = (_units) => {
-    console.log('_units: ', _units);
     SetUnits(units => [..._units])
   }
 
   const handleAddProduct = (_product) => {
-    console.log('_product: ', _product);
     setProducts(products => [...products, _product])
+  }
+
+  const handleRemoveProduct = (_product) => {
+    let productss = products.filter(item => item != _product)
+    setProducts(productss)
   }
 
   const validateProduct = products => {
@@ -103,56 +145,42 @@ export const FormQuotation = (props) => {
     return validate
   }
 
-
-  // const UnitCost = () => {
-  //   return (
-  //     <Grid container spacing={3} >
-  //       <Grid item md={2} className="unit">
-  //         <TextField
-  //           id={'unit'}
-  //           name={'unit'}
-  //           className=""
-  //           label="Unidades"
-  //         />
-  //       </Grid>
-  //       <Grid item md={2}>
-  //         <Button color="primary" onClick={handleAddUnits}>
-  //           Agregar <AddCircleIcon />
-  //         </Button>
-  //       </Grid>
-  //     </Grid>
-  //   )
-  // }
-
   const saveQuotation = event => {
-    // if (event) {
-    //   event.preventDefault();
-    //   const data = generateData()
-    //   console.log('FECHA', da.localize);
-    //   props.eventCreateQuotation(data)
-    // }
+    const data = generateData()
+    data.status = status
+    data.endQuotation = event
+
+    validate(data) && props.eventCreateQuotation(data)
+  }
+
+  const updateQuotation = event => {
+    const data = generateData()
+    data.status = event
+    data.id = idSelectUpdate
+    validate(data) && props.updateQuotations(data)
   }
 
   const generatePDF = async () => {
     const data = generateData()
-    sessionStorage.setItem('quotation', JSON.stringify(data))
-    props.eventSavePDF(data)
-    console.log('data: ', data);
-    // fetch(`${conf.api_url}/quotationtemp/`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({ data: data }),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     console.log('res: ', res);
-    //     props.eventSavePDF(res.data)
-    //   })
-    //   .catch(() => {
-    //     console.log('ERROR');
-    //   })
+    let idClient = data.client
+    let idUser = data.user
+
+    for (let i = 0; i < dataClients.length; i++) {
+      if (dataClients[i].id == idClient) {
+        data.client = dataClients[i]
+      }
+    }
+
+    for (let i = 0; i < dataUsers.length; i++) {
+      if (dataUsers[i].id == idUser) {
+        data.user = dataUsers[i]
+      }
+    }
+
+    if (validate(data)) {
+      sessionStorage.setItem('quotation', JSON.stringify(data))
+      props.eventSavePDF(data)
+    }
   }
 
   const generateData = () => {
@@ -165,30 +193,99 @@ export const FormQuotation = (props) => {
     }
     obj.products = products
     obj.units = units
-    // obj.products = generateProducts({ ...obj });
     return obj
   }
 
+  const getClients = async () => {
+    try {
+      let response = await fetch(`${conf.api_url}/client/`)
+      let data = await response.json();
+
+      setDataClients(data.results)
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const getUsers = async () => {
+    try {
+      let response = await fetch(`${conf.api_url}/profile/`)
+      let data = await response.json();
+      setDataUsers(data.results)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const handleChange = e => {
+    switch (e.target.name) {
+      case "client":
+        setCientSelectUpdate(e.target.value)
+        break
+      case "user":
+        setUserSelectUpdate(e.target.value)
+        break
+      case "pay_format":
+        setSelectUpdate({ pay_format: e.target.value })
+        break
+      case "delivery_time":
+        setSelectUpdate({ delivery_time: e.target.value })
+        break
+      default: break;
+    }
+  }
+
+  const cancelEmail = e => {
+    setOpenEmail(e)
+  }
+
+  const preEmail = () => {
+    let data = generateData()
+
+    validate(data) && setOpenEmail(true)
+  }
+
+  const confEmail = (dataEmail) => {
+    let data = generateData()
+    data.email = dataEmail
+    data.status = "Finalizado"
+    data.id = idSelectUpdate
+
+    idSelectUpdate ? props.updateQuotations(data) : props.eventCreateQuotation(data)
+  }
+
+  const validate = (data) => {
+    let error = []
+    !data.client && error.push('client')
+    !data.user && error.push('user')
+
+    if (error.length > 0) {
+      let errors = {}
+      for (let item of error) {
+        errors[item] = true
+      }
+      setErrors(errors)
+
+      return false
+    }
+    else return true
+  }
+
   return (
-    <div>
-      <div className="title">
-        Crear cotización
-      </div>
-      <br />
-      <form id="quotationForm" >{/* onSubmit={saveQuotation} */}
-        <Grid container spacing={3}>
-          <Grid item md={3}>
-            <TextField
-              id="consecutive"
-              name="consecutive"
-              className=""
-              label="Cosecutivo"
-              margin="normal"
-            />
-          </Grid>
-          <Grid item md={3}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <div >
+      <div>
+        {openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={confEmail} />}
+        <div className="title">
+          Crear cotización
+        </div>
+        <div>
+          {/* 
+        <form id="quotationForm" className="form-quotation" >
+            <MuiPickersUtilsProvider  utils={DateFnsUtils}>
               <KeyboardDatePicker
+                disabled
+                className="col-md-4 col-xs-12"
                 disableToolbar
                 variant="inline"
                 format="MM/dd/yyyy"
@@ -196,109 +293,106 @@ export const FormQuotation = (props) => {
                 id="date-picker-inline"
                 name="quotationDate"
                 label="Fecha de cotización"
-                value={selectedDate}
+                value={idSelectUpdate ? selectUpdate.date_created: selectedDate}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
               />
             </MuiPickersUtilsProvider>
-          </Grid>
-          <Grid item md={3}>
-            <TextField
-              id="client"
+            <TextField required
+              select
+              label="Cliente"
               name="client"
-              className=""
-              label="Nombre cliente"
+              onChange={getClients}
+              defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
+              className="col-md-4 col-xs-12"
               margin="normal"
-            />
-          </Grid>
-          <Grid item md={3}>
-            <TextField
-              id="clientPhone"
-              name="clientPhone"
-              className=""
-              label="Teléfono cliente"
-              margin="normal"
-            />
-          </Grid>
+              error={errors.client}
+              helperText={errors.client && 'Este campo es requerido.'}
+            >
+              {dataClients.map(clients => (
+                <MenuItem
+                  value={clients.id}
+                >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
+              ))}
+            </TextField> */}
 
           {/* segunda fila  */}
-
-          <Grid item md={3}>
-            <TextField
-              id="user"
-              name="user"
-              className=""
+          {/* <TextField required
+              select
               label="Ejecutivo de ventas"
+              name="user"
+              onChange={getUsers}
+              defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
+              className="col-md-4 col-xs-12"
               margin="normal"
-            />
-          </Grid>
-          <Grid item md={3}>
+              error={errors.user}
+              helperText={errors.user && 'Este campo es requerido.'}
+            >
+              {dataUsers.map(users => (
+                <MenuItem
+                  value={users.id}
+                >{users.user.first_name}</MenuItem>
+              ))}
+            </TextField>
             <TextField
-              id="city"
-              name="city"
-              className=""
-              label="Ciudad"
-              margin="normal"
-            />
-          </Grid>
-          <Grid item md={3}>
-            <TextField
-              id="deliveryTime"
-              name="deliveryTime"
-              className=""
-              label="Tiempo de entrega"
-              margin="normal"
-            />
-          </Grid>
-          <Grid item md={3}>
-            <TextField
-              id="payTime"
-              name="payTime"
-              className=""
+              id="pay_format"
+              name="pay_format"
+              className="col-md-4 col-xs-12"
               label="Formato de pago"
               margin="normal"
+              value={idSelectUpdate ? selectUpdate.pay_format : null}
+              onChange={handleChange}
             />
-          </Grid>
-          {/* fila 3 */}
-        </Grid>
-      </form>
-      <br />
-      <div className="sub-title">
-        Agregar Unidades
-      </div>
+            <TextField
+              id="delivery_time"
+              name="delivery_time"
+              className="col-md-4 col-xs-12"
+              label="Tiempo de entrega (Días)"
+              margin="normal"
+              value={idSelectUpdate ? selectUpdate.delivery_time : null}
+              onChange={handleChange}
+            />
+        </form> */}
 
-      {/* Unidades */}
-      <UnitsCost handleAddUnit={handleAddUnit} preUnits={props.preQuotation.units} />
-
-      <br />
-      <div className="sub-title">
-        <Button onClick={() => setShowproductForm(!showproductForm)}>Agregar productos </Button>
-      </div>
-      {/* Anadir producto */}
-      {
-        showproductForm &&
-        <>
-          <ProductForm units={units} addProduct={handleAddProduct} />
-        </>
-      }
-      <div className="col-12 px-0">
-        <Grid item md={12} className="d-flex justify-content-end">
-          <div className="button-action">
-            <Button variant="contained" color="primary" type="submit" onClick={saveQuotation}>
-              Guardar cotización
-          </Button>
+          <div className="sub-title">
+            <span className="text">Unidades</span>
           </div>
-          <div className="button-action">
-            <Button variant="contained" color="secondary" onClick={generatePDF}>
-              Generar PDF <PictureAsPdfIcon />
-            </Button>
+
+          {/* Unidades */}
+          <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={units} />
+
+          <div className="sub-title">
+            <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon />  </Button>
           </div>
-        </Grid>
+
+          {/* Anadir producto */}
+          { showproductForm &&
+            <>
+                <ProductForm 
+                  units={units} 
+                  productsE={products} 
+                  addProduct={handleAddProduct}
+                  removeProduct={handleRemoveProduct}                  
+                />
+            </>
+        }
+
+        </div>
+        {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert }} />}
       </div>
-
-
+      <div className="col-12 px-0 d-flex justify-content-end container-button">
+        <Button variant="contained" color="secondary" type="submit" onClick={() => idSelectUpdate ? updateQuotation("En progreso") : saveQuotation("En progreso")}>
+          Guardar cotización
+        </Button>
+        <Button variant="contained" onClick={generatePDF}>
+          Vista previa PDF <PictureAsPdfIcon />
+        </Button>
+        <Button variant="contained" type="submit" onClick={preEmail}>
+          Finalizar
+        </Button>
+      </div>
     </div>
   );
 }

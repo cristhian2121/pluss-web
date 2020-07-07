@@ -1,6 +1,15 @@
-import { ADD_PRODUCT, REMOVE_PRODUCT } from './genericType'
+import {
+    ADD_PRODUCT,
+    ADD_PRODUCTS,
+    ADD_UNITS,
+    REMOVE_PRODUCT,
+    GET_ALL
+} from './genericType'
 
 export {
     ADD_PRODUCT,
-    REMOVE_PRODUCT
+    ADD_PRODUCTS,
+    ADD_UNITS,
+    REMOVE_PRODUCT,
+    GET_ALL
 }

@@ -5,13 +5,15 @@ import { List } from "../../components/users/list"
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandMore';
-import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
-import {Alert} from '../../components/common/alerts'
+// import {Alert} from '../../components/common/alerts'
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 import { Menu } from '../../components/common/nav-bar'
 
-// import { assembleUrlPage } from '../'
+import { assembleUrlPage } from '../../utils/pagination-utils'
 
 import conf from '../../config'
 
@@ -59,8 +61,9 @@ export class User extends Component {
 
     dataUpdate =  (data) => {
       if (data !== '' || data!== null) {
+        this.showForm('update')
         this.setState({
-          showForm: true, 
+          // dataUser: true,
           dataFormUpdate: data
         })
       }
@@ -213,15 +216,23 @@ export class User extends Component {
     }
 
     handleChangePage = (forward) => {
-      // const params = assembleUrlPage(forward, this.nextPage, this.previousPage)
-      // this.getClient(params)
+      const params = assembleUrlPage(forward, this.nextPage, this.previousPage)
+      this.getClient(params)
     }
 
     render() {
         return (
           <div>
-            <div className="title">
-               Usuarios
+            <div className="title row">
+              <div className="title-text col-md-6 col-xs-12">
+                Usuarios
+              </div>
+              <div className="action-title col-md-6 col-xs-12">
+                <span className="text" onClick={this.showForm}>
+                  {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario
+                  <Button className="button-more" onClick={this.showForm}> <AddCircleIcon/>  </Button>
+                </span>
+              </div>
             </div>
             
             {

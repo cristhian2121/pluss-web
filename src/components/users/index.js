@@ -7,8 +7,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Snackbar from '@material-ui/core/Snackbar';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandMore';
+import Alert from '@material-ui/lab/Alert';
+
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import conf from '../../config'
 
@@ -17,12 +21,76 @@ export class Create extends Component {
     super(props)
     this.data = {}
     this.state = {
-      dataEdit: null,
+      alert: {
+        open: false,
+        message: '',
+        type: '',
+      },
+      errors: {},
+      showPassword: false,
+      showConfirmPassword: false,
       showForm: true,
-      dataGroups: [],
-      passDiff: false,
-      activeDialog: false,
-      messageAlert: '',
+      idUser: props.selectUpdate.user ? props.selectUpdate.id : null,
+      code: props.selectUpdate.user ? props.selectUpdate.code : null,
+      first_name: props.selectUpdate.user ? props.selectUpdate.user.first_name : null,
+      identification_number: props.selectUpdate.identification_number,
+      username: props.selectUpdate.user ? props.selectUpdate.user.username : null,
+      phone_number: props.selectUpdate ? props.selectUpdate.phone_number : null,
+      password: null,
+      passwordConfirm: null,
+      groups: props.selectUpdate.user ? [`${props.selectUpdate.user.groups}`] : []
+    }
+  }
+  
+  addUser = (e) => {
+    let data = this.generateData()
+    // data.groups = data.groups.split(',')
+    console.log('this.data adduser: ', this.data);
+
+    this.validator(data) && (
+      this.state.idUser ? this.props.updateUser(data) : this.props.saveUser(data)
+    )
+  }
+
+  generateData = () => {
+    let elements = document.getElementById('userForm').elements;
+    let data = {};
+    for (let item of elements) {
+      data[item.name] = item.value;
+    }
+    data.user = this.props.selectUpdate.user ? this.props.selectUpdate.user.id : ''
+    data.type_identification = 'CC'
+    return data
+  }
+
+  validator(data) {
+    let error = []
+    !data.code && error.push('code')
+    !data.first_name && error.push('first_name')
+    !data.identification_number && error.push('identification_number')
+    !data.username && error.push('username')
+    !data.phone_number && error.push('phone_number')
+    !data.groups && error.push('groups')
+    !this.state.idUser && !data.password1 && error.push('password1')
+
+    if (error.length > 0) {
+      let errors = {}
+      for (let item of error) {
+        errors[item] = true
+      }
+      this.setState({errors: errors})
+      
+      return false
+    }
+    else return true   
+  }
+
+  clear = () => {
+    this.data = {}
+    this.errors = {}
+    document.getElementById("userForm").reset()
+    this.setState({
+      idUser: null,
       code: null,
       first_name: null,
       identification_number: null,
@@ -31,43 +99,10 @@ export class Create extends Component {
       password: null,
       passwordConfirm: null,
       groups: []
-    }
-  }
-  showForm = () => {
-    if (this.state.showForm) { document.getElementById('userForm').style.display='block' }
-    else { document.getElementById('userForm').style.display='none' }
-
-    this.setState({ showForm: !this.state.showForm })
-    console.log('segundo', this.state.showForm)
-  }
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      dataEdit: nextProps.selectUpdate.user ? nextProps.selectUpdate : null,
-      code: nextProps.selectUpdate.user ? nextProps.selectUpdate.code : null,
-      first_name: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.first_name : null,
-      identification_number: nextProps.selectUpdate.identification_number,
-      username: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.username : null,
-      phone_number: nextProps.selectUpdate ? nextProps.selectUpdate.phone_number : null,
-      password: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
-      passwordConfirm: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.password : null,
-      groups: nextProps.selectUpdate.user ? nextProps.selectUpdate.user.groups : []
     })
+    this.props.cancelForm(false)
   }
-  componentDidMount() {
-    this.getGroups()
-    document.getElementById('userForm').style.display='none'
-  }
-  getGroups = async () => {
-    try {
-      let response = await fetch(`${conf.api_url}/group/`)
-      let data = await response.json();
-      this.setState({
-        dataGroups: data
-      })
-    } catch (error) {
-      console.log('error', error)
-    }
-  }
+
   handleChange = e => {
     this.render()
     switch (e.target.name) {
@@ -98,224 +133,163 @@ export class Create extends Component {
         } else {
           this.setState({ passDiff: false, password: e.target.value })
         }
-        break
+        break;
+        default: break;
     }
-  };
-  clear = () => {
-    this.data = {}
-    document.getElementById("userForm").reset()
-    this.setState({
-      dataEdit: null,
-      code: null,
-      first_name: null,
-      identification_number: null,
-      username: null,
-      phone_number: null,
-      password: null,
-      passwordConfirm: null,
-      groups: []
-    })
-  };
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    this.setState({ activeDialog: false })
   }
-  generateData = () => {
-    let elements = document.getElementById('userForm').elements;
-    let data = {};
-    console.log('dataform', elements)
-    for (let item of elements) {
-      data[item.name] = item.value;
-    }
-    data.user = this.props.selectUpdate.user ? this.props.selectUpdate.user.id : ''
-    data.type_identification = 'CC'
-    return data
-  }
-  save = (evt) => {
-    this.data = this.generateData()
-    console.log('editando', this.data)
-    fetch(`${conf.api_url}/profile/`, {
-      method: 'POST',
-      body: JSON.stringify(this.data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(async (response) => {
-        let resp = await response.json()
-        if (response.status == 201) {
-          this.setState({ activeDialog: true, messageAlert: resp['detail'] })
-          this.clear()
-        }
-        if (response.status == 400) {
-          this.setState({ activeDialog: true, messageAlert: resp['error'] })
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ activeDialog: true, messageAlert: 'Por favor valide los campos obligatorios' })
-      });
-  };
-  update = () => {
-    this.data = this.generateData()
-    this.data.groups = this.data.groups.split(',')
-    console.log('entro por el editar casi ue no', this.data, this.props.selectUpdate.id)
-    fetch(`${conf.api_url}/user/${this.props.selectUpdate.user.id}/`, {
-      method: 'PUT',
-      body: JSON.stringify(this.data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(async (response) => {
-        let resp1 = await response.json()
-        console.log('response', resp1, response.status)
-        if (response.status == 200 ||  response.status == 201) {
-          fetch(`${conf.api_url}/profile/${this.props.selectUpdate.id}/`, {
-            method: 'PUT',
-            body: JSON.stringify(this.data),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
-            .then(async (response) => {
-              let resp = await response.json()
-              if (response.status == 200 ||  response.status == 201) {
-                this.setState({ activeDialog: true,  messageAlert: 'El usuario se  actualizó correctamente' })
-                this.clear()
-              }
-              if (response.status == 400 ) {
-                this.setState({ activeDialog: true,  messageAlert:'No se pudo actualizar el usuario, por favor vuelva a intentarlo.' })
-              }
-            })
-            .catch(err => {
-              console.log(err);
-              // this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-            });
-        }
-        if (response.status == 400 ) {
-          console.log(resp1)
-          this.setState({ activeDialog: true,  messageAlert: resp1['error'] })
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ activeDialog: true,  messageAlert: 'Por favor valide los campos obligatorios' })
-      });
-
-  };
 
   render() {
     return (
-      <div>
-        <div className="sub-title">
-          <Button onClick={this.showForm}>
-            {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario {this.state.dataEdit ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
-          </Button>
-        </div>
-        <form id="userForm">
-          <TextField
-            required
-            name="code"
-            onChange={this.handleChange}
-            value={this.state.code}
-            label="Código"
-            margin="normal"
-          />
-          <TextField
-            required
-            name="first_name"
-            label="Nombre"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.first_name}
-          />
-          <TextField
-            name="identification_number"
-            label="Documento"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.identification_number}
-          />
-          <TextField
-            required
-            name="username"
-            label="Correo electrónico"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.username}
-          />
-          <TextField
-            required
-            name="phone_number"
-            label="Teléfono"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.phone_number}
-          />
-          <TextField
-            required
-            type="password"
-            name="password1"
-            label="Contraseña"
-            margin="normal"
-            onChange={this.handleChange}
-            value={this.state.passwordConfirm}
-          />
-          <FormControl>
-            <TextField
-              required
-              type="password"
-              name="password"
-              label="Confirme contraseña"
+      <div id="userForm-cu" className="create-update">
+        <div className="create-update-form">
+
+          <div className="title-modal">
+              {this.state.idUser ? 'Editar' : 'Crear'} usuario
+          </div>
+            
+          <form autocomplete="off" id="userForm" >
+            <TextField required
+              name="code"
+              onChange={this.handleChange}
+              value={this.state.code}
+              label="Código"
+              margin="normal"
+              className="col-md-4 col-xs-4"
+              error={this.state.errors.code} 
+              helperText={this.state.errors.code && 'Este campo es requerido.'}
+            />
+            <TextField required
+              name="first_name"
+              label="Nombre"
               margin="normal"
               onChange={this.handleChange}
-              value={this.state.password}
+              value={this.state.first_name}
+              className="col-md-4 col-xs-8"
+              error={this.state.errors.first_name} 
+              helperText={this.state.errors.first_name && 'Este campo es requerido.'}
             />
-            {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
-          </FormControl>
-          <FormControl margin="normal">
-            <InputLabel id="groups">Tipo usuario</InputLabel>
-            <Select
-              labelId="groups"
+            <TextField required
+              name="identification_number"
+              label="Documento"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.identification_number}
+              className="col-md-4 col-xs-4"
+              error={this.state.errors.identification_number} 
+              helperText={this.state.errors.identification_number && 'Este campo es requerido.'}
+            />
+            <TextField required
+              name="username"
+              label="Correo electrónico"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.username}
+              className="col-md-4 col-xs-8"
+              error={this.state.errors.username} 
+              helperText={this.state.errors.username && 'Este campo es requerido.'}
+            />
+            <TextField required
+              name="phone_number"
+              label="Teléfono"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.phone_number}
+              className="col-md-4 col-xs-6"
+              error={this.state.errors.phone_number} 
+              helperText={this.state.errors.phone_number && 'Este campo es requerido.'}
+            />
+            <TextField required
+              select
+              label="Tipo usuario"
               name="groups"
               onChange={this.handleChange}
-            // value={this.props.selectUpdate ? this.props.selectUpdate.user.groups : null}
-            >
-              {this.state.dataGroups.map(groups => (
-                <MenuItem
-                  value={groups.id}
-                >{groups.name}</MenuItem>
+              defaultValue={this.state.groups}
+              margin="normal"
+              className="col-md-4 col-xs-6"
+              error={this.state.errors.groups}
+              helperText={this.state.errors.groups && 'Este campo es requerido.'}
+              >
+              {this.props.dataGroups.map(groups => (
+                <MenuItem value={groups.id} >
+                  {groups.name}
+                </MenuItem>
               ))}
-            </Select>
-          </FormControl>
-          <br /><br /><br />
-          <div className="text-center">
-            <Button variant="contained" color="secondary" onClick={this.clear}>
-              Limpiar
-            </Button>
-            <Button variant="contained" color="primary" onClick={this.state.dataEdit ? this.update : this.save}>
-              {this.state.dataEdit ? 'Guardar' : 'Crear Usuario'}
-            </Button>
-          </div>
-        </form>
+            </TextField>
+            <TextField required
+              type={this.state.showPassword ? "text" : "password"}
+              name="password1"
+              label="Contraseña"
+              margin="normal"
+              onChange={this.handleChange}
+              value={this.state.passwordConfirm}
+              className="col-md-6 col-xs-6"
+              error={this.state.errors.password1} 
+              helperText={this.state.errors.password1 && 'Este campo es requerido.'}
+              InputProps={{
+                endAdornment:(
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => this.setState({showPassword:!this.state.showPassword})}
+                    >
+                      {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+            <FormControl className="col-md-6 col-xs-6">
+              <TextField
+                required
+                type={this.state.showConfirmPassword ? "text" : "password"}
+                name="password"
+                label="Confirme contraseña"
+                margin="normal"
+                onChange={this.handleChange}
+                value={this.state.password}
+                InputProps={{
+                  endAdornment:(
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => this.setState({showConfirmPassword:!this.state.showConfirmPassword})}
+                      >
+                        {this.state.showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+              {this.state.passDiff ? <FormHelperText error >La contraseña no coincide.</FormHelperText> : ''}
+            </FormControl>
+            <div className="text-center container-button">
+              <Button variant="contained" onClick={this.clear}>
+                Cancelar
+              </Button>
+              <Button variant="contained" color="secondary" onClick={this.addUser}>
+                Guardar
+              </Button>
+            </div>
+          </form>
 
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          open={this.state.activeDialog}
-          autoHideDuration={3000}
-          color="secondary"
-          onClose={this.handleClose}
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          message={<span id="message-id">{this.state.messageAlert}</span>}
-        />
+          <Snackbar
+            open={this.state.alert.open}
+            autoHideDuration={4000}
+            onClose={() => 
+              this.setState({alert: {open: false}})
+            }
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            anchorOrigin= {{ 
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+          >
+            <Alert variant="filled" severity={this.state.alert.type}>{this.state.alert.message}</Alert>
+          </Snackbar>
+        </div>
+        
       </div>
     );
   }

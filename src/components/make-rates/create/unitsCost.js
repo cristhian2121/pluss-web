@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Grid from '@material-ui/core/Grid';
-
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -8,59 +6,89 @@ import Chip from '@material-ui/core/Chip';
 
 export const UnitsCost = (props) => {
 
-
     const [units, setUnits] = useState(() => props.preUnits || [])
+    const [errors, setErrors] = useState(false)
 
     const handleAddUnits = () => {
-        console.log('handleAddUnits: ', document.querySelector(`#unit`));
         const $unit = document.querySelector(`#unit`)
-        if ($unit) {
+
+        setErrors(false)
+
+        if (validate($unit)) {
             const unit = $unit.value
             const _units = [...units, unit]
             setUnits(units => [...units, unit]);
             props.handleAddUnit(_units)
             document.querySelector(`#unit`).value = ''
+        }else {
+            // setOblUnit(true)
         }
     }
 
     const handleDelete = unitToDelete => () => {
-      let del = units.indexOf(unitToDelete)
-      if (del !== -1) {
-        units.splice(del, 1)
-        props.handleAddUnit(units)
-      }
+        if (props.products && !props.products.length) {
+            let del = units.indexOf(unitToDelete)
+            if (del !== -1) {
+              units.splice(del, 1)
+              props.handleAddUnit(units)
+            }
+        }else {
+            setErrors({cant: true})
+        }
     };
 
+    const validate = (e) => {
+        if (props.products && props.products.length) {
+            setErrors({cant: true})
+            return false
+        }
+        else if (!e.value) {
+            setErrors({obl: true})
+            return false
+        }
+
+        return true
+    }
+
+    // const clearAlert = () => {
+    //     setOblUnit(false)
+    // }
+
     return (
-        <>
-            <Grid container spacing={3} >
-                <Grid item md={2} className="unit">
-                    <TextField
-                        id={'unit'}
-                        name={'unit'}
-                        label="Unidades"
+        <div className="row form-units">  
+            <div className="col-md-3 col-xs-12">
+                <TextField
+                    id={'unit'}
+                    name={'unit'}
+                    label="Unidades"
+                    className="col-12"
+                />
+                {errors.obl &&
+                    <div class="lbl-error" >
+                        Debe ingresar una unidad válida.
+                    </div>
+                }
+                {errors.cant &&
+                    <div class="lbl-error" >
+                        No puede modificar las unidades porque hay productos agregados.
+                    </div>
+                }
+            </div>
+            <Button className="col-md-1 col-xs-2 button-more-units" onClick={handleAddUnits}>
+                <AddCircleIcon />
+            </Button>
+            {/* Mostrar unidades */}
+            <div className="col-md-8 col-xs-12 margin-component">
+                {units.map(unit => (
+                    <Chip
+                        key={unit}
+                        label={unit}
+                        onDelete={handleDelete(unit)}
+                        color="primary"
+                        variant="outlined"
                     />
-                </Grid>
-                <Grid item md={2}>
-                    <Button color="primary" onClick={handleAddUnits}>
-                        Agregar <AddCircleIcon />
-                    </Button>
-                </Grid>
-                {/* Mostrar unidades */}
-                <div>
-                    <br/>
-                    {units.map(unit => (
-                        <Chip
-                            key={unit}
-                            label={unit}
-                            onDelete={handleDelete(unit)}
-                            color="primary"
-                            variant="outlined"
-                        />
-                        // <span key={unit} style={{ paddingRight: '1em' }}>{unit},</span>
-                    ))}
-                </div>
-            </Grid>
-        </>
+                ))}
+            </div>
+        </div>
     )
 }
