@@ -56,12 +56,15 @@ export const UnitsCost = (props) => {
 
     return (
         <div className="row form-units">  
-            <div className="col-md-3 col-xs-12">
+            <div className="col-md-3 col-sm-12 input-unit">
                 <TextField
                     id={'unit'}
                     name={'unit'}
                     label="Unidades"
-                    className="col-12"
+										className="col-12"
+										onKeyPress={(event) => {
+											(event.key === "Enter") && handleAddUnits()
+										}}
                 />
                 {errors.obl &&
                     <div class="lbl-error" >
@@ -74,11 +77,11 @@ export const UnitsCost = (props) => {
                     </div>
                 }
             </div>
-            <Button className="col-md-1 col-xs-2 button-more-units" onClick={handleAddUnits}>
+            <Button className="col-md-1 col-sm-2 button-more-units" onClick={handleAddUnits}>
                 <AddCircleIcon />
             </Button>
             {/* Mostrar unidades */}
-            <div className="col-md-8 col-xs-12 margin-component">
+            <div className="col-md-8 col-sm-12 margin-component">
                 {units.map(unit => (
                     <Chip
                         key={unit}

@@ -121,6 +121,9 @@ function IntegrationNotistack() {
             name="username"
             autoComplete="username"
             autoFocus
+            onKeyPress={(event) => {
+              (event.key === "Enter") && login(event)
+            }}
           />
           <TextField
             variant="outlined"
@@ -143,6 +146,9 @@ function IntegrationNotistack() {
                   </IconButton>
                 </InputAdornment>
               )
+            }}
+            onKeyPress={(event) => {
+              (event.key === "Enter") && login(event)
             }}
           />
           {/* <FormControlLabel

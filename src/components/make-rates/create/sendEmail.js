@@ -53,7 +53,7 @@ export const SendEmail = (props) => {
                         name="subject"
                         label="Asunto"
                         margin="normal"
-                        className="col-md-6 col-xs-12"
+                        className="col-md-6 col-sm-12"
                         error={errors.subject}
                         helperText={errors.subject && 'Este campo es requerido.'}
                     />
@@ -62,7 +62,7 @@ export const SendEmail = (props) => {
                         name="send_copy"
                         label="Enviar copia"
                         margin="normal"
-                        className="col-md-6 col-xs-12"
+                        className="col-md-6 col-sm-12"
                     />
                     <TextField
                         id='message'
@@ -70,7 +70,7 @@ export const SendEmail = (props) => {
                         multiline
                         rowsMax="4"
                         label="Observaciones"
-                        className="col-md-12 col-xs-12"
+                        className="col-md-12 col-sm-12"
                         margin="normal"
                         error={errors.message}
                         helperText={errors.message && 'Este campo es requerido.'}

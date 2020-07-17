@@ -211,10 +211,10 @@ export class User extends Component {
         return (
           <div>
             <div className="title row">
-              <div className="title-text col-md-6 col-xs-12">
+              <div className="title-text col-6">
                 Usuarios
               </div>
-              <div className="action-title col-md-6 col-xs-12">
+              <div className="action-title col-6">
                 <span className="text" onClick={this.showForm}>
                   {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario
                   <Button className="button-more" onClick={this.showForm}> <AddCircleIcon/>  </Button>

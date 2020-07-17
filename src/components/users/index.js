@@ -33,7 +33,7 @@ export class Create extends Component {
       idUser: props.selectUpdate.user ? props.selectUpdate.id : null,
       code: props.selectUpdate.user ? props.selectUpdate.code : null,
       first_name: props.selectUpdate.user ? props.selectUpdate.user.first_name : null,
-      identification_number: props.selectUpdate.identification_number,
+      identification_number: props.selectUpdate.identification_number? props.selectUpdate.identification_number : null,
       username: props.selectUpdate.user ? props.selectUpdate.user.username : null,
       phone_number: props.selectUpdate ? props.selectUpdate.phone_number : null,
       password: null,
@@ -154,7 +154,7 @@ export class Create extends Component {
               value={this.state.code}
               label="Código"
               margin="normal"
-              className="col-md-4 col-xs-4"
+              className="col-md-4 col-sm-4"
               error={this.state.errors.code} 
               helperText={this.state.errors.code && 'Este campo es requerido.'}
             />
@@ -164,7 +164,7 @@ export class Create extends Component {
               margin="normal"
               onChange={this.handleChange}
               value={this.state.first_name}
-              className="col-md-4 col-xs-8"
+              className="col-md-4 col-sm-8"
               error={this.state.errors.first_name} 
               helperText={this.state.errors.first_name && 'Este campo es requerido.'}
             />
@@ -174,7 +174,7 @@ export class Create extends Component {
               margin="normal"
               onChange={this.handleChange}
               value={this.state.identification_number}
-              className="col-md-4 col-xs-4"
+              className="col-md-4 col-sm-4"
               error={this.state.errors.identification_number} 
               helperText={this.state.errors.identification_number && 'Este campo es requerido.'}
             />
@@ -184,7 +184,7 @@ export class Create extends Component {
               margin="normal"
               onChange={this.handleChange}
               value={this.state.username}
-              className="col-md-4 col-xs-8"
+              className="col-md-4 col-sm-8"
               error={this.state.errors.username} 
               helperText={this.state.errors.username && 'Este campo es requerido.'}
             />
@@ -194,7 +194,7 @@ export class Create extends Component {
               margin="normal"
               onChange={this.handleChange}
               value={this.state.phone_number}
-              className="col-md-4 col-xs-6"
+              className="col-md-4 col-sm-6"
               error={this.state.errors.phone_number} 
               helperText={this.state.errors.phone_number && 'Este campo es requerido.'}
             />
@@ -205,7 +205,7 @@ export class Create extends Component {
               onChange={this.handleChange}
               defaultValue={this.state.groups}
               margin="normal"
-              className="col-md-4 col-xs-6"
+              className="col-md-4 col-sm-6"
               error={this.state.errors.groups}
               helperText={this.state.errors.groups && 'Este campo es requerido.'}
               >
@@ -222,7 +222,7 @@ export class Create extends Component {
               margin="normal"
               onChange={this.handleChange}
               value={this.state.passwordConfirm}
-              className="col-md-6 col-xs-6"
+              className="col-md-6 col-sm-6"
               error={this.state.errors.password1} 
               helperText={this.state.errors.password1 && 'Este campo es requerido.'}
               InputProps={{
@@ -238,7 +238,7 @@ export class Create extends Component {
                 )
               }}
             />
-            <FormControl className="col-md-6 col-xs-6">
+            <FormControl className="col-md-6 col-sm-6">
               <TextField
                 required
                 type={this.state.showConfirmPassword ? "text" : "password"}
