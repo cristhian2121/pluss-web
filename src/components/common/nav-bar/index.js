@@ -58,7 +58,6 @@ const useStyles = makeStyles(theme => ({
   },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0,
     whiteSpace: "nowrap"
   },
   drawerOpen: {
@@ -114,8 +113,9 @@ export const Menu = ({ children }) => {
   }
 
   return (
-    <div className={classes.root} id="nav-var-pluss">
-      <Drawer
+    <div className="flex" id="nav-var-pluss">
+      <div className="">
+        <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
@@ -183,7 +183,9 @@ export const Menu = ({ children }) => {
           </Tooltip>            
         </div>
       </Drawer>
-      <main className={classes.content}>
+      </div>
+
+      <main className="view">
         <div className={classes.toolbar} />
         {children}
       </main>
