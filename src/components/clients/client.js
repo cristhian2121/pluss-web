@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import { CreateClient } from './createClient'
 import { ClientList } from './clientList'
 import config from '../../config'
+import { assembleUrlPage } from '../../utils/pagination-utils'
 
 export class Clients extends React.Component {
   constructor(props) {
@@ -20,23 +21,29 @@ export class Clients extends React.Component {
         message: '',
         type: '',
       },
-      openCreateUpdate: false
+      openCreateUpdate: false,
+      clientsCount: 0
     }
     this.clientDelete = this.clientDelete.bind(this)
+    this.previousPage = null
+    this.nextPage = null
   }
 
   componentDidMount() {
     this.getClient()
   }
 
-  getClient() {
-    fetch(`${config.api_url}/client`)
+  getClient(params = '') {
+    fetch(`${config.api_url}/client${params}`)
       .then(response => {
         return response.json()
       })
       .then(res => {
+        this.previousPage = res.previous
+        this.nextPage = res.next        
         this.setState({
-          clients: res.results
+          clients: res.results,
+          clientsCount: res.count
         })
       })
       .catch(e => {
@@ -155,6 +162,11 @@ export class Clients extends React.Component {
     }
   }
 
+  handleChangePage = (forward) => {
+    const params = assembleUrlPage(forward, this.nextPage, this.previousPage)
+    this.getClient(params)
+  }
+
   render() {
 
     return (
@@ -165,23 +177,30 @@ export class Clients extends React.Component {
           </div>
           <div className="action-title col-md-6 col-sm-12">
             <span onClick={this.showForm} className="text">
-            Crear Cliente
-            <Button className="button-more" onClick={this.showForm}><AddCircleIcon/>  </Button>
+              Crear Cliente
+            <Button className="button-more" onClick={this.showForm}><AddCircleIcon />  </Button>
             </span>
           </div>
         </div>
 
         {
           this.state.openCreateUpdate &&
-          <CreateClient 
-          saveClient={this.saveClient}
-          clientUpdate={this.state.updateClient}
-          updateClient={this.updateClient}
-          cancelForm={this.showForm}
+          <CreateClient
+            saveClient={this.saveClient}
+            clientUpdate={this.state.updateClient}
+            updateClient={this.updateClient}
+            cancelForm={this.showForm}
           />
         }
 
-        <ClientList duplicateClient={this.saveClient} selectDelete={this.clientDelete} selectUpdate={this.selectUpdate} clientList={this.state.clients} />
+        <ClientList
+          duplicateClient={this.saveClient}
+          selectDelete={this.clientDelete}
+          selectUpdate={this.selectUpdate}
+          clientList={this.state.clients}
+          changePage={this.handleChangePage}
+          count={this.state.clientsCount}
+        />
 
         <Snackbar
           open={this.state.alert.open}

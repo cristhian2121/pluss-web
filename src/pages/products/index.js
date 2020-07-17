@@ -42,11 +42,25 @@ class Products extends PureComponent {
       query: `${conf.api_url}/product?referency_id=_referency_id`
     },
     {
-      id: 'colors',
-      type: 'input',
-      name: 'colors',
-      placeHolder: 'Color',
-      // query: `${conf.api_url}/product?referency_id`
+      id: 'provier_name',
+      type: 'select',
+      name: 'provier_name',
+      placeHolder: 'Proveedor',
+      data: [
+        {
+          value: 0,
+          text: 'Todos'
+        },
+        {
+          value: conf.PROVEEDORES.MPPROMOCIONALES,
+          text: conf.PROVEEDORES.MPPROMOCIONALES
+        },
+        {
+          value: conf.PROVEEDORES.PRUEBA,
+          text: conf.PROVEEDORES.PRUEBA
+        }
+      ],
+      query: `${conf.api_url}/product?provier_name=_provier_name`
     },
     {
       id: 'name',
@@ -142,7 +156,6 @@ class Products extends PureComponent {
   }
 
   afterFiltered = (newData) => {
-    console.log('newData: ', newData);
     if (newData.results) {
       this.setState({ dataProductsDisplay: newData.results })  
     } else{
@@ -169,6 +182,7 @@ class Products extends PureComponent {
         <br />
         <FiltersComponent fields={this.fieldsFilter}
           data={this.state.dataProducts}
+          nameFilter={'produtos'}
           external={this.externalQuery}
           dataFiltered={this.afterFiltered} />
         <br />

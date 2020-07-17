@@ -2,73 +2,91 @@ import React, { Component } from "react";
 
 import MaterialTable from 'material-table';
 
-import AlertDialog from '../common/confirm'
+import {
+  TableGeneric,
+  AlertDialog
+} from '../common/common'
+
 import conf from '../../config'
 
 export class List extends Component {
-    constructor(props){
-        super(props)
+  constructor(props) {
+    super(props)
+  }
+
+  actions = [
+    {
+      type: 'edit',
+      title: 'Editar usuario'
+    },
+    {
+      type: 'delete',
+      title: 'Eliminar usuario'
     }
+  ]
 
-    state = {
-        alert: {
-            open: false
-        },
-        columns: [
-            { title: 'codigo', field: 'code' },
-            { title: 'Nombre', field: 'user.first_name' },
-            { title: 'Correo electrónico', field: 'user.username' },
-            { title: 'Documento', field: 'identification_number' },
-            { title: 'Teléfono', field: 'phone_number'}
-        ],
-        dataUser: [],
-        showAlert: false,
-        selectRegisterDelete: null,
-    };
+  showConfirmation = (rowData) => {
+    this.setState({
+      showAlert: {
+        open: true,
+        option: 'delete'
+      },
+      selectRegisterDelete: rowData.user.id
+    })
+  }
 
-    render () {
-      return (
-        <div>            
-            <div className="sub-title">
-                <span className="text">
-                    Lista de usuarios
-                </span>
-            </div>
-            <MaterialTable
-                title=""
-                columns={this.state.columns}
-                data={this.props.userList}
-                actions={[
-                    {
-                      icon: 'edit',
-                      tooltip: 'Editar usuario',
-                      onClick: (event, rowData) => {
-                        this.props.selectUpdate(rowData)
-                      }
-                    },
-                    {
-                        icon: 'delete',
-                        tooltip: 'Eliminar usuario',
-                        onClick: (event, rowData) => {
-                          this.setState({
-                            showAlert: {
-                              open: true,
-                              option: 'delete'
-                            },
-                            selectRegisterDelete: rowData.user.id
-                          })
-                        }
-                    }
-                  ]}
-            />
+  state = {
+    alert: {
+      open: false
+    },
+    columns: [
+      { title: 'codigo', field: 'code' },
+      { title: 'Nombre', field: 'user.first_name' },
+      { title: 'Correo electrónico', field: 'user.username' },
+      { title: 'Documento', field: 'identification_number' },
+      { title: 'Teléfono', field: 'phone_number' }
+    ],
+    dataUser: [],
+    showAlert: false,
+    selectRegisterDelete: null,
+  };
 
-            <AlertDialog
-                open={this.state.showAlert.open}
-                option={this.state.showAlert.option}
-                close={() => this.setState({showAlert: !this.state.showAlert})}
-                confirm={() => this.props.selectDelete(this.state.selectRegisterDelete)}
-            />
+  handleChangePage = (forward) => {
+    this.props.changePage(forward)
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="sub-title">
+          <span className="text">
+            Lista de usuarios
+          </span>
         </div>
-      );
-    }
+        <TableGeneric
+          title=''
+          columns={this.state.columns}
+          data={this.props.userList}
+          actions={this.actions}
+          editItem={this.props.selectUpdate}
+          deleteItem={this.showConfirmation}
+          changePage={this.handleChangePage}
+          count={this.props.count}
+        />
+        {/* <MaterialTable
+          title=""
+          columns={this.state.columns}
+          data={this.props.userList}
+          actions={}
+        /> */}
+
+        <AlertDialog
+          open={this.state.showAlert.open}
+          option={this.state.showAlert.option}
+          close={() => this.setState({ showAlert: !this.state.showAlert })}
+          confirm={() => this.props.selectDelete(this.state.selectRegisterDelete)}
+        />
+      </div>
+    );
+  }
 }
