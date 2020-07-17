@@ -4,7 +4,7 @@
   height: 100%;
   z-index: 100;
   width: 100%;
-  display: none;
+  /* display: none; */
   border-radius: 5px;
   box-shadow: 0 0 20px -8px inset;
   padding: 10px;
@@ -26,21 +26,42 @@
   100% {opacity: 1; width: 100%;}
 } */
 
+/* .add-product:hover .action-add-product {
+  display: none;
+} */
+
+.action-add-product .delete-product button {
+  margin: 0 3px;
+}
+
 .add-product:hover .action-add-product {
   display: block;
 }
 
-.add-product:hover .action-add-product .delete-product{
-  display: flex;
-}
-
-.add-product:hover .action-add-product .delete-product {
+.add-product .action-add-product .delete-product {
   display: flex;
   height: inherit;
   align-items: center;
   justify-content: center;
 }
 
+.alert-edit-product {
+  font-weight: bold;
+  color: #db2929;
+  font-size: 1.5em;
+  background: #fff;
+}
+
+/* .add-product:hover .action-add-product .delete-product{
+  display: flex;
+} */
+/* 
+.action-add-product:hover .delete-product {
+  display: flex;
+  height: inherit;
+  align-items: center;
+  justify-content: center;
+} */
 
 .App {
   font-family: Roboto,-apple-system,Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -189,45 +210,6 @@
     text-decoration: none;
     top: 200px;
   }
-  
-  .action-add-product {
-    background: #0000004f;
-    position: absolute;
-    height: 100%;
-    z-index: 100;
-    width: 100%;
-    display: none;
-    border-radius: 5px;
-    box-shadow: 0 0 20px -8px inset;
-    padding: 10px;
-    /* -webkit-animation-name: fade-options; 
-    -webkit-animation-duration: 1s;
-    animation-name: fade-options;
-    animation-duration: 1s; */
-  }
-
-  /* Safari 4.0 - 8.0 */
-  /* @-webkit-keyframes fade-options {
-    0%   {opacity: 0; width: 0%;}
-    100% {opacity: 1; width: 100%;}
-  } */
-
-  /* Standard syntax */
-  /* @keyframes fade-options {
-    0%   {opacity: 0; width: 0%;}
-    100% {opacity: 1; width: 100%;}
-  } */
-
-  .add-product:hover .action-add-product {
-    display: block;
-  }
-
-  .add-product:hover .action-add-product .delete-product {
-    display: flex;
-    height: inherit;
-    align-items: center;
-    justify-content: center;
-  }
 
   /*************** Detail Products ***********/
 
@@ -280,6 +262,11 @@
 
 
 /**************** NAV-BAR ***************/
+
+div#nav-var-pluss {
+  display: flex;
+}
+
 .nav-bar-text {
   margin-left: 0 !important;
   color: #000000 !important;

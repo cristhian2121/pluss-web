@@ -81,7 +81,7 @@ export const GeneratePDFHook = (props) => {
         <div id='pdf'>
             {quotation && <div className="container-pdf">
                 <section>
-                    <div className="header-pdf col-12 d-flex">
+                    <div className="header-pdf col-md-12 col-sm-12 d-flex">
                         <div className="col-6 text-descripcion">
                             <p>Medellín, {quotation.quotationDate}</p><br />
                             <p>Señores:</p>

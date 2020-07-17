@@ -160,10 +160,10 @@ export class Clients extends React.Component {
     return (
       <>
         <div className="title row">
-          <div className="title-text col-md-6 col-xs-12">
+          <div className="title-text col-md-6 col-sm-12">
             Clientes
           </div>
-          <div className="action-title col-md-6 col-xs-12">
+          <div className="action-title col-md-6 col-sm-12">
             <span onClick={this.showForm} className="text">
             Crear Cliente
             <Button className="button-more" onClick={this.showForm}><AddCircleIcon/>  </Button>
