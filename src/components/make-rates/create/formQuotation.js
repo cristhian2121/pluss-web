@@ -15,6 +15,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 // Icons
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
@@ -75,8 +77,6 @@ export const FormQuotation = (props) => {
   const [dataClients, setDataClients] = useState([])
   const [dataUsers, setDataUsers] = useState([])
   const [status, setStatus] = useState("En progreso")
-  if (props.updateQuotation) console.log('SI', products);
-  else console.log('NO');
   const [selectUpdate, setSelectUpdate] = useState()
   const [clientSelectUpdate, setCientSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.client : null)
   const [userSelectUpdate, setUserSelectUpdate] = useState(props.updateQuotation ? props.updateQuotation.selectUpdate.user : null)
@@ -87,7 +87,8 @@ export const FormQuotation = (props) => {
   const [messageAlert, setMessageAlert] = useState('')
   const [typeAlert, setTypeAlert] = useState('')
   const [errors, setErrors] = useState({})
-
+  const [alert, setAlert] = useState({})
+  
   useEffect(() => {
     getClients()
     getUsers()
@@ -110,12 +111,20 @@ export const FormQuotation = (props) => {
   }
 
   const handleAddProduct = (_product) => {
-    setProducts(products => [...products, _product])
+    console.log('products: ', products);
+    const aux = [...products]
+    aux.push(_product)
+    setProducts(aux)
   }
 
   const handleRemoveProduct = (_product) => {
-    let productss = products.filter(item => item != _product)
-    setProducts(productss)
+    let newProduct = products.filter(item => item != _product)
+    setProducts(newProduct)
+  }
+
+  const handleUpdateProduct = (_product) => {
+    let newProduct = products.filter(item => item.id != _product.id)
+    setProducts([...newProduct, _product])
   }
 
   const validateProduct = products => {
@@ -243,7 +252,7 @@ export const FormQuotation = (props) => {
   const preEmail = () => {
     let data = generateData()
 
-    validate(data) && setOpenEmail(true)
+    validateSend(data) && setOpenEmail(true)
   }
 
   const confEmail = (dataEmail) => {
@@ -272,115 +281,155 @@ export const FormQuotation = (props) => {
     else return true
   }
 
+  const validateSend = (data) => {
+    let error = []
+    !data.client && error.push('client')
+    !data.user && error.push('user')
+
+    for (let index in data.products) {
+      if (!data.products[index].prices) {
+        setOpenAlert({
+          open:true,
+          message: 'Antes de finalizar debe editar los precios por unidad de los productos pendientes.',
+          type:'error'
+        })
+        error.push('productEdit')
+      }
+    }
+    
+    if (error.length > 0) {
+      let errors = {}
+      for (let item of error) {
+        errors[item] = true
+      }
+      setErrors(errors)
+      return false
+    }
+    else return true    
+  }
+
+  const openPanelCreate = () => {
+    if(units.length > 0) {
+      setShowproductForm(!showproductForm)
+    }else{
+      setOpenAlert({
+        open:true,
+        message: 'Para agregar productos es necesario agregar las unidades.',
+        type:'error'
+      })
+    }      
+  }
+
   return (
     <div >
       <div>
+        {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert }} />}
         {openEmail && <SendEmail cancelEmail={cancelEmail} sendEmail={confEmail} />}
         <div className="title">
           Crear cotización
         </div>
         <div>
-          {/* 
+          
         <form id="quotationForm" className="form-quotation" >
-            <MuiPickersUtilsProvider  utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                disabled
-                className="col-md-4 col-xs-12"
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                name="quotationDate"
-                label="Fecha de cotización"
-                value={idSelectUpdate ? selectUpdate.date_created: selectedDate}
-                onChange={handleDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-            </MuiPickersUtilsProvider>
-            <TextField required
-              select
-              label="Cliente"
-              name="client"
-              onChange={getClients}
-              defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
-              className="col-md-4 col-xs-12"
+          <MuiPickersUtilsProvider  utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disabled
+              className="col-md-4 col-sm-12"
+              disableToolbar
+              variant="inline"
+              format="MM/dd/yyyy"
               margin="normal"
-              error={errors.client}
-              helperText={errors.client && 'Este campo es requerido.'}
-            >
-              {dataClients.map(clients => (
-                <MenuItem
-                  value={clients.id}
-                >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
-              ))}
-            </TextField> */}
+              id="date-picker-inline"
+              name="quotationDate"
+              label="Fecha de cotización"
+              value={idSelectUpdate ? selectUpdate.date_created: selectedDate}
+              onChange={handleDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </MuiPickersUtilsProvider>
+          <TextField required
+            select
+            label="Cliente"
+            name="client"
+            onChange={getClients}
+            defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
+            className="col-md-4 col-sm-12"
+            margin="normal"
+            error={errors.client}
+            helperText={errors.client && 'Este campo es requerido.'}
+          >
+            {dataClients.map(clients => (
+              <MenuItem
+                value={clients.id}
+              >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
+            ))}
+          </TextField>
 
           {/* segunda fila  */}
-          {/* <TextField required
-              select
-              label="Ejecutivo de ventas"
-              name="user"
-              onChange={getUsers}
-              defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
-              className="col-md-4 col-xs-12"
-              margin="normal"
-              error={errors.user}
-              helperText={errors.user && 'Este campo es requerido.'}
-            >
-              {dataUsers.map(users => (
-                <MenuItem
-                  value={users.id}
-                >{users.user.first_name}</MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              id="pay_format"
-              name="pay_format"
-              className="col-md-4 col-xs-12"
-              label="Formato de pago"
-              margin="normal"
-              value={idSelectUpdate ? selectUpdate.pay_format : null}
-              onChange={handleChange}
-            />
-            <TextField
-              id="delivery_time"
-              name="delivery_time"
-              className="col-md-4 col-xs-12"
-              label="Tiempo de entrega (Días)"
-              margin="normal"
-              value={idSelectUpdate ? selectUpdate.delivery_time : null}
-              onChange={handleChange}
-            />
-        </form> */}
+          <TextField required
+            select
+            label="Ejecutivo de ventas"
+            name="user"
+            onChange={getUsers}
+            defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
+            className="col-md-4 col-sm-12"
+            margin="normal"
+            error={errors.user}
+            helperText={errors.user && 'Este campo es requerido.'}
+          >
+            {dataUsers.map(users => (
+              <MenuItem
+                value={users.id}
+              >{users.user.first_name}</MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="pay_format"
+            name="pay_format"
+            className="col-md-4 col-sm-12"
+            label="Formato de pago"
+            margin="normal"
+            value={idSelectUpdate ? selectUpdate.pay_format : null}
+            onChange={handleChange}
+          />
+          <TextField
+            id="delivery_time"
+            name="delivery_time"
+            className="col-md-4 col-sm-12"
+            label="Tiempo de entrega (Días)"
+            margin="normal"
+            value={idSelectUpdate ? selectUpdate.delivery_time : null}
+            onChange={handleChange}
+          />
+        </form>
 
-          <div className="sub-title">
-            <span className="text">Unidades</span>
-          </div>
-
-          {/* Unidades */}
-          <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={units} />
-
-          <div className="sub-title">
-            <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={() => setShowproductForm(!showproductForm)}> <AddCircleIcon />  </Button>
-          </div>
-
-          {/* Anadir producto */}
-          { showproductForm &&
-            <>
-                <ProductForm 
-                  units={units} 
-                  productsE={products} 
-                  addProduct={handleAddProduct}
-                  removeProduct={handleRemoveProduct}                  
-                />
-            </>
-        }
-
+        {/* Unidades */}
+        <div className="sub-title">
+          <span className="text">Unidades</span>
         </div>
-        {redirectList && <Redirect to={{ pathname: '/cotizaciones', state: openAlert }} />}
+        <UnitsCost products={products} handleAddUnit={handleAddUnit} preUnits={units} />
+
+        {/* Anadir producto */}
+        <div className="sub-title">
+          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={openPanelCreate}> <AddCircleIcon />  </Button>
+        </div>
+        {/* { showproductForm && */}
+        <>
+            <ProductForm 
+              openCreate={showproductForm}
+              setOpenCreate={() => setShowproductForm(!showproductForm)}
+              units={units} 
+              productsE={products} 
+              addProduct={handleAddProduct}
+              removeProduct={handleRemoveProduct}
+              updateProduct={handleUpdateProduct}                
+            />
+        </>
+        {/* } */}
+
+      </div>
       </div>
       <div className="col-12 px-0 d-flex justify-content-end container-button">
         <Button variant="contained" color="secondary" type="submit" onClick={() => idSelectUpdate ? updateQuotation("En progreso") : saveQuotation("En progreso")}>
@@ -393,6 +442,18 @@ export const FormQuotation = (props) => {
           Finalizar
         </Button>
       </div>
+      <Snackbar
+        open={openAlert.open}
+        autoHideDuration={4000}
+        onClose={() => 
+          setOpenAlert({alert: {open: false}})
+        }
+        anchorOrigin= {{ 
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}>
+        <Alert variant="filled" severity={openAlert.type}>{openAlert.message}</Alert>
+      </Snackbar>
     </div>
   );
 }
