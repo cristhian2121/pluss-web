@@ -1,4 +1,7 @@
-import React from 'react'
+/*
+    Este Archivo tiene la información completa sobre cada producto de la cotización
+*/
+import React, {useEffect} from 'react'
 import '../../../styles/pdf.css'
 
 import Table from '@material-ui/core/Table';
@@ -16,7 +19,10 @@ import config from '../../../config'
 
 
 export const ProductPDF = ({ product, removeProduct, editProduct }) => {
-    console.log('product: ************', product);
+
+    useEffect(() => { 
+    	document.getElementById(product.id).style.display = product.prices ? 'none':'block'  
+    }, []);
 
     const formatCurrency = new Intl.NumberFormat('es-Co', {//"de-DE"
         style: 'currency',
@@ -26,20 +32,27 @@ export const ProductPDF = ({ product, removeProduct, editProduct }) => {
 
     return (
         <><br/><div className="product-section-pdf col-12 px-0">
-            <div className="action-add-product">
-                <div className="delete-product">
-                    <Fab color="primary" aria-label="edit" onClick={() => editProduct(product)} >
-                        <EditIcon />
-                    </Fab>
-                    <Fab color="primary" aria-label="delete" onClick={() => removeProduct(product)} >
-                        <DeleteIcon />
-                    </Fab>
+            <div className="action-add-product" id={product.id} >
+                <div className="delete-product d-flex flex-column align-items-center">
+                    {!product.prices && 
+                    <div className="alert-edit-product">
+                        Es necesario que edite los precios por unidad del producto.
+                    </div>
+                    }
+                    <br/>
+                    <div>
+                        <Fab color="secundary" className="button" aria-label="edit" onClick={() => editProduct(product)} >
+                            <EditIcon />
+                        </Fab>
+                        <Fab color="primary" className="button" xaria-label="delete" onClick={() => removeProduct(product)} >
+                            <DeleteIcon />
+                        </Fab>
+                    </div>
                 </div>
             </div>
 
             <div className="col-4 product-pdf">
-                <img src={`${config.api_products}${product.more_info.codigoProd}.
-                ${config.EXTENSION_IMAGE}`} className="product-image-pdf img-fluid"
+                <img src={product.image} className="product-image-pdf img-fluid"
                     alt="" />
             </div>
             <div className="col-8 px-1">

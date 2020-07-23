@@ -140,7 +140,7 @@ export class CreateClient extends React.Component {
               label="Nombre empresa" 
               value={this.state.name} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
               required 
               error={this.state.errors.name} 
@@ -152,7 +152,7 @@ export class CreateClient extends React.Component {
               label="Nit" 
               value={this.state.nit} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
               required 
               error={this.state.errors.nit} 
@@ -164,7 +164,7 @@ export class CreateClient extends React.Component {
               label="Nombre responsable" 
               value={this.state.agent} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
               required 
               error={this.state.errors.agent} 
@@ -176,7 +176,7 @@ export class CreateClient extends React.Component {
               label="Area responsable" 
               value={this.state.dependece} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
               required 
               error={this.state.errors.dependece} 
@@ -188,7 +188,7 @@ export class CreateClient extends React.Component {
               label="Correo electrónico" 
               value={this.state.email} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
               required 
               error={this.state.errors.email} 
@@ -200,7 +200,7 @@ export class CreateClient extends React.Component {
               label="Teléfono" 
               value={this.state.phone} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
               required 
               error={this.state.errors.phone} 
@@ -212,7 +212,7 @@ export class CreateClient extends React.Component {
               label="Teléfono alternativo" 
               value={this.state.phone_two} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
             />
             <TextField 
@@ -221,7 +221,7 @@ export class CreateClient extends React.Component {
               label="Ciudad" 
               value={this.state.city} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
               required 
               error={this.state.errors.city} 
@@ -233,7 +233,7 @@ export class CreateClient extends React.Component {
               label="Dirección" 
               value={this.state.address} 
               onChange={this.handleChange} 
-              className="col-md-4 col-xs-12" 
+              className="col-md-4 col-sm-12" 
               margin="normal"
             />
 
