@@ -69,7 +69,6 @@ const setEditQuotation = (props) => {
 }
 
 export const FormQuotation = (props) => {
-  console.log('props: ', props)
   const objectInitialization = setEditQuotation(props)
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
@@ -343,7 +342,7 @@ export const FormQuotation = (props) => {
               id="date-picker-inline"
               name="quotationDate"
               label="Fecha de cotización"
-              value={idSelectUpdate ? selectUpdate.date_created: selectedDate}
+              value={selectUpdate ? selectUpdate.date_created: selectedDate}
               onChange={handleDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
@@ -355,7 +354,7 @@ export const FormQuotation = (props) => {
             label="Cliente"
             name="client"
             onChange={getClients}
-            defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
+            defaultValue={clientSelectUpdate ? clientSelectUpdate.id : ''}
             className="col-md-4 col-sm-12"
             margin="normal"
             error={errors.client}
@@ -363,6 +362,7 @@ export const FormQuotation = (props) => {
           >
             {dataClients.map(clients => (
               <MenuItem
+              key={clients.id}
                 value={clients.id}
               >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
             ))}
@@ -374,7 +374,7 @@ export const FormQuotation = (props) => {
             label="Ejecutivo de ventas"
             name="user"
             onChange={getUsers}
-            defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
+            defaultValue={userSelectUpdate ? userSelectUpdate.id : ''}
             className="col-md-4 col-sm-12"
             margin="normal"
             error={errors.user}
@@ -382,6 +382,7 @@ export const FormQuotation = (props) => {
           >
             {dataUsers.map(users => (
               <MenuItem
+              key={users.id}
                 value={users.id}
               >{users.user.first_name}</MenuItem>
             ))}
@@ -392,7 +393,7 @@ export const FormQuotation = (props) => {
             className="col-md-4 col-sm-12"
             label="Formato de pago"
             margin="normal"
-            value={idSelectUpdate ? selectUpdate.pay_format : null}
+            value={selectUpdate ? selectUpdate.pay_format : ''}
             onChange={handleChange}
           />
           <TextField
@@ -401,7 +402,7 @@ export const FormQuotation = (props) => {
             className="col-md-4 col-sm-12"
             label="Tiempo de entrega (Días)"
             margin="normal"
-            value={idSelectUpdate ? selectUpdate.delivery_time : null}
+            value={selectUpdate ? selectUpdate.delivery_time : ''}
             onChange={handleChange}
           />
         </form>
