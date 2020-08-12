@@ -34,6 +34,7 @@ export const ProductForm = (props) => {
 
     const handleAddProduct = () => {
         const product = buildProduct()
+        console.log('product adddd: ', product)
         // if (!validateProduct(product)) return
         if (validateProduct(product)) {
             product.id = getRandom()
@@ -54,8 +55,7 @@ export const ProductForm = (props) => {
             currentProduct.push(product)
             console.log('currentProduct enter: ', currentProduct)
             setProducts([...currentProduct])
-            props.updateProduct(product)           
-    
+            props.updateProduct(product)    
             clearForm()
         }
     }
