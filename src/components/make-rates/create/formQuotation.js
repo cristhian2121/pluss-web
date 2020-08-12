@@ -69,7 +69,7 @@ const setEditQuotation = (props) => {
 }
 
 export const FormQuotation = (props) => {
-  console.log('props: ', props)
+  console.log('props - FormQuotation: ', props)
   const objectInitialization = setEditQuotation(props)
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)
@@ -112,7 +112,6 @@ export const FormQuotation = (props) => {
   }
 
   const handleAddProduct = (_product) => {
-    console.log('products: ', products);
     const aux = [...products]
     aux.push(_product)
     setProducts(aux)

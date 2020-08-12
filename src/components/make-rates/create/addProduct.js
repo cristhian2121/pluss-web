@@ -187,7 +187,11 @@ export const ProductForm = (props) => {
         setidEditProduct(_product.id)
         setEditProduct(_product)
         setCostValue(_product.cost)
-        props.setOpenCreate(true)        
+        props.setOpenCreate(true)
+        setMarkValue(_product.costs.map(_ => _.mark))   
+        setDiscountValue(_product.costs.map(_ => _.discount))
+        setProfitablenessValue(_product.costs.map(_ => _.profitableness))
+        setTransportValue(_product.costs.map(_ => _.transport))
     }
 
     const showConfirmation = (product) => {
@@ -358,6 +362,7 @@ export const ProductForm = (props) => {
                           id={`discount${index}`}
                           name={`discount`}
                           label="Descuento"
+                          value={discountValue[index] ? discountValue[index] : ''}
                           onChange={event => handleChange(event, index)}
                           className="col-md-1 col-sm-12"
                           InputProps = {{
@@ -367,6 +372,7 @@ export const ProductForm = (props) => {
                       <TextField
                           id={`mark${index}`}
                           name={`mark`}
+                          value={markValue[index] ? markValue[index] : ''}
                           label="Precio de marcación (Unidad)"
                           onChange={event => handleChange(event, index)}
                           className="col-md-3 col-sm-12"
@@ -378,6 +384,7 @@ export const ProductForm = (props) => {
                           id={`profitableness${index}`}
                           name={`profitableness`}
                           label="Rentabilidad"
+                          value={profitablenessValue[index] ? profitablenessValue[index] : ''}
                           onChange={event => handleChange(event, index)}
                           className="col-md-1 col-sm-12"
                           InputProps = {{
@@ -388,6 +395,7 @@ export const ProductForm = (props) => {
                           id={`transport${index}`}
                           name={`transport`}
                           label="Transporte unitario"
+                          value={transportValue[index] ? transportValue[index] : ''}
                           onChange={event => handleChange(event, index)}
                           className="col-md-2 col-sm-12"
                           InputProps = {{
