@@ -65,7 +65,7 @@ class CreateQuotationHook extends Component {
   }
 
   createQuotation(data) {
-    this.props.createQuotation({ ...data })
+    this.props.quotationActions.createQuotation({ ...data })
     let dataEmail = data.email
 
     fetch(`${conf.api_url}/quotation/`, {

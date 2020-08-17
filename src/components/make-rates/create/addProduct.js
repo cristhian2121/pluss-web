@@ -184,14 +184,20 @@ export const ProductForm = (props) => {
     }
 
     const handleEditProduct = (_product) => {
+        const mark = _product.costs ? _product.costs.map(_ => _.mark): [];
+        const discount = _product.costs ? _product.costs.map(_ => _.discount) : [];
+        const profitableness = _product.costs ? _product.costs.map(_ => _.profitableness) : [];
+        const transport = _product.costs ? _product.costs.map(_ => _.transport) : [];
+
+
         setidEditProduct(_product.id)
         setEditProduct(_product)
         setCostValue(_product.cost)
         props.setOpenCreate(true)
-        setMarkValue(_product.costs.map(_ => _.mark))   
-        setDiscountValue(_product.costs.map(_ => _.discount))
-        setProfitablenessValue(_product.costs.map(_ => _.profitableness))
-        setTransportValue(_product.costs.map(_ => _.transport))
+        setMarkValue(mark)   
+        setDiscountValue(discount)
+        setProfitablenessValue(profitableness)
+        setTransportValue(transport)
     }
 
     const showConfirmation = (product) => {
