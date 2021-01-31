@@ -118,10 +118,10 @@ class Products extends PureComponent {
 
   productDetail = (dataProduct) => {
     if (dataProduct) {
-      // this.setState({
-      //   open: true,
-      //   detailProducts: dataProduct
-      // })
+      this.setState({
+        open: true,
+        detailProducts: dataProduct
+      })
     }
   }
 

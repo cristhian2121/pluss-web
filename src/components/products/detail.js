@@ -46,37 +46,38 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Detail(props) {
+export default function Detail({ selectDetail }) {
   const classes = useStyles();
-  const data = props.selectDetail;
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7}>
+        <img src={selectDetail.image} loading="lazy" />
+      </Grid>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}> 
+        <div className={classes.paper}>
           <Typography className="text-center" variant="h5">
-            {data.descripcion}
+            {selectDetail.descripcion}
           </Typography>
-          <span>Ref. {data.referencia}</span>
-          <br/>
-          <div>            
-            <span>Color:</span> {data.color} <br/>
-            <span>Material:</span> {data.material} <br/>
-            <span>Medidas:</span> {data.medidas} <br/>
-            <span>Marcas:</span> {data.areaImpresion} <br/>
+          <span>Código del producto. {selectDetail.cod_product}</span>
+          <br />
+          <div>
+            <span>Color:</span> {selectDetail.colors} <br />
+            <span>Material:</span> {selectDetail.material} <br />
+            <span>Medidas:</span> {selectDetail.size} <br />
+            <span>Marcas:</span> {selectDetail.prints} <br />
           </div>
           <Divider />
-          <br/>
+          <br />
           <div>
-            {data.descLarga}
+            {selectDetail.detail}
           </div>
 
-          <br/>
+          <br />
           <div>
-            {data.existencias} Unidades disponibles <br/>
-            Valor unitario ${data.vlrUnitario}
+            {selectDetail.inventory} Unidades disponibles <br />
+            Valor unitario ${selectDetail.cost}
           </div>
 
           <form className={classes.form} noValidate>

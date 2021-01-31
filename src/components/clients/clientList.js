@@ -1,5 +1,4 @@
 import React from 'react'
-import MaterialTable from 'material-table';
 
 import {
     AlertDialog,
@@ -7,7 +6,7 @@ import {
 } from '../common/common'
 
 export class ClientList extends React.Component {
-    constructor(props) {        
+    constructor(props) {
         super(props)
     }
 

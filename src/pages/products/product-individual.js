@@ -35,7 +35,8 @@ export const ProductIndividual = (props) => {
     return (
         <div className="pl-1 pr-1 pb-3 ">
             <div className="card" style={{ width: '16.5rem', height: '25rem' }}>
-                <img className="img-product" alt={props.product.name} src={`${config.api_products}${props.product.more_info.codigoProd}.${config.EXTENSION_IMAGE}`} />
+                {/* ${config.api_products}${props.product.more_info.codigoProd}.${config.EXTENSION_IMAGE} */}
+                <img className="img-product" alt={props.product.name} src={`${props.product.image}`} />
                 <div className="card-body card-body">
                     <div className="px-0 card-text text-common">
                         {props.product.detail}
