@@ -228,7 +228,7 @@ export class User extends Component {
                 Usuarios
               </div>
               <div className="action-title col-6">
-                <span className="text" onClick={this.showForm}>
+                <span className="text cursor-pointer" onClick={this.showForm}>
                   {this.state.dataEdit ? 'Editar' : 'Crear'} Usuario
                   <Button className="button-more" onClick={this.showForm}> <AddCircleIcon/>  </Button>
                 </span>
