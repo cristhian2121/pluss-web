@@ -243,11 +243,15 @@ export const ProductForm = (props) => {
     }
 
     const handleOverProcut = (_product) => {
-        document.getElementById(_product.id).style.display = 'block'
+        if(document.getElementById(_product.id)){
+            document.getElementById(_product.id).style.display = 'block'
+        }
     }
 
     const handleOutOverProduct = (_product) => {
-        document.getElementById(_product.id).style.display = _product.prices ? 'none' :'block'
+        if(document.getElementById(_product.id)){
+            document.getElementById(_product.id).style.display = _product.prices ? 'none' :'block'
+        }
     }
 
     return (
@@ -345,7 +349,7 @@ export const ProductForm = (props) => {
                 className="col-md-6 col-sm-12"
                 margin="normal"
                 value={editProduct ? editProduct.description:''}
-                onChange={editProduct && handleEditChange}
+                onChange={handleEditChange}
                 />
               <TextField
                 id='observation'
