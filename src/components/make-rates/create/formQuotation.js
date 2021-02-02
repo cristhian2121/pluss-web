@@ -69,7 +69,6 @@ const setEditQuotation = (props) => {
 }
 
 export const FormQuotation = (props) => {
-  console.log('props - FormQuotation: ', props)
   const objectInitialization = setEditQuotation(props)
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false)

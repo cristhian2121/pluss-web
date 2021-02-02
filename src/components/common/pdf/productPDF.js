@@ -21,7 +21,9 @@ import config from '../../../config'
 export const ProductPDF = ({ product, removeProduct, editProduct }) => {
 
     useEffect(() => { 
-    	document.getElementById(product.id).style.display = product.prices ? 'none':'block'  
+        if(document.getElementById(product.id)){
+            document.getElementById(product.id).style.display = product.prices ? 'none':'block'  
+        }
     }, []);
 
     const formatCurrency = new Intl.NumberFormat('es-Co', {//"de-DE"
