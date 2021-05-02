@@ -36,7 +36,7 @@ export const ProductIndividual = (props) => {
         <div className="pl-1 pr-1 pb-3 ">
             <div className="card" style={{ width: '16.5rem', height: '25rem' }}>
                 {/* ${config.api_products}${props.product.more_info.codigoProd}.${config.EXTENSION_IMAGE} */}
-                <img className="img-product" alt={props.product.name} src={`${props.product.image}`} />
+                <img className="img-product" alt={props.product.name} src={`${props.product.image_sm}`} />
                 <div className="card-body card-body">
                     <div className="px-0 card-text text-common">
                         {props.product.detail}
