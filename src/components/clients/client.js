@@ -53,7 +53,6 @@ export class Clients extends React.Component {
   }
 
   saveClient = (client) => {
-    console.log('client: ', client);
     fetch(`${config.api_url}/client/`,
       {
         method: 'POST',
@@ -64,16 +63,14 @@ export class Clients extends React.Component {
       }).then(res => res.json())
       .catch(error => console.log('Error saveClient: ', error))
       .then(response => {
-        console.log('response: ', response)
         this.setState({
-          clients: [...this.state.clients, client],
+          clients: [...this.state.clients, response],
           alert: {
             open: true,
             message: 'El cliente se creo correctamente.',
             type: 'success'
           }
         })
-        // this.clearForm()
         this.setState({
           openCreateUpdate: false
         })
@@ -81,9 +78,7 @@ export class Clients extends React.Component {
   }
 
   updateClient = (client) => {
-    console.log('client: ', client);
     let idClient = this.state.updateClient.id
-    console.log('idClient: ', idClient);
     fetch(`${config.api_url}/client/${idClient}/`,
       {
         method: 'PUT',
@@ -151,7 +146,6 @@ export class Clients extends React.Component {
   }
 
   showForm = (action) => {
-    console.log('action: ', action);
     this.setState({
       openCreateUpdate: !this.state.openCreateUpdate
     })
