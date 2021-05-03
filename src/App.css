@@ -126,9 +126,6 @@
 }
 
 .button-more {
-  padding: 0 !important;
-  margin: 0 !important;
-  min-width: auto !important;
   color: #000000;
 }
 
@@ -169,10 +166,6 @@
 
 .App-link {
   color: #09d3ac;
-}
-
-.cursor-pointer {
-  cursor: pointer;
 }
 
 .icon-size {

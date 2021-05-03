@@ -1,10 +1,12 @@
+@import './variables.css';
+
 .menuFilter {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 1.8rem;
     height: 1.9rem;
-    background: #fd080847;
+    background: var(--secondary-color);
     border-radius: 0.5rem;
     top: 17.5%;
     right: 2%;
@@ -16,7 +18,7 @@
 }
 
 .menuFilter:hover{
-    background: #fd080863;
+    background: var(--secondary-color-hover);
 }
 
 .checkboxFilter:checked~.menuFilter {
