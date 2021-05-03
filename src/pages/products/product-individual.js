@@ -35,7 +35,7 @@ export const ProductIndividual = ({
             <div>$ {product.cost} c/u</div>
             <div className={`icon-active ${selected ? "primary-color" : ""}`}>
               <Tooltip title="Agregar producto">
-                <AddCircleIcon className="primary-color"
+                <AddCircleIcon
                   className="icon-size"
                   onClick={() => {
                     addProduct(product);

@@ -427,7 +427,7 @@ export const ProductForm = (props) => {
                   Limpiar
               </Button>
               <Button color="primary" href="#new-product" onClick={editProduct ? handleUpdateProduct : handleAddProduct}>
-                  {editProduct ? 'Guardar producto' : 'Agregar producto'} <AddCircleIcon />
+                  {editProduct ? 'Guardar producto' : 'Agregar producto'} <AddCircleIcon className="icon-size" />
               </Button>
             </form>         
           }

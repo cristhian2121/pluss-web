@@ -174,7 +174,7 @@ class Products extends PureComponent {
             <div className="col-4 px-0 d-flex flex-row-reverse">
               {this.state.productsSelecteds.length}
               <span className="store-car" onClick={this.goToCreateQuotation}>
-                <LocalGroceryStoreIcon />
+                <LocalGroceryStoreIcon className="icon-size" />
               </span>
             </div>
           </div>

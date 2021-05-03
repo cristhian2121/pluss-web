@@ -138,11 +138,11 @@ function IntegrationNotistack() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
+                  <IconButton 
                     aria-label="toggle password visibility"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showPassword ? <Visibility className="icon-size" /> : <VisibilityOff className="icon-size" />}
                   </IconButton>
                 </InputAdornment>
               )

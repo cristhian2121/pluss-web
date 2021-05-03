@@ -414,7 +414,7 @@ export const FormQuotation = (props) => {
 
         {/* Anadir producto */}
         <div className="sub-title">
-          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={openPanelCreate}> <AddCircleIcon />  </Button>
+          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={openPanelCreate}> <AddCircleIcon className="icon-size" />  </Button>
         </div>
         {/* { showproductForm && */}
         <>
@@ -437,7 +437,7 @@ export const FormQuotation = (props) => {
           Guardar cotización
         </Button>
         <Button variant="contained" onClick={generatePDF}>
-          Vista previa PDF <PictureAsPdfIcon />
+          Vista previa PDF <PictureAsPdfIcon className="icon-size" />
         </Button>
         <Button variant="contained" type="submit" onClick={preEmail}>
           Finalizar

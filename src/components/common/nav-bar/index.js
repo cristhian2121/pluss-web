@@ -21,12 +21,6 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import {Redirect} from "react-router-dom";
 
 import AlertDialog from "../confirm"
-import PageNotFound from "../page-not-found";
-import { User } from "../../../pages/users/index";
-import { CreateQuotation } from "../../make-rates/create";
-import { MakeRate } from "../../make-rates/list/index";
-import { GeneratePDF } from '../pdf'
-import ListItemText from '@material-ui/core/ListItemText';
 
 
 const drawerWidth = 210;
@@ -131,7 +125,7 @@ export const Menu = ({ children }) => {
       >
         <div className="popo">
           <IconButton onClick={handleDrawerClose}>
-            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {open ? <ChevronLeftIcon className="icon-size" /> : <ChevronRightIcon className="icon-size" />}
           </IconButton>
           Hola {userSession}
         </div>
