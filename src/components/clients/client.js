@@ -172,7 +172,7 @@ export class Clients extends React.Component {
           <div className="action-title col-md-6 col-sm-12 cursor-pointer">
             <span onClick={this.showForm} className="text" onClick={this.showForm}>
               Crear Cliente
-            <Button className="button-more"><AddCircleIcon />  </Button>
+            <Button className="button-more"><AddCircleIcon className="icon-size" />  </Button>
             </span>
           </div>
         </div>

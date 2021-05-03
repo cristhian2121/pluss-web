@@ -140,27 +140,27 @@ export const Menu = ({ children }) => {
           {[
             {
               text: "Usuarios",
-              icon: <PeopleIcon />,
+              icon: <PeopleIcon className="icon-size" />,
               path: "/usuarios"
             },
             {
               text: "Crear cotización",
-              icon: <AssignmentIcon />,
+              icon: <AssignmentIcon className="icon-size" />,
               path: "/cotizaciones/crear"
             },
             {
               text: "Lista de cotizaciones",
-              icon: <AssignmentTurnedInIcon />,
+              icon: <AssignmentTurnedInIcon className="icon-size" />,
               path: "/cotizaciones"
             },
             {
               text: "Productos",
-              icon: <AddShoppingCartIcon />,
+              icon: <AddShoppingCartIcon className="icon-size" />,
               path: "/productos"
             },
             {
               text: "Clientes",
-              icon: <FaceIcon />,
+              icon: <FaceIcon className="icon-size" />,
               path: "/clientes"
             }
           ].map((section, index) => (
@@ -178,7 +178,7 @@ export const Menu = ({ children }) => {
         <div >
           <Tooltip title="Cerrar sesión" placement="right-start" variant="regular">
             <IconButton onClick={() => setShowAlert({open:true, option:'logout'})}>
-              <ExitToAppIcon />
+              <ExitToAppIcon className="icon-size" />
             </IconButton>
           </Tooltip>            
         </div>

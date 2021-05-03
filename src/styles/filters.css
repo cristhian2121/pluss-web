@@ -257,7 +257,7 @@
 }
 
 .button-label-secondary {
-    background-color: #db2929;
+    background-color: var(--primary-color);
     color: white;
     font-weight: bold;
     /* margin-right: 0.1rem; */
@@ -265,7 +265,7 @@
 
 .button-containedSecondary {
     color: #fff;
-    background-color: #db2929;
+    background-color: var(--primary-color);
 }
 
 

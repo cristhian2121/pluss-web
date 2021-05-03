@@ -1,3 +1,5 @@
+@import "./variables.css";
+
 p {
     margin-top: 0.15em;
     margin-bottom: 0.15em;
@@ -100,7 +102,7 @@ p {
 } */
 
 .quote-delivery span {
-    color: red;
+    color: var(--primary-color);
 }
 
 .quote-delivery p:not(:first-child) {

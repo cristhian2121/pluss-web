@@ -1,0 +1,18 @@
+:root {
+    --primary-color: rgba(64, 62, 151, 0.95);
+    --primary-color-hover: rgba(64, 62, 151, 0.7);
+    --secondary-color: rgba(61, 132, 184, 0.95);
+    --secondary-color-hover: rgba(61, 132, 184, 0.7);
+
+    --bg-color-ligth: rgb(253, 252, 242);
+    --bg-color-dark: rgba(54, 55, 33, 1);
+    
+    --text-size: 0.9em;
+    
+    /* _Icons */
+    --icon-size: scale(1.4);
+    --icon-size-hover: scale(1.5);
+    --icon-color: #908d8d;
+    --icon-color-active: rgb(212, 211, 193);
+
+}

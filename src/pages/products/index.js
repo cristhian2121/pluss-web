@@ -217,6 +217,8 @@ class Products extends PureComponent {
         <Dialog
           onClose={() => this.setState({ open: false })}
           open={this.state.open}
+          maxWidth='sm'
+          fullWidth={false}
         >
           <Detail selectDetail={this.state.detailProducts} />
         </Dialog>
