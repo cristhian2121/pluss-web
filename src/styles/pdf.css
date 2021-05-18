@@ -24,7 +24,7 @@ p {
 
 .image-logo-pdf {
     /* height: 100px; */
-    width: 65%;
+    width: 100%;
 }
 
 .header-pdf {
@@ -49,7 +49,7 @@ p {
 }
 
 .bar-head {
-    background-color: #ff0000 !important;
+    background-color: var(--primary-color);
     height: 1.5em;
 }
 
