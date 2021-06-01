@@ -56,7 +56,9 @@ export class Create extends Component {
     let elements = document.getElementById('userForm').elements;
     let data = {};
     for (let item of elements) {
-      data[item.name] = item.value;
+      if(item && item.name){
+        data[item.name] = item.value;
+      }
     }
     data.user = this.props.selectUpdate.user ? this.props.selectUpdate.user.id : ''
     data.type_identification = 'CC'

@@ -1,5 +1,4 @@
 import React from 'react'
-import MaterialTable from 'material-table';
 
 import {
     AlertDialog,
@@ -10,7 +9,7 @@ import {
 import { Dialog } from '@material-ui/core';
 
 export class ClientList extends React.Component {
-    constructor(props) {        
+    constructor(props) {
         super(props)
     }
 

@@ -6,8 +6,6 @@ import App from './App';
 
 // Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
-import $ from 'jquery';
-import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 // REDUX
@@ -31,5 +29,12 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
+process.on('exit', function(code) {
+  // do *NOT* do this
+  setTimeout(function() {
+    console.log('This will not run ***************************');
+  }, 0);
+  console.log('About to exit with code: ***********************', code);
+});
 // PWA off
 // serviceWorker.unregister();

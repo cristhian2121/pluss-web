@@ -118,10 +118,10 @@ class Products extends PureComponent {
 
   productDetail = (dataProduct) => {
     if (dataProduct) {
-      // this.setState({
-      //   open: true,
-      //   detailProducts: dataProduct
-      // })
+      this.setState({
+        open: true,
+        detailProducts: dataProduct
+      })
     }
   }
 
@@ -174,7 +174,7 @@ class Products extends PureComponent {
             <div className="col-4 px-0 d-flex flex-row-reverse">
               {this.state.productsSelecteds.length}
               <span className="store-car" onClick={this.goToCreateQuotation}>
-                <LocalGroceryStoreIcon />
+                <LocalGroceryStoreIcon className="icon-size" />
               </span>
             </div>
           </div>
@@ -217,6 +217,8 @@ class Products extends PureComponent {
         <Dialog
           onClose={() => this.setState({ open: false })}
           open={this.state.open}
+          maxWidth='sm'
+          fullWidth={false}
         >
           <Detail selectDetail={this.state.detailProducts} />
         </Dialog>

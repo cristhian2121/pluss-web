@@ -10,6 +10,7 @@
     "@material-ui/pickers": "^3.2.7",
     "bootstrap": "^4.4.1",
     "date-fns": "^2.0.0-beta.5",
+    "dayjs": "^1.10.4",
     "file-saver": "^2.0.2",
     "jquery": "^3.4.1",
     "material-table": "^1.54.1",
@@ -30,7 +31,34 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "indent": [
+        "error",
+        4
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "comma-dangle": [
+        "error",
+        "always"
+      ],
+      "no-cond-assign": [
+        "error",
+        "always"
+      ],
+      "no-console": "on"
+    }
   },
   "browserslist": {
     "production": [

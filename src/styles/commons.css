@@ -1,6 +1,8 @@
+@import "./variables.css";
+
 .text-expand{
     font-size: 1.1em;
-    color: #db2929;/*#97b10c;*/
+    color: var(--primary-color);/*#97b10c;*/
     text-align: right;
     font-weight: bold;
 }
@@ -11,7 +13,7 @@
 
 .messagge-validator {
     font-size: 0.8 em;
-    color: red;
+    color: var(--primary-color);
 }
 
 .MuiTable-root {
@@ -36,7 +38,7 @@
 
 /*************************** Style lists **********************/
 table:first-child td div button span.material-icons.MuiIcon-root {
-    background: #d22e2e;
+    background: var(--primary-color);
     border-radius: 50px;
     padding: 4px;
     font-size: 16px;
@@ -70,8 +72,8 @@ button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorInherit:hover sp
 }
 /*Alertas*/
 .MuiFormHelperText-root.Mui-error {
-    color: #f44336;
-    background: #f9d8d8;
+    color: var(--primary-color);
+    background: var(--secondary-color);
     padding: 5px !important;
     margin: 0 !important;
     font-size: 11.5px;
@@ -127,4 +129,8 @@ button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorInherit:hover sp
   .view {
     width: -webkit-fill-available;
     padding: 1.4em;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

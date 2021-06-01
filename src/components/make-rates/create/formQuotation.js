@@ -111,7 +111,6 @@ export const FormQuotation = (props) => {
   }
 
   const handleAddProduct = (_product) => {
-    console.log('products: ', products);
     const aux = [...products]
     aux.push(_product)
     setProducts(aux)
@@ -342,7 +341,7 @@ export const FormQuotation = (props) => {
               id="date-picker-inline"
               name="quotationDate"
               label="Fecha de cotización"
-              value={idSelectUpdate ? selectUpdate.date_created: selectedDate}
+              value={selectUpdate ? selectUpdate.date_created: selectedDate}
               onChange={handleDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
@@ -354,7 +353,7 @@ export const FormQuotation = (props) => {
             label="Cliente"
             name="client"
             onChange={getClients}
-            defaultValue={clientSelectUpdate ? clientSelectUpdate.id : null}
+            defaultValue={clientSelectUpdate ? clientSelectUpdate.id : ''}
             className="col-md-4 col-sm-12"
             margin="normal"
             error={errors.client}
@@ -362,6 +361,7 @@ export const FormQuotation = (props) => {
           >
             {dataClients.map(clients => (
               <MenuItem
+              key={clients.id}
                 value={clients.id}
               >{clients.nit} | {clients.name} | {clients.agent} | {clients.dependece} </MenuItem>
             ))}
@@ -373,7 +373,7 @@ export const FormQuotation = (props) => {
             label="Ejecutivo de ventas"
             name="user"
             onChange={getUsers}
-            defaultValue={userSelectUpdate ? userSelectUpdate.id : null}
+            defaultValue={userSelectUpdate ? userSelectUpdate.id : ''}
             className="col-md-4 col-sm-12"
             margin="normal"
             error={errors.user}
@@ -381,6 +381,7 @@ export const FormQuotation = (props) => {
           >
             {dataUsers.map(users => (
               <MenuItem
+              key={users.id}
                 value={users.id}
               >{users.user.first_name}</MenuItem>
             ))}
@@ -391,7 +392,7 @@ export const FormQuotation = (props) => {
             className="col-md-4 col-sm-12"
             label="Formato de pago"
             margin="normal"
-            value={idSelectUpdate ? selectUpdate.pay_format : null}
+            value={selectUpdate ? selectUpdate.pay_format : ''}
             onChange={handleChange}
           />
           <TextField
@@ -400,7 +401,7 @@ export const FormQuotation = (props) => {
             className="col-md-4 col-sm-12"
             label="Tiempo de entrega (Días)"
             margin="normal"
-            value={idSelectUpdate ? selectUpdate.delivery_time : null}
+            value={selectUpdate ? selectUpdate.delivery_time : ''}
             onChange={handleChange}
           />
         </form>
@@ -413,7 +414,7 @@ export const FormQuotation = (props) => {
 
         {/* Anadir producto */}
         <div className="sub-title">
-          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={openPanelCreate}> <AddCircleIcon />  </Button>
+          <span className="text">Productos</span> <Button href="#addProductForm" className="button-more" onClick={openPanelCreate}> <AddCircleIcon className="icon-size" />  </Button>
         </div>
         {/* { showproductForm && */}
         <>
@@ -436,7 +437,7 @@ export const FormQuotation = (props) => {
           Guardar cotización
         </Button>
         <Button variant="contained" onClick={generatePDF}>
-          Vista previa PDF <PictureAsPdfIcon />
+          Vista previa PDF <PictureAsPdfIcon className="icon-size" />
         </Button>
         <Button variant="contained" type="submit" onClick={preEmail}>
           Finalizar

@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react'
-
-import Button from '@material-ui/core/Button';
-
+// Styles
 import '../../../styles/filters.css'
 
 /**

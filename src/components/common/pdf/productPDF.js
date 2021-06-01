@@ -21,7 +21,9 @@ import config from '../../../config'
 export const ProductPDF = ({ product, removeProduct, editProduct }) => {
 
     useEffect(() => { 
-    	document.getElementById(product.id).style.display = product.prices ? 'none':'block'  
+        if(document.getElementById(product.id)){
+            document.getElementById(product.id).style.display = product.prices ? 'none':'block'  
+        }
     }, []);
 
     const formatCurrency = new Intl.NumberFormat('es-Co', {//"de-DE"
@@ -42,10 +44,10 @@ export const ProductPDF = ({ product, removeProduct, editProduct }) => {
                     <br/>
                     <div>
                         <Fab color="secundary" className="button" aria-label="edit" onClick={() => editProduct(product)} >
-                            <EditIcon />
+                            <EditIcon className="icon-size" />
                         </Fab>
                         <Fab color="primary" className="button" xaria-label="delete" onClick={() => removeProduct(product)} >
-                            <DeleteIcon />
+                            <DeleteIcon className="icon-size" />
                         </Fab>
                     </div>
                 </div>

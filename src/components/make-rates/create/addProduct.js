@@ -34,6 +34,7 @@ export const ProductForm = (props) => {
 
     const handleAddProduct = () => {
         const product = buildProduct()
+        console.log('product adddd: ', product)
         // if (!validateProduct(product)) return
         if (validateProduct(product)) {
             product.id = getRandom()
@@ -54,8 +55,7 @@ export const ProductForm = (props) => {
             currentProduct.push(product)
             console.log('currentProduct enter: ', currentProduct)
             setProducts([...currentProduct])
-            props.updateProduct(product)           
-    
+            props.updateProduct(product)    
             clearForm()
         }
     }
@@ -184,10 +184,20 @@ export const ProductForm = (props) => {
     }
 
     const handleEditProduct = (_product) => {
+        const mark = _product.costs ? _product.costs.map(_ => _.mark): [];
+        const discount = _product.costs ? _product.costs.map(_ => _.discount) : [];
+        const profitableness = _product.costs ? _product.costs.map(_ => _.profitableness) : [];
+        const transport = _product.costs ? _product.costs.map(_ => _.transport) : [];
+
+
         setidEditProduct(_product.id)
         setEditProduct(_product)
         setCostValue(_product.cost)
-        props.setOpenCreate(true)        
+        props.setOpenCreate(true)
+        setMarkValue(mark)   
+        setDiscountValue(discount)
+        setProfitablenessValue(profitableness)
+        setTransportValue(transport)
     }
 
     const showConfirmation = (product) => {
@@ -233,11 +243,15 @@ export const ProductForm = (props) => {
     }
 
     const handleOverProcut = (_product) => {
-        document.getElementById(_product.id).style.display = 'block'
+        if(document.getElementById(_product.id)){
+            document.getElementById(_product.id).style.display = 'block'
+        }
     }
 
     const handleOutOverProduct = (_product) => {
-        document.getElementById(_product.id).style.display = _product.prices ? 'none' :'block'
+        if(document.getElementById(_product.id)){
+            document.getElementById(_product.id).style.display = _product.prices ? 'none' :'block'
+        }
     }
 
     return (
@@ -335,7 +349,7 @@ export const ProductForm = (props) => {
                 className="col-md-6 col-sm-12"
                 margin="normal"
                 value={editProduct ? editProduct.description:''}
-                onChange={editProduct && handleEditChange}
+                onChange={handleEditChange}
                 />
               <TextField
                 id='observation'
@@ -358,6 +372,7 @@ export const ProductForm = (props) => {
                           id={`discount${index}`}
                           name={`discount`}
                           label="Descuento"
+                          value={discountValue[index] ? discountValue[index] : ''}
                           onChange={event => handleChange(event, index)}
                           className="col-md-1 col-sm-12"
                           InputProps = {{
@@ -367,6 +382,7 @@ export const ProductForm = (props) => {
                       <TextField
                           id={`mark${index}`}
                           name={`mark`}
+                          value={markValue[index] ? markValue[index] : ''}
                           label="Precio de marcación (Unidad)"
                           onChange={event => handleChange(event, index)}
                           className="col-md-3 col-sm-12"
@@ -378,6 +394,7 @@ export const ProductForm = (props) => {
                           id={`profitableness${index}`}
                           name={`profitableness`}
                           label="Rentabilidad"
+                          value={profitablenessValue[index] ? profitablenessValue[index] : ''}
                           onChange={event => handleChange(event, index)}
                           className="col-md-1 col-sm-12"
                           InputProps = {{
@@ -388,6 +405,7 @@ export const ProductForm = (props) => {
                           id={`transport${index}`}
                           name={`transport`}
                           label="Transporte unitario"
+                          value={transportValue[index] ? transportValue[index] : ''}
                           onChange={event => handleChange(event, index)}
                           className="col-md-2 col-sm-12"
                           InputProps = {{
@@ -409,7 +427,7 @@ export const ProductForm = (props) => {
                   Limpiar
               </Button>
               <Button color="primary" href="#new-product" onClick={editProduct ? handleUpdateProduct : handleAddProduct}>
-                  {editProduct ? 'Guardar producto' : 'Agregar producto'} <AddCircleIcon />
+                  {editProduct ? 'Guardar producto' : 'Agregar producto'} <AddCircleIcon className="icon-size" />
               </Button>
             </form>         
           }

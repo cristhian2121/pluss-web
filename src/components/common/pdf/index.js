@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Logo from '../../../static/logo_pop_litle.png'
+import Logo from '../../../static/Logo.png'
 import conf from '../../../config'
 
 // Components
@@ -142,7 +142,7 @@ export const GeneratePDFHook = (props) => {
                             <div className="sub-title-pdf text-center">Información de contacto</div><br />
                             <p>{quotation.user.first_name}</p>
                             <p>Ventas</p>
-                            <p>PLUSS P.O.P S.A.S</p>
+                            <p>KAVENTAS</p>
                             <p>Email: {quotation.user.email}</p>
                             <p>Cel: {quotation.user.phone_number}</p>
                         </div>

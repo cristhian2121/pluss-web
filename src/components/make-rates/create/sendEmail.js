@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 
 
 export const SendEmail = (props) => {
+    console.log('props denEmail: ', props)
     const [errors, setErrors] = useState({})
 
     const sendEmail = () => {

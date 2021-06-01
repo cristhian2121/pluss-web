@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import conf from '../../config';
 import Copyright from '../../components/common/copyright'
 import { Redirect } from 'react-router-dom'
-import Logo from '../../static/logo_pop_litle.png'
+import Logo from '../../static/Logo.png'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -138,11 +138,11 @@ function IntegrationNotistack() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
+                  <IconButton 
                     aria-label="toggle password visibility"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showPassword ? <Visibility className="icon-size" /> : <VisibilityOff className="icon-size" />}
                   </IconButton>
                 </InputAdornment>
               )

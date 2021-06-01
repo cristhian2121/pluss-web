@@ -8,7 +8,6 @@ import conf from '../../config'
 export class CreateClient extends React.Component {
 
   constructor(props) {
-    console.log('props: ', props);
     super(props)
     this.state = {
       idClient: props.clientUpdate ? props.clientUpdate.id : null,
@@ -30,7 +29,6 @@ export class CreateClient extends React.Component {
     event.preventDefault()
 
     let data = this.generateData()
-    console.log('data: ', data);
     const validate = this.validator(data)
 
     this.validator(data) && (

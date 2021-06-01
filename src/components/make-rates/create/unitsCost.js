@@ -78,7 +78,7 @@ export const UnitsCost = (props) => {
                 }
             </div>
             <Button className="col-md-1 col-sm-2 button-more-units" onClick={handleAddUnits}>
-                <AddCircleIcon />
+                <AddCircleIcon className="icon-size" />
             </Button>
             {/* Mostrar unidades */}
             <div className="col-md-8 col-sm-12 margin-component">

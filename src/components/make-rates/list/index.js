@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import * as dayjs from 'dayjs';
+
 import MaterialTable from 'material-table';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
@@ -15,7 +17,11 @@ export class MakeRate extends Component {
       this.state = {
           columns: [
               { title: 'Id', field: 'id' },
-              { title: 'Fecha creación', field: 'date_created' },
+              { 
+                title: 'Fecha creación',
+                field: 'date_created',
+                render: rowData => <span>{dayjs(rowData.date_created).format('DD/MM/YYYY')}</span>
+              },
               { title: 'Cliente', field: 'client_name' },
               { title: 'Creado por', field: 'user_name' },
               { title: 'Estado', field: 'status'}
