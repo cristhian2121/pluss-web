@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import Button from "@material-ui/core/Button";
 
 import { CreateClient } from "./createClient";
 import { ClientList } from "./clientList";
@@ -15,13 +13,13 @@ export class Clients extends React.Component {
 
     this.state = {
       clients: [],
-      updateClient: [],
+      updateClient: null,
+      editUser: false,
       alert: {
         open: false,
         message: "",
         type: "",
       },
-      openCreateUpdate: false,
       clientsCount: 0,
     };
     this.clientDelete = this.clientDelete.bind(this);
@@ -49,7 +47,6 @@ export class Clients extends React.Component {
       .catch((e) => {
         console.log("Error getClient: ", e);
       });
-    // this.clearForm()
   }
 
   saveClient = (client) => {
@@ -65,20 +62,18 @@ export class Clients extends React.Component {
       .then((response) => {
         this.setState({
           clients: [...this.state.clients, response],
+          clientsCount: this.state.clientsCount + 1,
           alert: {
             open: true,
             message: "El cliente se creo correctamente.",
             type: "success",
           },
         });
-        this.setState({
-          openCreateUpdate: false,
-        });
       });
   };
 
   updateClient = (client) => {
-    let idClient = this.state.updateClient.id;
+    const idClient = this.state.updateClient.id;
     fetch(`${config.api_url}/client/${idClient}/`, {
       method: "PUT",
       body: JSON.stringify(client),
@@ -87,25 +82,29 @@ export class Clients extends React.Component {
       },
     })
       .then(async (response) => {
-        let resp = await response.json();
+        const resp = await response.json();
         if (response.status === 200 || response.status == 201) {
-          let clients = this.state.clients.filter((item) => item.id != resp.id);
+          const clientIndex = this.state.clients.findIndex(
+            (item) => item.id == resp.id
+          );
+          const clients = this.state.clients.map((_, index) => {
+            if (index == clientIndex) {
+              _ = resp;
+            }
+            return _;
+          });
           this.setState({
-            clients: [...clients, resp],
-            updateClient: [],
+            clients: [...clients],
+            updateClient: null,
             alert: {
               open: true,
               message: "El cliente se actualizo correctamente.",
               type: "success",
             },
           });
-          // this.clearForm()
-          this.showForm();
         } else {
-          let idCli = this.state.updateClient.id;
           this.setState({
             alert: {
-              updateClient: [...client, idCli],
               open: true,
               message:
                 "No se pudieron guardar los cambios por favor valide los campos.",
@@ -126,6 +125,7 @@ export class Clients extends React.Component {
           );
           this.setState({
             clients: clients,
+            clientsCount: this.state.clientsCount - 1,
             alert: {
               open: true,
               message: "El cliente se elimino correctamente.",
@@ -139,31 +139,17 @@ export class Clients extends React.Component {
       });
   };
 
-  // clearForm() {
-  //   // document.getElementById("clientForm").reset()
-  // }
-
   selectUpdate = (client) => {
-    this.showForm("update");
     this.setState({
       updateClient: client,
+      editUser: true,
     });
-  };
-
-  showForm = (action) => {
-    this.setState({
-      openCreateUpdate: !this.state.openCreateUpdate,
-    });
-    if (action != "update") {
-      this.setState({
-        updateClient: {},
-      });
-    }
   };
 
   handleChangePage = (forward) => {
-    const params = assembleUrlPage(forward, this.nextPage, this.previousPage);
-    this.getClient(params);
+    const final =  (Math.ceil(this.state.clientsCount / config.ROWS_FOR_PAGES) * config.ROWS_FOR_PAGES) - config.ROWS_FOR_PAGES
+    const params = assembleUrlPage(forward, this.nextPage, this.previousPage, final);
+    params && this.getClient(params);
   };
 
   render() {
@@ -172,23 +158,18 @@ export class Clients extends React.Component {
         <div className="title row">
           <div className="title-text col-md-6 col-sm-12">Clientes</div>
           <div className="action-title col-md-6">
-            <span className="text cursor-pointer" onClick={this.showForm}>
-              Crear Cliente
-              <Button className="button-more">
-                <AddCircleIcon className="icon-size" />
-              </Button>
-            </span>
+            <CreateClient
+              saveClient={this.saveClient}
+              clientUpdate={this.state.updateClient}
+              updateClient={this.updateClient}
+              open={this.state.editUser}
+              close={() => this.setState({ editUser: !this.state.editUser })}
+              openDialog={() =>
+                this.setState({ editUser: !this.state.editUser })
+              }
+            />
           </div>
         </div>
-
-        {this.state.openCreateUpdate && (
-          <CreateClient
-            saveClient={this.saveClient}
-            clientUpdate={this.state.updateClient}
-            updateClient={this.updateClient}
-            cancelForm={this.showForm}
-          />
-        )}
 
         <ClientList
           duplicateClient={this.saveClient}

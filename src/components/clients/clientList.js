@@ -1,97 +1,113 @@
-import React from 'react'
+import React from "react";
 
+import { AlertDialog, TableGeneric } from "../common/common";
 import {
-    AlertDialog,
-    TableGeneric
-} from '../common/common'
-
-// or
-import { Dialog } from '@material-ui/core';
+  clientsColumnsMock,
+  clientsActionsMock,
+} from "../common/table/columnMock";
 
 export class ClientList extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    state = {
-        alert: {
-            open: false
-        },
-        columns: [
-            { title: 'Nit', field: 'nit' },
-            { title: 'Nombre', field: 'name' },
-            { title: 'Teléfono', field: 'phone' },
-            { title: 'Asesor de venta', field: 'agent' },
-            { title: 'Ciudad', field: 'city' },
-            { title: 'id', field: 'id' }
-        ],
-        dataUser: [],
-        showAlert: false,
-        selectRegister: null,
+  constructor(props) {
+    super(props);
+    this.state = {
+      alert: {
+        open: false,
+      },
+      dataUser: [],
+      showAlert: false,
+      selectRegister: null,
+      loader: true,
     };
+  }
 
-    actions = [
-        {
-            type: 'edit',
-            title: 'Editar cliente',
-        },
-        {
-            type: 'file_copy',
-            title: 'Duplicar cliente',
-        },
-        {
-            type: 'delete',
-            title: 'Eliminar cliente',
-        }
-    ]
+  rendered = true;
 
-    showConfirmation = (rowData) => {
-        this.setState({
-            showAlert: {
-                open: true,
-                option: 'delete'
-            },
-            selectRegister: rowData
-        })
+  componentDidMount() {
+    this.setState({ loader: false });
+  }
+
+  /**
+   * Before update render validate rules
+   * @param {*} props before props
+   * @param {*} state before state
+   * @returns 
+   */
+  shouldComponentUpdate(props, state) {
+    // Validate if state.loader is equal to update loader in componentDidMount so render
+    // If is not equal then no render
+    if (state.loader === this.rendered) {
+      return true;
     }
+    this.rendered = state.loader;
+    return false;
+  }
 
-    handleChangePage = (forward) => {
-        console.log('forward: ', forward);
-        this.props.changePage(forward)
-    }
+  /**
+   * Show delete modal
+   * @param {*} rowData elemet to delete 
+   */
+  showConfirmation = (rowData) => {
+    this.setState({
+      showAlert: {
+        open: true,
+        option: "delete",
+      },
+      selectRegister: rowData,
+    });
+  };
 
-    render() {
-        return (
-            <div>
-                <div className="sub-title">
-                    <span className="text">
-                        Lista de Clientes
-                </span>
-                </div>
-                <TableGeneric
-                    title=""
-                    columns={this.state.columns}
-                    data={this.props.clientList}
-                    actions={this.actions}
-                    editItem={this.props.selectUpdate}
-                    deleteItem={this.showConfirmation}
-                    duplicateItem={this.props.duplicateClient}
-                    changePage={this.handleChangePage}
-                    count={this.props.count}
+  /**
+   * Change page table dispath event to parent component betweent props
+   * @param {*} forward 
+   */
+  handleChangePage = (forward) => {
+    this.props.changePage(forward);
+  };
 
-                />
-                {/* <MaterialTable
-                    title=""
-                    columns={this.state.columns}
-                    data={this.props.clientList} /> */}
+  /**
+   * Call and send props to AlertDialog Component (alert to aplication)
+   * @returns AlertDialog Component
+   */
+  AlertComponet = () => (
+    <AlertDialog
+      open={this.state.showAlert.open}
+      option={this.state.showAlert.option}
+      close={() => this.setState({ showAlert: !this.state.showAlert })}
+      confirm={() => this.props.selectDelete(this.state.selectRegister)}
+    />
+  );
 
-                <AlertDialog
-                    open={this.state.showAlert.open}
-                    option={this.state.showAlert.option}
-                    close={() => this.setState({ showAlert: !this.state.showAlert })}
-                    confirm={() => this.props.selectDelete(this.state.selectRegister)}
-                />
-            </div>
-        );
-    }
+  /**
+   * Call and send props to TableGeneric Component (table to aplication)
+   * @returns TableGeneric Component
+   */
+  tableComponent = () => {
+    return (
+      <TableGeneric
+        title=""
+        columns={clientsColumnsMock}
+        data={this.props.clientList}
+        actions={clientsActionsMock}
+        editItem={this.props.selectUpdate}
+        deleteItem={this.showConfirmation}
+        duplicateItem={this.props.duplicateClient}
+        changePage={this.handleChangePage}
+        count={this.props.count}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <div>
+        <div className="sub-title">
+          <span className="text">Lista de Clientes</span>
+        </div>
+        {!this.state.loader && this.tableComponent()}
+        {!this.state.loader &&
+          this.state.showAlert.open &&
+          this.AlertComponet()}
+      </div>
+    );
+  }
 }

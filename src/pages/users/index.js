@@ -212,8 +212,9 @@ export class User extends Component {
   };
 
   handleChangePage = (forward) => {
-    const params = assembleUrlPage(forward, this.nextPage, this.previousPage);
-    this.getClient(params);
+    const final =  (Math.ceil(this.state.usersCount / conf.ROWS_FOR_PAGES) * conf.ROWS_FOR_PAGES) - conf.ROWS_FOR_PAGES
+    const params = assembleUrlPage(forward, this.nextPage, this.previousPage, final);
+    params && this.getClient(params);
   };
 
   render() {
