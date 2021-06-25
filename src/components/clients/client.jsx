@@ -147,27 +147,37 @@ export class Clients extends React.Component {
   };
 
   handleChangePage = (forward) => {
-    const final =  (Math.ceil(this.state.clientsCount / config.ROWS_FOR_PAGES) * config.ROWS_FOR_PAGES) - config.ROWS_FOR_PAGES
-    const params = assembleUrlPage(forward, this.nextPage, this.previousPage, final);
+    const final =
+      Math.ceil(this.state.clientsCount / config.ROWS_FOR_PAGES) *
+        config.ROWS_FOR_PAGES -
+      config.ROWS_FOR_PAGES;
+    const params = assembleUrlPage(
+      forward,
+      this.nextPage,
+      this.previousPage,
+      final
+    );
     params && this.getClient(params);
   };
 
   render() {
     return (
-      <>
-        <div className="title row">
-          <div className="title-text col-md-6 col-sm-12">Clientes</div>
-          <div className="action-title col-md-6">
-            <CreateClient
-              saveClient={this.saveClient}
-              clientUpdate={this.state.updateClient}
-              updateClient={this.updateClient}
-              open={this.state.editUser}
-              close={() => this.setState({ editUser: !this.state.editUser })}
-              openDialog={() =>
-                this.setState({ editUser: !this.state.editUser })
-              }
-            />
+      <div className="container-body">
+        <div className="title">
+          <div className="title-actions">
+            <div className="title-text">Clientes</div>
+            <div className="action-title">
+              <CreateClient
+                saveClient={this.saveClient}
+                clientUpdate={this.state.updateClient}
+                updateClient={this.updateClient}
+                open={this.state.editUser}
+                close={() => this.setState({ editUser: !this.state.editUser })}
+                openDialog={() =>
+                  this.setState({ editUser: !this.state.editUser })
+                }
+              />
+            </div>
           </div>
         </div>
 
@@ -193,7 +203,7 @@ export class Clients extends React.Component {
             {this.state.alert.message}
           </Alert>
         </Snackbar>
-      </>
+      </div>
     );
   }
 }

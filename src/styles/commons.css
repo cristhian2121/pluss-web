@@ -134,3 +134,20 @@ button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorInherit:hover sp
 .cursor-pointer {
     cursor: pointer;
 }
+
+/* Body */
+.container-body {
+    display: grid;
+    grid-template-rows: 70px auto;
+}
+.container-product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16.5rem, 1fr)) 
+}
+
+.title-actions {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: space-between;
+}

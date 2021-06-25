@@ -212,23 +212,33 @@ export class User extends Component {
   };
 
   handleChangePage = (forward) => {
-    const final =  (Math.ceil(this.state.usersCount / conf.ROWS_FOR_PAGES) * conf.ROWS_FOR_PAGES) - conf.ROWS_FOR_PAGES
-    const params = assembleUrlPage(forward, this.nextPage, this.previousPage, final);
+    const final =
+      Math.ceil(this.state.usersCount / conf.ROWS_FOR_PAGES) *
+        conf.ROWS_FOR_PAGES -
+      conf.ROWS_FOR_PAGES;
+    const params = assembleUrlPage(
+      forward,
+      this.nextPage,
+      this.previousPage,
+      final
+    );
     params && this.getClient(params);
   };
 
   render() {
     return (
-      <div>
-        <div className="title row">
-          <div className="title-text col-6">Usuarios</div>
-          <div className="action-title col-6">
-            <span className="text cursor-pointer" onClick={this.showForm}>
-              {this.state.dataEdit ? "Editar" : "Crear"} Usuario
-              <Button className="button-more">
-                <AddCircleIcon className="icon-size" />
-              </Button>
-            </span>
+      <div className="container-body">
+        <div className="title">
+          <div className="title-actions">
+            <div className="title-text">Usuarios</div>
+            <div className="action-title">
+              <span className="text cursor-pointer" onClick={this.showForm}>
+                {this.state.dataEdit ? "Editar" : "Crear"} Usuario
+                <Button className="button-more">
+                  <AddCircleIcon className="icon-size" />
+                </Button>
+              </span>
+            </div>
           </div>
         </div>
 

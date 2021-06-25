@@ -5,12 +5,12 @@ import { GeneratePDF } from "./components/common/pdf";
 import Login from "./pages/login";
 
 import { MakeRate } from './components/make-rates/list'
-import { User } from './pages/users'
+import { User } from './pages/users/index'
 import { CreateQuotation } from './components/make-rates/create/'
 import PageNotFound from './components/common/page-not-found'
 import { Menu } from './components/common/nav-bar'
-import { Clients } from './components/clients/client'
-import { ProductComponent } from './pages/products'
+import { Clients } from './components/clients/client.jsx'
+import { ProductComponent } from './pages/products/index'
 import { PrivateRoute } from './router/privateRoute'
 import "./App.css";
 
