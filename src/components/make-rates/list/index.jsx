@@ -8,25 +8,23 @@ import { Link } from "react-router-dom";
 
 import conf from "../../../config";
 
+// Components
+
+// Common
+import {
+  TableGeneric,
+  actionMakeRatesMock,
+  makeRatesColumnMock,
+} from "../../common/table";
+import { assembleUrlPage, parseData } from "../../../utils";
+
 export class MakeRate extends Component {
   constructor(props) {
     super(props);
     console.log("props list cotización: ", props);
     this.state = {
-      columns: [
-        { title: "Id", field: "id" },
-        {
-          title: "Fecha creación",
-          field: "date_created",
-          render: (rowData) => (
-            <span>{dayjs(rowData.date_created).format("DD/MM/YYYY")}</span>
-          ),
-        },
-        { title: "Cliente", field: "client_name" },
-        { title: "Creado por", field: "user_name" },
-        { title: "Estado", field: "status" },
-      ],
       dataQuotations: [],
+      count: 0,
       redirectFormQuotation: false,
       alert: {
         open: props.location.state ? props.location.state.open : false,
@@ -40,19 +38,40 @@ export class MakeRate extends Component {
     this.getDataQuotations();
   }
 
-  getDataQuotations = async () => {
+  /**
+   * Get pagined Make rates
+   */
+  getDataQuotations = async (params = "") => {
     try {
-      let response = await fetch(`${conf.api_url}/quotation/?limit=30`);
-      let data = await response.json();
-      console.log("data quotation: ", data);
+      const response = await fetch(`${conf.api_url}/quotation/${params}`);
+      const data = await response.json();
+      const quotations = parseData(data.results)
       this.setState({
-        dataQuotations: data.results,
+        dataQuotations: quotations,
+        count: data.count,
       });
     } catch (error) {
       console.log("error", error);
     }
+  }; 
+
+  /**
+   * Edit make rate
+   * @param {*} item mate rate to edit
+   */
+  editMakeRate = (item) => {
+    this.props.history.push({
+      pathname: "/cotizaciones/crear",
+      state: {
+        selectUpdate: item,
+      },
+    });
   };
 
+  /**
+   * Duplicate make rate
+   * @param {*} quotation
+   */
   duplicateQuotation = (quotation) => {
     const data = quotation;
     data.status = "En progreso";
@@ -84,6 +103,31 @@ export class MakeRate extends Component {
       .catch((error) => console.log("Error: ", error));
   };
 
+  /**
+   * Handle change page either next o prev page
+   * @param {*} event
+   * @param {*} nextPage
+   */
+  handleChangePage = (forward) => {
+    const final =
+      Math.ceil(this.state.count / conf.ROWS_FOR_PAGES) * conf.ROWS_FOR_PAGES -
+      conf.ROWS_FOR_PAGES;
+    const params = assembleUrlPage(
+      forward,
+      this.nextPage,
+      this.previousPage,
+      final
+    );
+    params && this.getClient(params);
+  };
+
+  handleShow = (rowData) => {
+    // sessionStorage.setItem('quotation', JSON.stringify(rowData))
+    window.open(`/cotizacion/${rowData.id}/`, "_blank", "", true);
+    // window.open(`/cotizacion/`, '_blank','',true)
+  };
+
+ 
   render() {
     return (
       <div className="container-body">
@@ -93,43 +137,22 @@ export class MakeRate extends Component {
           </div>
         </div>
 
-        <MaterialTable
+        <div className="sub-title">
+          <span className="text">Lista de cotizaciones</span>
+        </div>
+        <TableGeneric
           title=""
-          columns={this.state.columns}
+          columns={makeRatesColumnMock}
           data={this.state.dataQuotations}
-          actions={[
-            {
-              icon: "visibility",
-              tooltip: "Ver cotización",
-              onClick: (event, rowData) => {
-                // sessionStorage.setItem('quotation', JSON.stringify(rowData))
-                window.open(`/cotizacion/${rowData.id}/`, "_blank", "", true);
-                // window.open(`/cotizacion/`, '_blank','',true)
-              },
-            },
-            (rowData) => ({
-              icon: "edit",
-              tooltip: "Editar cotización",
-              onClick: (event, rowData) => {
-                this.props.history.push({
-                  pathname: "/cotizaciones/crear",
-                  state: {
-                    selectUpdate: rowData,
-                  },
-                });
-              },
-              hidden: rowData.status == "Finalizado",
-            }),
-            (rowData) => ({
-              icon: "file_copy",
-              tooltip: "Duplicar cotización",
-              onClick: (event, rowData) => {
-                this.duplicateQuotation(rowData);
-              },
-              hidden: rowData.status == "En progreso",
-            }),
-          ]}
+          actions={actionMakeRatesMock}
+          editItem={this.editMakeRate}
+          showItem={this.handleShow}
+          deleteItem={() => null}
+          duplicateItem={this.duplicateQuotation}
+          changePage={this.handleChangePage}
+          count={this.state.count}
         />
+
         <Link
           to="chart"
           id="linkQuotation"

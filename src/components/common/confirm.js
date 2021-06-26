@@ -81,7 +81,7 @@ export default function AlertDialog(props) {
       >
         {content &&
           <div>
-            <DialogTitle id="alert-dialog-title">
+            <DialogTitle className="title-modal" id="alert-dialog-title">
               {content.textTitle}
             </DialogTitle>
             <DialogContent>

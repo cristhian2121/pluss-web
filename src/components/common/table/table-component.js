@@ -143,8 +143,6 @@ export const TableGeneric = (props) => {
           // exportFileName: "Clientes",
           // exportButton: true,
           pageSize: pageForPage,
-          searchTooltip: "Buscar",
-          searchPlaceholder: "Buscar",
         }}
       />
     );

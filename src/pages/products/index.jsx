@@ -205,19 +205,7 @@ class Products extends PureComponent {
             </div>
           )}
         </div>
-        {this.state.dataProductsDisplay.map((product) => {
-          let selected =
-            this.state.productsSelecteds.indexOf(product.id) < 0 ? false : true;
-          return (
-            <ProductIndividual
-              key={product.id}
-              product={product}
-              productDetail={(obj) => this.productDetail(obj)}
-              addProduct={(obj) => this.addProduct(obj)}
-              selected={selected}
-            />
-          );
-        })}
+
         <Dialog
           onClose={() => this.setState({ open: false })}
           open={this.state.open}
