@@ -18,7 +18,7 @@ import * as productActions from "../../actions/productActions";
 
 // Style
 import "../../styles/product.css";
-import './styles.css'
+import "./styles.css";
 
 // Component
 import { ProductIndividual } from "./product-individual";
@@ -178,22 +178,62 @@ class Products extends PureComponent {
           </div>
         </div>
         <div className="container-product-list">
-          {this.state.dataProductsDisplay.map((product) => {
-            let selected =
-              this.state.productsSelecteds.indexOf(product.id) < 0
-                ? false
-                : true;
-            return (
-              <ProductIndividual
-                key={product.id}
-                product={product}
-                productDetail={(obj) => this.productDetail(obj)}
-                addProduct={(obj) => this.addProduct(obj)}
-                selected={selected}
-              />
-            );
-          })}
+          {this.state.loader ? (
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ height: "50vh", width: "100%" }}
+            >
+              <Loader size={70} />
+            </div>
+          ) : (
+            <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
+              {this.state.dataProductsDisplay.map((product) => {
+                let selected =
+                  this.state.productsSelecteds.indexOf(product.id) < 0
+                    ? false
+                    : true;
+                return (
+                  <ProductIndividual
+                    key={product.id}
+                    product={product}
+                    productDetail={(obj) => this.productDetail(obj)}
+                    addProduct={(obj) => this.addProduct(obj)}
+                    selected={selected}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
+        {this.state.dataProductsDisplay.map((product) => {
+          let selected =
+            this.state.productsSelecteds.indexOf(product.id) < 0 ? false : true;
+          return (
+            <ProductIndividual
+              key={product.id}
+              product={product}
+              productDetail={(obj) => this.productDetail(obj)}
+              addProduct={(obj) => this.addProduct(obj)}
+              selected={selected}
+            />
+          );
+        })}
+        <Dialog
+          onClose={() => this.setState({ open: false })}
+          open={this.state.open}
+          maxWidth="sm"
+          fullWidth={false}
+        >
+          <Detail selectDetail={this.state.detailProducts} />
+        </Dialog>
+        {this.state.showDialogUnits && (
+          <AlertDialog
+            option={this.state.showDialogUnits.option}
+            open={this.state.showDialogUnits.open}
+            close={() => this.setState({ showDialogUnits: false })}
+            confirm={this.addUnits}
+          />
+        )}
 
         {/* <div className="title">
           <div className="col-12 px-0 d-flex">

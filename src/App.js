@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import { GeneratePDF } from "./components/common/pdf";
 import Login from "./pages/login";
 
-import { MakeRate } from './components/make-rates/list'
+import { MakeRate } from './components/make-rates/list/index'
 import { User } from './pages/users/index'
 import { CreateQuotation } from './components/make-rates/create/'
 import PageNotFound from './components/common/page-not-found'
