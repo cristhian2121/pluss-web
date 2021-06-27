@@ -21,7 +21,6 @@ import { assembleUrlPage, parseData } from "../../../utils";
 export class MakeRate extends Component {
   constructor(props) {
     super(props);
-    console.log("props list cotización: ", props);
     this.state = {
       dataQuotations: [],
       count: 0,

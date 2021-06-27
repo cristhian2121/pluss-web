@@ -17,9 +17,9 @@ export class ProductsService {
         this.response.messagge = error.messagge
     }
 
-    getProducts = async () => {
+    getProducts = async (params='') => {
         try {
-            const res = await fetch(`${config.api_url}/product/?limit=10`)
+            const res = await fetch(`${config.api_url}/product/?${params}`)
             this.response.data = await res.json();
         }
         catch (error) {

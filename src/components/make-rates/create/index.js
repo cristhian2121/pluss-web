@@ -18,7 +18,6 @@ class CreateQuotationHook extends Component {
   preViewPDF = false;
 
   constructor(props) {
-    console.log('props llegando 1: ', props);
     super(props)
     this.state = {
       downloadPDF: false,

@@ -15,6 +15,7 @@ import Detail from "../../components/products/detail";
 import conf from "../../config";
 import Loader from "../../components/common/loader";
 import * as productActions from "../../actions/productActions";
+import { assembleUrlPage } from "../../utils/pagination-utils";
 
 // Style
 import "../../styles/product.css";
@@ -30,6 +31,8 @@ class Products extends PureComponent {
   longitud = 0;
   productsAux = [];
   externalQuery = true;
+  nextPage = "";
+  scrollMemo = 0;
 
   fieldsFilter = [
     {
@@ -84,12 +87,23 @@ class Products extends PureComponent {
       showDialogUnits: false,
     };
     this.addProduct = this.addProduct.bind(this);
+    this.myRef = React.createRef();
+  }
 
-    // store.subscribe(() => {
-    //   this.setState({
-    //     productDetail: store.getProducts()
-    //   })
-    // })
+  /**
+   * Validate if scroll full so when new products page
+   */
+  observerElement() {
+    const element$ = new IntersectionObserver((change) => {
+      const { isIntersecting, boundingClientRect } = change[0];
+      console.log('boundingClientRect.bottom: ', boundingClientRect.bottom);
+      if (isIntersecting && this.state.dataProducts.length) {
+        this.scrollMemo = boundingClientRect.bottom;
+        console.log('eNTRY', boundingClientRect.bottom);
+        this.getProducts();
+      }
+    });
+    element$.observe(this.myRef.current);
   }
 
   componentDidMount() {
@@ -99,15 +113,36 @@ class Products extends PureComponent {
         productsSelecteds: this.state.products.map((_) => _.id),
       });
     }
+    this.observerElement();
   }
 
+  componentDidUpdate() {
+    console.log('*****', this.scrollMemo);
+    // setTimeout(() => {
+      window.scroll(0, this.scrollMemo ? (this.scrollMemo + 10000) : 0);
+    // }, 500)
+  }
+
+  /**
+   * Get products of 50 to 50
+   */
   getProducts = async () => {
     this.setState({ loader: true });
-    const res = await this.productsService.getProducts();
+    // Validate if is necesary other page
+    let next = "";
+    if (this.nextPage) {
+      next = this.nextPage.split("?")[1];
+    }
+
+    const res = await this.productsService.getProducts(next);
     if (res.state) {
+      this.nextPage = res.data.next;
       this.setState({
-        dataProducts: res.data.results,
-        dataProductsDisplay: res.data.results,
+        dataProducts: [...this.state.dataProductsDisplay, ...res.data.results],
+        dataProductsDisplay: [
+          ...this.state.dataProductsDisplay,
+          ...res.data.results,
+        ],
         count: res.data.count,
         loader: false,
       });
@@ -205,6 +240,8 @@ class Products extends PureComponent {
             </div>
           )}
         </div>
+        {/* Interception observe */}
+        <div ref={this.myRef}></div>
 
         <Dialog
           onClose={() => this.setState({ open: false })}
