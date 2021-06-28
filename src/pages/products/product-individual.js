@@ -33,7 +33,7 @@ export const ProductIndividual = ({
           <div className="col-12 px-0">Ref. {product.referency_id}</div>
           <div className="col-12 px-0 d-flex justify-content-between">
             <div>$ {product.cost} c/u</div>
-            <div className={`icon-active ${selected ? "primary-color" : ""}`}>
+            <div className={`icon-active ${selected ? "secondary-color" : ""}`}>
               <Tooltip title="Agregar producto">
                 <AddCircleIcon
                   className="icon-size"

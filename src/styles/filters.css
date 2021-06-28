@@ -270,6 +270,73 @@
     background-color: var(--primary-color);
 }
 
+/* NEW */
+
+.title--filters {
+    border-radius: 30px;
+    height: 30px;
+    width: 90px;
+    margin-right: 35px;
+    background: var(--secondary-color);
+    font-size: .85rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* transition: width 1s; */
+}
+
+.title--filters:hover {
+    height: 31px;
+    width: 92px;
+    font-weight: bold;
+}
+/* 
+.title--filters:active {
+    width: 150px;
+} */
+
+/* Filters */
+.container-filters {
+    padding: 1.3rem;
+    width: 100%;
+    height: 100vh;
+    background: blueviolet;
+    right: 0px;
+    /* position: absolute;
+    z-index: 1; */
+}
+
+.filters-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch
+}
+
+.filters-form .MuiFormControl-root {
+    padding: 0px;
+}
+
+.filters-title {
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+.filters--inputs .filters--inputs__margin, .filters--inputs__margin {
+    margin-bottom: 20px;
+}
+
+.filters--buttons {
+    margin: 21px 0px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.filters--buttons .button--search {
+    margin-right: 5px;
+}
+
+
+
 
 
 

@@ -1,3 +1,24 @@
+@import '../../styles/variables.css';
+
 .title--mark-cart {    
     padding-right: 2%;
+    display: flex;
+}
+
+.container-products-list {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.container-filters-products {
+    width: 0px;
+    opacity: 0;
+    transition: width 1s, opacity 1.2s;
+}
+
+.filter__show.container-filters-products {
+    width: 25%;
+    opacity: 1;
+    transition: width 1s, opacity 0.8s;
+    /* display: block; */
 }

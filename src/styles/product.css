@@ -32,6 +32,15 @@
   color: var(--primary-color-hover);
 }
 
+.icon-active.secondary-color {
+  color: var(--secondary-color);
+}
+
+.icon-active.secondary-color:hover {
+  font-size: 1.4em;
+  color: var(--secondary-color-hover);
+}
+
 /* Bar scroll */
 
 .scroll-y {
