@@ -59,7 +59,7 @@ export const FilterComponent = () => {
               value={formik.values.name}
             />
           </div>
-          {formik.errors.common && <div>Err</div>}
+          {/* {formik.errors.common && <div>Err</div>} */}
           <div className="filters--buttons">
             <Button type="submit" className="button--search" variant="contained" color="secondary">
               Buscar
