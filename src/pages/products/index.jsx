@@ -24,7 +24,7 @@ import "./styles.css";
 // Component
 import { ProductIndividual } from "./product-individual";
 import AlertDialog from "../../components/common/confirm";
-import { FiltersComponent } from "../../components/common/filters/filter-component";
+import { FilterComponent } from "../../components/common/filters/filter-component.jsx";
 
 class Products extends PureComponent {
   productsService = new ProductsService();
@@ -33,6 +33,8 @@ class Products extends PureComponent {
   externalQuery = true;
   nextPage = "";
   scrollMemo = 0;
+  scrolling = false;
+  openfilters = false;
 
   fieldsFilter = [
     {
@@ -91,15 +93,36 @@ class Products extends PureComponent {
   }
 
   /**
+   * suscribe to scroll
+   */
+  handleScroll = () => {
+    if (document.documentElement.scrollTop) {
+      this.scrollMemo = document.documentElement.scrollTop;
+    }
+  };
+
+  hadleClickFilters = () => {
+    const $element = document.getElementById("js-products-filters");
+    this.openfilters
+      ? $element.classList.remove("filter__show")
+      : $element.classList.add("filter__show");
+    this.openfilters = !this.openfilters
+  };
+
+  /**
    * Validate if scroll full so when new products page
    */
   observerElement() {
     const element$ = new IntersectionObserver((change) => {
-      const { isIntersecting, boundingClientRect } = change[0];
-      console.log('boundingClientRect.bottom: ', boundingClientRect.bottom);
+      const { isIntersecting } = change[0];
+
+      // If exist scrolling set scroll to value from handleScroll
+      if (this.scrolling) {
+        window.scroll(0, this.scrollMemo - 500);
+        this.scrolling = false;
+      }
       if (isIntersecting && this.state.dataProducts.length) {
-        this.scrollMemo = boundingClientRect.bottom;
-        console.log('eNTRY', boundingClientRect.bottom);
+        this.scrolling = true;
         this.getProducts();
       }
     });
@@ -107,20 +130,21 @@ class Products extends PureComponent {
   }
 
   componentDidMount() {
+    // reset scroll
+    this.scrolling = 0;
+
     this.getProducts();
-    if (this.state.products.length) {
-      this.setState({
-        productsSelecteds: this.state.products.map((_) => _.id),
-      });
-    }
+    // if (this.state.products.length) {
+    //   this.setState({
+    //     productsSelecteds: this.state.products.map((_) => _.id),
+    //   });
+    // }
     this.observerElement();
+    window.addEventListener("scroll", this.handleScroll);
   }
 
-  componentDidUpdate() {
-    console.log('*****', this.scrollMemo);
-    // setTimeout(() => {
-      window.scroll(0, this.scrollMemo ? (this.scrollMemo + 10000) : 0);
-    // }, 500)
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
   }
 
   /**
@@ -200,67 +224,80 @@ class Products extends PureComponent {
 
   render() {
     return (
-      <div className="container-body">
-        <div className="title">
-          <div className="title-actions">
-            <div className="title-text">Productos</div>
-            <div className="title--mark-cart">
-              <span className="store-car" onClick={this.goToCreateQuotation}>
-                <LocalGroceryStoreIcon className="icon-size" />
-              </span>
-              {this.state.productsSelecteds.length}
+      <div className="container-products-list">
+        <div id="js-products-filters" className="container-filters-products">
+          <FilterComponent />
+        </div>
+        <div className="container-body">
+          <div className="title">
+            <div className="title-actions">
+              <div className="title-text">Productos</div>
+              <div className="title--mark-cart">
+                <div
+                  className="title--filters cursor-pointer"
+                  onClick={this.hadleClickFilters}
+                >
+                  Filtros
+                </div>
+                <span className="store-car" onClick={this.goToCreateQuotation}>
+                  <LocalGroceryStoreIcon className="icon-size" />
+                </span>
+                {this.state.productsSelecteds.length}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="container-product-list">
-          {this.state.loader ? (
-            <div
-              className="d-flex align-items-center justify-content-center"
-              style={{ height: "50vh", width: "100%" }}
-            >
-              <Loader size={70} />
-            </div>
-          ) : (
-            <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
-              {this.state.dataProductsDisplay.map((product) => {
-                let selected =
-                  this.state.productsSelecteds.indexOf(product.id) < 0
-                    ? false
-                    : true;
-                return (
-                  <ProductIndividual
-                    key={product.id}
-                    product={product}
-                    productDetail={(obj) => this.productDetail(obj)}
-                    addProduct={(obj) => this.addProduct(obj)}
-                    selected={selected}
-                  />
-                );
-              })}
-            </div>
+
+          <div className="container-product-list">
+            {/* Filters */}
+
+            {this.state.loader ? (
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{ height: "50vh", width: "100%" }}
+              >
+                <Loader size={70} />
+              </div>
+            ) : (
+              <div className="col-12 px-0 d-flex flex-wrap justify-content-between">
+                {this.state.dataProductsDisplay.map((product) => {
+                  let selected =
+                    this.state.productsSelecteds.indexOf(product.id) < 0
+                      ? false
+                      : true;
+                  return (
+                    <ProductIndividual
+                      key={product.id}
+                      product={product}
+                      productDetail={(obj) => this.productDetail(obj)}
+                      addProduct={(obj) => this.addProduct(obj)}
+                      selected={selected}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          {/* Interception observe */}
+          <div ref={this.myRef}>l</div>
+
+          <Dialog
+            onClose={() => this.setState({ open: false })}
+            open={this.state.open}
+            maxWidth="sm"
+            fullWidth={false}
+          >
+            <Detail selectDetail={this.state.detailProducts} />
+          </Dialog>
+          {this.state.showDialogUnits && (
+            <AlertDialog
+              option={this.state.showDialogUnits.option}
+              open={this.state.showDialogUnits.open}
+              close={() => this.setState({ showDialogUnits: false })}
+              confirm={this.addUnits}
+            />
           )}
-        </div>
-        {/* Interception observe */}
-        <div ref={this.myRef}></div>
 
-        <Dialog
-          onClose={() => this.setState({ open: false })}
-          open={this.state.open}
-          maxWidth="sm"
-          fullWidth={false}
-        >
-          <Detail selectDetail={this.state.detailProducts} />
-        </Dialog>
-        {this.state.showDialogUnits && (
-          <AlertDialog
-            option={this.state.showDialogUnits.option}
-            open={this.state.showDialogUnits.open}
-            close={() => this.setState({ showDialogUnits: false })}
-            confirm={this.addUnits}
-          />
-        )}
-
-        {/* <div className="title">
+          {/* <div className="title">
           <div className="col-12 px-0 d-flex">
             <div className="col-8 px-0">
               Productos
@@ -323,6 +360,7 @@ class Products extends PureComponent {
             close={() => this.setState({ showDialogUnits: false })}
             confirm={this.addUnits}
           />} */}
+        </div>
       </div>
     );
   }
