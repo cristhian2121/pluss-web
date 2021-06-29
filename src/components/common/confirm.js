@@ -19,7 +19,12 @@ export default function AlertDialog(props) {
   };
 
   const handleConfirm = () => {
-    props.option == UNITS_TEXT  ? props.confirm(units) : props.confirm(true);
+    if(props.option == UNITS_TEXT){
+      if(!units || !units.length) return
+      props.confirm(units)
+    } else {
+      props.confirm(true);
+    }
     handleClose();
   }
 
