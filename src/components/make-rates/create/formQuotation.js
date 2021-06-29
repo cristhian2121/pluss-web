@@ -24,7 +24,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 // component
 import { ProductForm } from './addProduct'
-import { SendEmail } from './sendEmail'
+import { SendEmail } from './sendEmail.jsx'
 import { UnitsCost } from './unitsCost'
 import conf from '../../../config'
 
