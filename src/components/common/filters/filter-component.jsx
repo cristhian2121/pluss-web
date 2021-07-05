@@ -16,7 +16,7 @@ const validate = (values) => {
   return errors;
 };
 
-export const FilterComponent = () => {
+export const FilterComponent = ({ getEntities, clearFilter }) => {
   const handleSubmit = (e) => {
     console.log("e: ", e);
   };
@@ -28,10 +28,15 @@ export const FilterComponent = () => {
     },
     validate,
     onSubmit: (values) => {
-      console.log("values: ", values);
+      getEntities(values)
       // isSubmitting = false
     },
   });
+
+  const clear = () =>  {
+    formik.resetForm()
+    clearFilter()
+  }
 
   return (
     <div className="container-filters">
@@ -59,12 +64,12 @@ export const FilterComponent = () => {
               value={formik.values.name}
             />
           </div>
-          {/* {formik.errors.common && <div>Err</div>} */}
+          {formik.errors.common && <div>Err</div>}
           <div className="filters--buttons">
             <Button type="submit" className="button--search" variant="contained" color="secondary">
               Buscar
             </Button>
-            <Button variant="contained" onClick={() => formik.resetForm()}>limpiar</Button>
+            <Button variant="contained" onClick={clear}>limpiar</Button>
           </div>
         </form>
       </div>

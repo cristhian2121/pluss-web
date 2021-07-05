@@ -35,41 +35,44 @@ class Products extends PureComponent {
   scrollMemo = 0;
   scrolling = false;
   openfilters = false;
+  filtered = false;
 
   fieldsFilter = [
     {
-      id: "referency_id",
+      id: "code",
       type: "input",
-      name: "referency_id",
-      placeHolder: "Referencia del producto",
+      name: "code",
+      label: "Código",
+      placeHolder: "Código",
       query: `${conf.api_url}/product?referency_id=_referency_id`,
     },
-    {
-      id: "provier_name",
-      type: "select",
-      name: "provier_name",
-      placeHolder: "Proveedor",
-      data: [
-        {
-          value: 0,
-          text: "Todos",
-        },
-        {
-          value: conf.PROVEEDORES.MPPROMOCIONALES,
-          text: conf.PROVEEDORES.MPPROMOCIONALES,
-        },
-        {
-          value: conf.PROVEEDORES.PRUEBA,
-          text: conf.PROVEEDORES.PRUEBA,
-        },
-      ],
-      query: `${conf.api_url}/product?provier_name=_provier_name`,
-    },
+    // {
+    //   id: "provier_name",
+    //   type: "select",
+    //   name: "provier_name",
+    //   placeHolder: "Proveedor",
+    //   data: [
+    //     {
+    //       value: 0,
+    //       text: "Todos",
+    //     },
+    //     {
+    //       value: conf.PROVEEDORES.MPPROMOCIONALES,
+    //       text: conf.PROVEEDORES.MPPROMOCIONALES,
+    //     },
+    //     {
+    //       value: conf.PROVEEDORES.PRUEBA,
+    //       text: conf.PROVEEDORES.PRUEBA,
+    //     },
+    //   ],
+    //   query: `${conf.api_url}/product?provier_name=_provier_name`,
+    // },
     {
       id: "name",
       type: "input",
       name: "name",
-      placeHolder: "Nombre del producto",
+      label: "Nombre",
+      placeHolder: "Nombre",
       query: `${conf.api_url}/product?name=_name`,
     },
   ];
@@ -106,7 +109,7 @@ class Products extends PureComponent {
     this.openfilters
       ? $element.classList.remove("filter__show")
       : $element.classList.add("filter__show");
-    this.openfilters = !this.openfilters
+    this.openfilters = !this.openfilters;
   };
 
   /**
@@ -123,7 +126,8 @@ class Products extends PureComponent {
       }
       if (isIntersecting && this.state.dataProducts.length) {
         this.scrolling = true;
-        this.getProducts();
+        // avoid re render when chield filter pass params
+        !this.filtered && this.getProducts();
       }
     });
     element$.observe(this.myRef.current);
@@ -132,15 +136,10 @@ class Products extends PureComponent {
   componentDidMount() {
     // reset scroll
     this.scrolling = 0;
-
     this.getProducts();
-    // if (this.state.products.length) {
-    //   this.setState({
-    //     productsSelecteds: this.state.products.map((_) => _.id),
-    //   });
-    // }
     this.observerElement();
     window.addEventListener("scroll", this.handleScroll);
+    this.filtered = false;
   }
 
   componentWillUnmount() {
@@ -170,6 +169,25 @@ class Products extends PureComponent {
         count: res.data.count,
         loader: false,
       });
+    }
+  };
+
+  /**
+   * get products by FilterComponent
+   */
+  getFilterProducts = async (next) => {
+    this.setState({ loader: true });
+    const res = await this.productsService.getProducts(next);
+    if (res.state) {
+      this.nextPage = res.data.next;
+      this.setState({
+        // dataProducts: res.data.results,
+        dataProductsDisplay: res.data.results,
+        count: res.data.count,
+        loader: false,
+      });
+      // Set filter to filter again
+      this.filtered = false
     }
   };
 
@@ -222,11 +240,38 @@ class Products extends PureComponent {
     }
   };
 
+  /**
+   * Clear filter and renew data
+   */
+  clearFilter = () => {
+    this.setState({
+      dataProductsDisplay: [...this.state.dataProducts],
+      // count: res.data.count,
+      loader: false,
+    });
+    this.filtered = false
+  };
+
+  onFilter = async (values) => {
+    let nextPage;
+    if (values.name) {
+      nextPage = `name=${values.name}`;
+    }
+    if (values.code) {
+      nextPage = `referency_id=${values.code}`;
+    }
+    this.filtered = true;
+    await this.getFilterProducts(nextPage);
+  };
+
   render() {
     return (
       <div className="container-products-list">
         <div id="js-products-filters" className="container-filters-products">
-          <FilterComponent />
+          <FilterComponent
+            getEntities={this.onFilter}
+            clearFilter={this.clearFilter}
+          />
         </div>
         <div className="container-body">
           <div className="title">
