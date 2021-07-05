@@ -64,7 +64,7 @@ export const FilterComponent = ({ getEntities, clearFilter }) => {
               value={formik.values.name}
             />
           </div>
-          {formik.errors.common && <div>Err</div>}
+          {formik.errors.common && <div className="text__error">Ingrese algún dato en los campos</div>}
           <div className="filters--buttons">
             <Button type="submit" className="button--search" variant="contained" color="secondary">
               Buscar
