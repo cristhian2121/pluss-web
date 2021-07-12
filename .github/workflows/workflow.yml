@@ -33,7 +33,7 @@ jobs:
         id: deploy
         run: |
           aws deploy create-deployment \
-            --application-name codeDeployKventas \
-            --deployment-group-name githubdeploy \
+            --application-name KameApplication \
+            --deployment-group-name KameDeployGroup \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
             --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
