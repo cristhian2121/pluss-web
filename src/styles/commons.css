@@ -139,6 +139,7 @@ button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorInherit:hover sp
 .container-body {
     display: grid;
     grid-template-rows: 70px auto;
+    width: 100%;
 }
 .container-product-list {
     display: grid;
