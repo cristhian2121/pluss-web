@@ -86,10 +86,14 @@
 }
 
 .store-car {
-  font-size: 1.7 !important;
   cursor: pointer;
+  position: fixed;
+  z-index: 1;
+}
+.store-car svg {
+  color: #62688f;
 }
 
-.store-car :hover {
-  font-size: 1.8 !important;
+.store-car svg:hover {
+  color: #6e759d
 }
