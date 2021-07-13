@@ -54,7 +54,7 @@ export const ProductPDF = ({ product, removeProduct, editProduct }) => {
             </div>
 
             <div className="col-4 product-pdf">
-                <img src={product.image} className="product-image-pdf img-fluid"
+                <img src={product.more_info?.imagen.imagen.file_md} className="product-image-pdf img-fluid"
                     alt="" />
             </div>
             <div className="col-8 px-1">
