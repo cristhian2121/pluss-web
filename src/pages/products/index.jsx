@@ -1,21 +1,18 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 
-import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
 
 import LocalGroceryStoreIcon from "@material-ui/icons/LocalGroceryStore";
 
 // services
 import { ProductsService } from "../../services/products";
-import Button from "@material-ui/core/Button";
 import Detail from "../../components/products/detail";
 
 // common
 import conf from "../../config";
 import Loader from "../../components/common/loader";
 import * as productActions from "../../actions/productActions";
-import { assembleUrlPage } from "../../utils/pagination-utils";
 
 // Style
 import "../../styles/product.css";
