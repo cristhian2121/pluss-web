@@ -131,7 +131,7 @@ export const GeneratePDFHook = (props) => {
                             <p>Precios por unidad</p>
                             <p>Sujeto a disponibilidad en el momento de enviar la orden de compra</p>
                             <p>Los precios no incluyen iva</p>
-                            <p>Entrega en sus oficinas en Medellín</p>
+                            <p>La entrega se realizará según acuerdo con el cliente</p>
                             <p>Forma de pago: 30 días</p>
                             <p>Tiempo de entrega: 8 a 15 días hábiles</p>
                             <p>El Logo será suministrado por el cliente en COREL o ILLUSTRATOR convertido a curvas.</p>
