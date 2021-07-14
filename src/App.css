@@ -316,11 +316,11 @@ button.MuiButtonBase-root.MuiIconButton-root:hover,
 /************************* FORM QUOTATION ***************************/
 
 .form-quotation {
-  padding: 0 3em;
+  /* padding: 0 3em; */
 }
 
 .form-units {
-  padding: 1em 3em 0;
+  /* padding: 1em 3em 0; */
 }
 
 .lbl-error{

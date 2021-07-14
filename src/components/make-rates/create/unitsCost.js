@@ -55,8 +55,8 @@ export const UnitsCost = (props) => {
     // }
 
     return (
-        <div className="row form-units">  
-            <div className="col-md-3 col-sm-12 input-unit">
+        <div className="row form-units mx-0">  
+            <div className="col-md-3 px-0 col-sm-12 input-unit">
                 <TextField
                     id={'unit'}
                     name={'unit'}
