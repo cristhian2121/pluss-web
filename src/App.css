@@ -1,4 +1,5 @@
 @import "./styles/variables.css";
+@import "./styles//inputs.css";
 
 .action-add-product {
   background: #0000004f;
@@ -124,6 +125,10 @@
   padding: 5px;
   border-radius: 5px 5px 0 0;
   font-weight: 600;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 .text-center {

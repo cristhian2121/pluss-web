@@ -158,3 +158,8 @@ button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-colorInherit:hover sp
     font-size: .8rem;
     font-weight: 500;
 }
+
+.img-circle-search {
+    border-radius: 50%;
+    /* object-fit: cover; */
+}

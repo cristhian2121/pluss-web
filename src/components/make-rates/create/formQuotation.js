@@ -72,7 +72,6 @@ const setEditQuotation = (props) => {
 
 export const FormQuotation = (props) => {
   const updateQuotationAux = props.updateQuotation;
-  console.log("FormQuotation -> props: ", props);
   const objectInitialization = setEditQuotation(props);
   const [showUnitForm, setshowUnitForm] = useState(false);
   const [showproductForm, setShowproductForm] = useState(false);
@@ -109,8 +108,8 @@ export const FormQuotation = (props) => {
 
   /**
    * Handle change date
-   * @param {*} date 
-   * @returns 
+   * @param {*} date
+   * @returns
    */
   const handleDateChange = (date) => setSelectedDate(date);
 
@@ -118,9 +117,7 @@ export const FormQuotation = (props) => {
     setshowUnitForm(!showUnitForm);
   };
 
-  const handleAddUnit = (_units) => {
-    SetUnits((units) => [..._units]);
-  };
+  const handleAddUnit = (_units) => SetUnits((units) => [..._units]);
 
   const handleAddProduct = (_product) => {
     const aux = [...products];
@@ -439,14 +436,14 @@ export const FormQuotation = (props) => {
 
         {/* Anadir producto */}
         <div className="sub-title">
-          <span className="text">Productos</span>{" "}
+          <span className="text">Productos</span>
           <Button
             href="#addProductForm"
             className="button-more"
             onClick={openPanelCreate}
           >
             {" "}
-            <AddCircleIcon className="icon-size" />{" "}
+            <AddCircleIcon className="icon-size" />
           </Button>
         </div>
         {/* { showproductForm && */}
